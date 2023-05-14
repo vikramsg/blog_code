@@ -31,11 +31,11 @@ def numpy_groupby(df: pd.DataFrame) -> pd.DataFrame:
     x_values = df["x"].to_numpy()
     y_values = df["y"].to_numpy()
 
-    sort_indices = np.lexsort((x_values, years, categories))
-    y_values = y_values[sort_indices]
-
     x_unique_values = np.unique(x_values)
     num_x_unique_values = len(x_unique_values)
+
+    sort_indices = np.lexsort((x_values, years, categories))
+    y_values = y_values[sort_indices]
 
     y_values = y_values.reshape([-1, num_x_unique_values])
     interpolated_y_values = np.apply_along_axis(
