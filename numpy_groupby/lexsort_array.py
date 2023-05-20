@@ -42,7 +42,7 @@ def quicksort(index, Left, Right, *arrays):
 
 @njit(nogil=True, cache=True, debug=True)
 def lexsort(arrays):
-    print("starting lexsort")
+    # print("starting lexsort")
 
     if len(arrays) == 0:
         return np.empty((), dtype=np.intp)
@@ -59,13 +59,13 @@ def lexsort(arrays):
 
     quicksort(index, 0, n - 1, *arrays)
 
-    print("ending lexsort")
+    # print("ending lexsort")
     return index
 
 
-a = np.array([2, 1, 4, 3, 0], dtype=np.int32)
-b = np.array([1, 2, 3, 4, 5], dtype=np.float64)
-
-print("before lexsort")
-print(lexsort((a, b)))
-print("after lexsort")
+# a = np.array([2, 1, 4, 3, 0], dtype=np.int32)
+# b = np.array([1, 2, 3, 4, 5], dtype=np.float64)
+#
+# print("before lexsort")
+# print(lexsort((a, b)))
+# print("after lexsort")

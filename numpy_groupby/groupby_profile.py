@@ -45,14 +45,16 @@ def _groupby_interpolate(
     reshape_y_size = np.int64(num_x_unique_values)
     reshape_x_size = np.int64(len(y_values) / reshape_y_size)
 
+    # This is the only format for which reshape works with Numba
+    # Uniform data type and no tuple/list as argument
     y_values = y_values.reshape(reshape_x_size, reshape_y_size)
-    return np.apply_along_axis(
-        _interpolate_wrapper,
-        axis=1,
-        arr=y_values,
-        x=_INTERPOLATE_AT,
-        xp=x_unique_values,
-    )
+
+    interpolate_values = np.zeros(reshape_x_size)
+    for i in range(reshape_x_size):
+        interpolate_values[i] = np.interp(
+            x=_INTERPOLATE_AT, xp=x_unique_values, fp=y_values[i, :]
+        )
+    return interpolate_values
 
 
 def numpy_groupby(df: pd.DataFrame) -> pd.DataFrame:
@@ -83,16 +85,15 @@ def pandas_groupby(df: pd.DataFrame) -> pd.DataFrame:
 
 
 if __name__ == "__main__":
-    numpy_groupby(create_dataframe())
-#    numpy_times = timeit.repeat(
-#        "numpy_groupby(df)",
-#        "from __main__ import create_dataframe, numpy_groupby;df = create_dataframe();",
-#        number=100,
-#    )
-#    print(f"Numpy times: {numpy_times}")
-#    pandas_times = timeit.repeat(
-#        "pandas_groupby(df)",
-#        "from __main__ import create_dataframe, pandas_groupby;df = create_dataframe()",
-#        number=100,
-#    )
-#    print(f"Pandas times: {pandas_times}")
+    pandas_times = timeit.repeat(
+        "pandas_groupby(df)",
+        "from __main__ import create_dataframe, pandas_groupby;df = create_dataframe()",
+        number=100,
+    )
+    print(f"Pandas times: {pandas_times}")
+    numpy_times = timeit.repeat(
+        "numpy_groupby(df)",
+        "from __main__ import create_dataframe, numpy_groupby;df = create_dataframe();",
+        number=100,
+    )
+    print(f"Numpy times: {numpy_times}")
