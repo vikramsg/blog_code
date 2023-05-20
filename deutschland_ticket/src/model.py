@@ -81,7 +81,7 @@ class StopDeparturesResponseModel(BaseModel):
     realtimeDataUpdatedAt: int
 
 
-class TravelRoute(BaseModel, set):
+class TravelRoute(BaseModel):
     origin: str
     destination: str
     train_line: str

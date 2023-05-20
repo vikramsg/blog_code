@@ -43,4 +43,4 @@ def get_departures(stop_id: int) -> List[TravelRoute]:
 
 if __name__ == "__main__":
     hamburg_stop_id = 8002549
-    get_departures(hamburg_stop_id)
+    travel_routes = get_departures(hamburg_stop_id)
