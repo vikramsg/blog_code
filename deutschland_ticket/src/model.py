@@ -87,6 +87,7 @@ class TravelRoute(BaseModel):
     train_line: str
     origin_id: int
     destination_id: int
+    trip_id: Optional[str]
 
     def __hash__(self) -> int:
         # Override hash to consider only origin and destination fields

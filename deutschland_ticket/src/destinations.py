@@ -4,6 +4,10 @@ import requests
 from src.model import StopDeparturesResponseModel, TravelRoute
 
 
+def get_trip_info(trip_id: str) -> None:
+    pass
+
+
 def get_departures(stop_id: int) -> List[TravelRoute]:
     url = (
         f"https://v6.db.transport.rest/stops/{stop_id}/departures?"
@@ -28,6 +32,7 @@ def get_departures(stop_id: int) -> List[TravelRoute]:
         line_name = line.name
         destination_name = departure.destination.name
         destination_id = departure.destination.id
+        trip_id = departure.tripId
 
         travel_route = TravelRoute(
             origin=orig_name,
@@ -35,6 +40,7 @@ def get_departures(stop_id: int) -> List[TravelRoute]:
             destination=destination_name,
             destination_id=destination_id,
             train_line=line_name,
+            trip_id=trip_id,
         )
         travel_routes.add(travel_route)
 
@@ -43,4 +49,8 @@ def get_departures(stop_id: int) -> List[TravelRoute]:
 
 if __name__ == "__main__":
     hamburg_stop_id = 8002549
+    # ToDo: We are not getting travel time or arrival time?
+    # to get departure and arrival time, we will have to
+    # call the trip api
     travel_routes = get_departures(hamburg_stop_id)
+    print(travel_routes)
