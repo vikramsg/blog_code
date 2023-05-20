@@ -24,7 +24,6 @@ def create_dataframe() -> pd.DataFrame:
     return pd.DataFrame(data, columns=["category", "year", "x", "y"])
 
 
-@nb.njit
 def _interpolate_wrapper(fp: np.ndarray, xp: np.ndarray, x: float) -> float:
     return float(np.interp(x=x, xp=xp, fp=fp))
 
@@ -57,7 +56,7 @@ def _groupby_interpolate(
     return interpolate_values
 
 
-def numpy_groupby(df: pd.DataFrame) -> pd.DataFrame:
+def njit_numpy_groupby(df: pd.DataFrame) -> pd.DataFrame:
     categories = df["category"].to_numpy()
     years = df["year"].to_numpy()
     x_values = df["x"].to_numpy()
@@ -75,6 +74,36 @@ def numpy_groupby(df: pd.DataFrame) -> pd.DataFrame:
     )
 
 
+def numpy_groupby(df: pd.DataFrame) -> pd.DataFrame:
+    categories = df["category"].to_numpy()
+    years = df["year"].to_numpy()
+    x_values = df["x"].to_numpy()
+    y_values = df["y"].to_numpy()
+
+    x_unique_values = np.unique(x_values)
+    num_x_unique_values = len(x_unique_values)
+
+    sort_indices = np.lexsort((x_values, years, categories))
+    y_values = y_values[sort_indices]
+
+    y_values = y_values.reshape([-1, num_x_unique_values])
+    interpolated_y_values = np.apply_along_axis(
+        _interpolate_wrapper,
+        axis=1,
+        arr=y_values,
+        x=_INTERPOLATE_AT,
+        xp=x_unique_values,
+    )
+
+    return pd.DataFrame(
+        data={
+            "category": categories.reshape([-1, num_x_unique_values])[:, 0],
+            "year": years.reshape([-1, num_x_unique_values])[:, 0],
+            "y": interpolated_y_values,
+        }
+    )
+
+
 def pandas_groupby(df: pd.DataFrame) -> pd.DataFrame:
     return (
         df.groupby(["category", "year"])
@@ -85,6 +114,11 @@ def pandas_groupby(df: pd.DataFrame) -> pd.DataFrame:
 
 
 if __name__ == "__main__":
+    """
+    Pandas times: [0.35364490200000004, 0.33443024, 0.3303176189999999, 0.32855506999999995, 0.33024766799999994]
+    Numpy times: [0.0469579229999999, 0.036730967, 0.03578966599999989, 0.035751120000000025, 0.03562025000000002]
+    Numba with NumPy times: [4.562287851, 0.6207038340000004, 0.6222665610000009, 0.584906624, 0.5903799620000001]
+    """
     pandas_times = timeit.repeat(
         "pandas_groupby(df)",
         "from __main__ import create_dataframe, pandas_groupby;df = create_dataframe()",
@@ -97,3 +131,9 @@ if __name__ == "__main__":
         number=100,
     )
     print(f"Numpy times: {numpy_times}")
+    numba_numpy_times = timeit.repeat(
+        "njit_numpy_groupby(df)",
+        "from __main__ import create_dataframe, njit_numpy_groupby;df = create_dataframe();",
+        number=100,
+    )
+    print(f"Numba with NumPy times: {numba_numpy_times}")
