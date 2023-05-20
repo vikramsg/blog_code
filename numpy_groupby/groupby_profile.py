@@ -1,10 +1,11 @@
 import random
 import timeit
 
+import numba as nb
 import numpy as np
 import pandas as pd
 
-import numba as nb
+from lexsort_array import lexsort
 
 _CATEGORIES = [0, 1, 2]  # ["red", "green", "blue"]
 _YEARS = range(2010, 2021)
@@ -38,7 +39,7 @@ def _groupby_interpolate(
     x_unique_values = np.unique(x_values)
     num_x_unique_values = len(x_unique_values)
 
-    sort_indices = np.lexsort((x_values, years, categories))
+    sort_indices = lexsort((x_values, years, categories))
     y_values = y_values[sort_indices]
 
     y_values = y_values.reshape([-1, num_x_unique_values])
