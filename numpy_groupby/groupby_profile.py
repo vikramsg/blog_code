@@ -42,7 +42,10 @@ def _groupby_interpolate(
     sort_indices = lexsort((x_values, years, categories))
     y_values = y_values[sort_indices]
 
-    y_values = y_values.reshape([-1, num_x_unique_values])
+    reshape_y_size = np.int64(num_x_unique_values)
+    reshape_x_size = np.int64(len(y_values) / reshape_y_size)
+
+    y_values = y_values.reshape(reshape_x_size, reshape_y_size)
     return np.apply_along_axis(
         _interpolate_wrapper,
         axis=1,
