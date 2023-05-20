@@ -1,17 +1,36 @@
+from datetime import datetime
 from typing import List
+
 import requests
 
-from src.model import StopDeparturesResponseModel, TravelRoute
+from src.model import (
+    StopDeparturesResponseModel,
+    TravelRoute,
+    TripDepartureArrival,
+    TripResponseModel,
+)
 
 
-def get_trip_info(trip_id: str) -> None:
-    pass
+def _get_trip_departure_arrival(trip_id: str) -> TripDepartureArrival:
+    url = f"https://v6.db.transport.rest/trips/{trip_id}"
+
+    response = requests.get(url)
+    json_response = response.json()
+
+    # Parse and validate the JSON response using the ResponseModel
+    response_model = TripResponseModel.parse_obj(json_response)
+
+    trip = response_model.trip
+    planned_departure = trip.plannedDeparture
+    planned_arrival = trip.plannedArrival
+
+    return TripDepartureArrival(departure=planned_departure, arrival=planned_arrival)
 
 
 def get_departures(stop_id: int) -> List[TravelRoute]:
     url = (
         f"https://v6.db.transport.rest/stops/{stop_id}/departures?"
-        "duration=120&bus=false&national=false&nationalExpress=false&suburban=false&subway=false&when=2023-05-20T08:00"
+        "duration=120&bus=false&national=false&nationalExpress=false&suburban=false&subway=false&when=2023-05-20T07:00"
     )
 
     response = requests.get(url)
@@ -33,6 +52,7 @@ def get_departures(stop_id: int) -> List[TravelRoute]:
         destination_name = departure.destination.name
         destination_id = departure.destination.id
         trip_id = departure.tripId
+        trip_departure_arrival = _get_trip_departure_arrival(trip_id)
 
         travel_route = TravelRoute(
             origin=orig_name,
@@ -40,11 +60,16 @@ def get_departures(stop_id: int) -> List[TravelRoute]:
             destination=destination_name,
             destination_id=destination_id,
             train_line=line_name,
-            trip_id=trip_id,
+            departure=trip_departure_arrival.departure,
+            arrival=trip_departure_arrival.arrival,
         )
         travel_routes.add(travel_route)
 
     return list(travel_routes)
+
+
+def _get_hours_minutes(date_time: datetime) -> str:
+    return date_time.time().strftime("%H:%M")
 
 
 if __name__ == "__main__":
@@ -53,4 +78,8 @@ if __name__ == "__main__":
     # to get departure and arrival time, we will have to
     # call the trip api
     travel_routes = get_departures(hamburg_stop_id)
-    print(travel_routes)
+    for route in travel_routes:
+        print(
+            f"Origin: {route.origin}, Destination: {route.destination}, Train: {route.train_line},"
+            f" Departure: {_get_hours_minutes(route.departure)}, Arrival: {_get_hours_minutes(route.arrival)}"
+        )

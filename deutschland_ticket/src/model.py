@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Any, List, Optional
 
 from pydantic import BaseModel
@@ -25,7 +26,7 @@ class Products(BaseModel):
 
 class Stop(BaseModel):
     type: str
-    id: str
+    id: int
     name: str
     location: Location
     products: Products
@@ -53,7 +54,7 @@ class Line(BaseModel):
 
 class Destination(BaseModel):
     type: str
-    id: str
+    id: int
     name: str
     location: Location
     products: Products
@@ -76,6 +77,51 @@ class Departure(BaseModel):
     destination: Destination
 
 
+class Stopover(BaseModel):
+    stop: Stop
+    arrival: Optional[str]
+    plannedArrival: Optional[str]
+    arrivalDelay: Optional[str]
+    arrivalPlatform: Optional[str]
+    arrivalPrognosisType: Optional[str]
+    plannedArrivalPlatform: Optional[str]
+    departure: Optional[str]
+    plannedDeparture: Optional[str]
+    departureDelay: Optional[str]
+    departurePlatform: Optional[str]
+    departurePrognosisType: Optional[str]
+    plannedDeparturePlatform: Optional[str]
+
+
+class Trip(BaseModel):
+    origin: Stop
+    destination: Stop
+    departure: str
+    plannedDeparture: datetime
+    departureDelay: Optional[str]
+    arrival: str
+    plannedArrival: datetime
+    arrivalDelay: Optional[str]
+    line: Line
+    direction: str
+    arrivalPlatform: str
+    plannedArrivalPlatform: str
+    arrivalPrognosisType: str
+    departurePlatform: str
+    plannedDeparturePlatform: str
+    departurePrognosisType: str
+    stopovers: List[Stopover]
+
+
+class TripResponseModel(BaseModel):
+    trip: Trip
+
+
+class TripDepartureArrival(BaseModel):
+    departure: datetime
+    arrival: datetime
+
+
 class StopDeparturesResponseModel(BaseModel):
     departures: List[Departure]
     realtimeDataUpdatedAt: int
@@ -87,7 +133,8 @@ class TravelRoute(BaseModel):
     train_line: str
     origin_id: int
     destination_id: int
-    trip_id: Optional[str]
+    departure: datetime
+    arrival: datetime
 
     def __hash__(self) -> int:
         # Override hash to consider only origin and destination fields
