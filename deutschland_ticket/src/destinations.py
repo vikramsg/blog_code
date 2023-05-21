@@ -74,12 +74,16 @@ def _get_hours_minutes(date_time: datetime) -> str:
 
 if __name__ == "__main__":
     hamburg_stop_id = 8002549
-    # ToDo: We are not getting travel time or arrival time?
-    # to get departure and arrival time, we will have to
-    # call the trip api
     travel_routes = get_departures(hamburg_stop_id)
     for route in travel_routes:
         print(
             f"Origin: {route.origin}, Destination: {route.destination}, Train: {route.train_line},"
             f" Departure: {_get_hours_minutes(route.departure)}, Arrival: {_get_hours_minutes(route.arrival)}"
         )
+
+    # ToDo
+    # Next, we want to find all departures from each destination
+    # within 120 mins of arrival from the starting point
+    # We will have to create a new models that is a composite of 2 trips
+    # It would need an id, saying which leg is the first and so on
+    # It should also exclude any trips back to the origin
