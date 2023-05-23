@@ -61,5 +61,45 @@ def parse_category_page() -> None:
             return
 
 
+def recursive_subcategories():
+    # Define the endpoint URL for the Wikipedia API
+    url = "https://en.wikipedia.org/w/api.php"
+
+    # Set the parameters for retrieving category members
+    category = "Germany"
+    params = {
+        "action": "query",
+        "format": "json",
+        "list": "categorymembers",
+        "cmtitle": f"Category:{category}",
+        "cmlimit": 500,
+    }
+
+    # Function to retrieve category members recursively
+    def retrieve_category_members(category):
+        # Set the category title in the API parameters
+        params["cmtitle"] = f"Category:{category}"
+
+        # Send a GET request to the API
+        response = requests.get(url, params=params)
+        data = response.json()
+
+        # Process the category members
+        for member in data["query"]["categorymembers"]:
+            if member["ns"] == 14:  # Check if the member is a subcategory
+                # Retrieve information from the subcategory page
+                subcategory_title = member["title"]
+                subcategory_name = subcategory_title.replace("Category:", "")
+                print(f"Processing subcategory: {subcategory_name}")
+
+                # Recursively retrieve category members from the subcategory
+                retrieve_category_members(subcategory_name)
+            else:
+                # Process the page within the category
+                page_title = member["title"]
+                print(f"Processing page: {page_title}")
+                # Perform further operations or retrieve page content here
+
+
 if __name__ == "__main__":
     parse_category_page()
