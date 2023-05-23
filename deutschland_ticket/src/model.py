@@ -124,7 +124,7 @@ class TripDepartureArrival(BaseModel):
 
 class StopDeparturesResponseModel(BaseModel):
     departures: List[Departure]
-    realtimeDataUpdatedAt: int
+    realtimeDataUpdatedAt: Optional[int]
 
 
 class TravelRoute(BaseModel):
