@@ -4,6 +4,7 @@ import timeit
 import numba as nb
 import numpy as np
 import pandas as pd
+import polars as pl
 
 from lexsort_array import lexsort
 
@@ -13,15 +14,26 @@ _X_VALUES = [0, 0.1, 0.25, 0.5, 1.0]
 _INTERPOLATE_AT = 0.3
 
 
-def create_dataframe() -> pd.DataFrame:
+def create_dataframe_data() -> pd.DataFrame:
+    columns = ["category", "year", "x", "y"]
     data = []
     for category in _CATEGORIES:
         for year in _YEARS:
             for x in _X_VALUES:
                 y = 25.0 * x + random.uniform(0, 1)
                 data.append([category, year, x, y])
+    return data, columns
 
-    return pd.DataFrame(data, columns=["category", "year", "x", "y"])
+
+def create_dataframe_pd() -> pd.DataFrame:
+    data, columns = create_dataframe_data()
+    return pd.DataFrame(data, columns=columns)
+
+
+def create_dataframe_pl() -> pl.DataFrame:
+    # or just create it from the pd df…
+    data, columns = create_dataframe_data()
+    return pl.DataFrame(data, schema=columns)
 
 
 def _interpolate_wrapper(fp: np.ndarray, xp: np.ndarray, x: float) -> float:
@@ -113,6 +125,17 @@ def pandas_groupby(df: pd.DataFrame) -> pd.DataFrame:
     )
 
 
+def polars_groupby(df: pl.DataFrame) -> pl.DataFrame:
+    return (
+        df.groupby(["category", "year"])
+        .agg(
+            pl.struct(["x","y"]).apply(
+                lambda x: np.interp(_INTERPOLATE_AT, x.struct.field("x"), x.struct.field("y"))
+            ).alias("y")
+        )
+    )
+
+
 if __name__ == "__main__":
     """
     Pandas times: [0.35364490200000004, 0.33443024, 0.3303176189999999, 0.32855506999999995, 0.33024766799999994]
@@ -121,19 +144,26 @@ if __name__ == "__main__":
     """
     pandas_times = timeit.repeat(
         "pandas_groupby(df)",
-        "from __main__ import create_dataframe, pandas_groupby;df = create_dataframe()",
+        "from __main__ import create_dataframe_pd, pandas_groupby;df = create_dataframe_pd()",
         number=100,
     )
     print(f"Pandas times: {pandas_times}")
     numpy_times = timeit.repeat(
         "numpy_groupby(df)",
-        "from __main__ import create_dataframe, numpy_groupby;df = create_dataframe();",
+        "from __main__ import create_dataframe_pd, numpy_groupby;df = create_dataframe_pd();",
         number=100,
     )
     print(f"Numpy times: {numpy_times}")
     numba_numpy_times = timeit.repeat(
         "njit_numpy_groupby(df)",
-        "from __main__ import create_dataframe, njit_numpy_groupby;df = create_dataframe();",
+        "from __main__ import create_dataframe_pd, njit_numpy_groupby;df = create_dataframe_pd();",
         number=100,
     )
     print(f"Numba with NumPy times: {numba_numpy_times}")
+
+    polars_times = timeit.repeat(
+        "polars_groupby(df);",
+        "from __main__ import create_dataframe_pl, polars_groupby; df = create_dataframe_pl();",
+        number=100,
+    )
+    print(f"Polars times: {polars_times}")
