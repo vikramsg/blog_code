@@ -75,6 +75,11 @@ def recursive_subcategories():
         "cmlimit": 500,
     }
 
+    # First pass, we only need to run through all pages
+    # to get the city names
+    # Second pass we do the page extracts and parse to
+    # retrieve relevant info
+
     # Function to retrieve category members recursively
     def retrieve_category_members(category):
         # Set the category title in the API parameters
