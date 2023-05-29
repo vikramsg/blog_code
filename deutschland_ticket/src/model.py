@@ -145,3 +145,18 @@ class TravelRoute(BaseModel):
         if isinstance(other, TravelRoute):
             return self.origin == other.origin and self.destination == other.destination
         return False
+
+
+class WikiCategoryMember(BaseModel):
+    pageid: int
+    ns: int  # 14: subcategories 0: page
+    title: str
+
+
+class WikiQuery(BaseModel):
+    categorymembers: List[WikiCategoryMember]
+
+
+class WikiCategoryResponse(BaseModel):
+    batchcomplete: str
+    query: WikiQuery
