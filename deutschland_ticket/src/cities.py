@@ -9,7 +9,7 @@ import requests
 
 from src.model import WikiCategoryResponse, WikiPageResponse
 
-_WIKI_URL = "https://en.wikivoyage.org/w/api.php"
+_WIKIVOYAGE_URL = "https://en.wikivoyage.org/w/api.php"
 
 
 def _category_query_params(category: str) -> Dict:
@@ -104,7 +104,7 @@ def parse_category_page() -> List[str]:
     while not categories.empty():
         category = categories.get()
 
-        response = requests.get(_WIKI_URL, params=_category_query_params(category))  # type: ignore
+        response = requests.get(_WIKIVOYAGE_URL, params=_category_query_params(category))  # type: ignore
         response_data = WikiCategoryResponse.parse_obj(response.json())
         for member in response_data.query.categorymembers:
             if member.ns == 14:
@@ -127,7 +127,7 @@ def cities_table(page_titles: List[str], conn: sqlite3.Connection) -> None:
     with conn:
         for page_title in page_titles:
             content_response = requests.get(
-                _WIKI_URL, params=_page_query_params(page_title)
+                _WIKIVOYAGE_URL, params=_page_query_params(page_title)
             )
             page_content = WikiPageResponse.parse_obj(content_response.json())
 
@@ -153,6 +153,11 @@ def cities_table(page_titles: List[str], conn: sqlite3.Connection) -> None:
                     )
 
     conn.close()
+
+
+# ToDo: We just need lat lon info now
+# We can loop through cities again, do the same query but now on wikipedia
+# Then we just have to extract lat, lon
 
 
 if __name__ == "__main__":
