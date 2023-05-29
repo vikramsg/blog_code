@@ -7,9 +7,10 @@ from typing import Dict, List
 
 import requests
 
-from src.model import WikiCategoryResponse, WikiPageResponse
+from src.model import CoordinatesQueryResult, WikiCategoryResponse, WikiPageResponse
 
 _WIKIVOYAGE_URL = "https://en.wikivoyage.org/w/api.php"
+_WIKIPEDIA_URL = "https://en.wikipedia.org/w/api.php"
 
 
 def _category_query_params(category: str) -> Dict:
@@ -30,6 +31,15 @@ def _page_query_params(page_title: str) -> Dict:
         "prop": "extracts",
         "explaintext": True,
         "inprop": "url",
+    }
+
+
+def _coordinate_query_params(city: str) -> Dict:
+    return {
+        "action": "query",
+        "format": "json",
+        "titles": city,
+        "prop": "coordinates",
     }
 
 
@@ -57,7 +67,10 @@ def _get_points_of_interest(page_extract: str) -> List[str]:
             if point_of_interest:
                 if point_of_interest.group(1) == "St":
                     rest = re.search(r"\.+.*?(\.+)", line)
-                    point_str = f"{point_of_interest.group(1)}.{rest.group(0)[1:]}"
+                    if rest:
+                        point_str = f"{point_of_interest.group(1)}.{rest.group(0)[1:]}"
+                    else:
+                        raise ValueError("Name should not be None")
                 else:
                     point_str = point_of_interest.group(1)
                 points_of_interest.append(point_str)
@@ -68,14 +81,14 @@ def _get_points_of_interest(page_extract: str) -> List[str]:
     return points_of_interest
 
 
-def _city_table_connection() -> sqlite3.Connection:
+def _city_table_connection(table_name: str) -> sqlite3.Connection:
     db_path = Path(".").resolve() / "data" / "cities.sqlite"
     conn = sqlite3.connect(db_path)
 
     # Create the table with a json_array column
     conn.execute(
-        """
-        CREATE TABLE IF NOT EXISTS cities(
+        f"""
+        CREATE TABLE IF NOT EXISTS {table_name}(
             city TEXT,
             places_to_see TEXT,
             url TEXT
@@ -118,13 +131,17 @@ def parse_category_page() -> List[str]:
     return pages
 
 
-def cities_table(page_titles: List[str], conn: sqlite3.Connection) -> None:
+def cities_table(
+    page_titles: List[str], conn: sqlite3.Connection, table_name: str
+) -> None:
     """
     This uses a crude regex pattern to extract points of interest
     We should replace this with Pythia API calls from Huggingface
     or use something like geoapify
     """
     with conn:
+        cursor = conn.cursor()
+
         for page_title in page_titles:
             content_response = requests.get(
                 _WIKIVOYAGE_URL, params=_page_query_params(page_title)
@@ -143,8 +160,8 @@ def cities_table(page_titles: List[str], conn: sqlite3.Connection) -> None:
                     places_to_see_json = json.dumps(points_of_interest)
 
                     print(f"Writing info for {page_title} city.")
-                    conn.execute(
-                        "INSERT INTO cities (city, places_to_see, url) VALUES (?, ?, ?)",
+                    cursor.execute(
+                        f"INSERT INTO {table_name} (city, places_to_see, url) VALUES (?, ?, ?)",
                         (
                             page_title,
                             places_to_see_json,
@@ -155,13 +172,39 @@ def cities_table(page_titles: List[str], conn: sqlite3.Connection) -> None:
     conn.close()
 
 
-# ToDo: We just need lat lon info now
-# We can loop through cities again, do the same query but now on wikipedia
-# Then we just have to extract lat, lon
+def cities_lat_lon(
+    conn: sqlite3.Connection, input_table: str, output_table: str
+) -> None:
+    cursor = conn.cursor()
+
+    with conn:
+        cursor.execute(f"SELECT city FROM {input_table}")
+        cities = cursor.fetchall()
+
+        for city in cities:
+            content_response = requests.get(
+                _WIKIPEDIA_URL, params=_coordinate_query_params(city)
+            )
+            city_coords_resp = CoordinatesQueryResult.parse_obj(content_response.json())
+
+            for _, page in city_coords_resp.query["pages"].items():
+                cursor.execute(
+                    f"INSERT INTO {output_table} (city, lat, lon) VALUES (?, ?, ?)",
+                    (city[0], page.coordinates[0].lat, page.coordinates[0].lon),
+                )
+
+    conn.close()
 
 
 if __name__ == "__main__":
-    # pages = parse_category_page()
-    # print(pages, len(pages))
-    conn = _city_table_connection()
-    cities_table(["Hamburg", "Lübeck", "Baltic Sea Coast (Germany)"], conn)
+    # Get all pages under the category Germany
+    pages = parse_category_page()
+
+    # Create cities table with city name and places of interest
+    conn = _city_table_connection(table_name="cities")
+    cities_table(pages, conn, table_name="cities")
+
+    # Use the existing db to get cities in the cities table
+    # Scrape wikipedia to get lat lon and create new table
+    conn = _city_table_connection(table_name="cities_lat_lon")
+    cities_lat_lon(conn, input_table="cities", output_table="cities_lat_lon")

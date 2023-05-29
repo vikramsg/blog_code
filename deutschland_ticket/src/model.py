@@ -175,3 +175,22 @@ class WikiPageQuery(BaseModel):
 class WikiPageResponse(BaseModel):
     batchcomplete: str
     query: WikiPageQuery
+
+
+class Coordinates(BaseModel):
+    lat: float
+    lon: float
+    primary: str
+    globe: str
+
+
+class CoordinatesPage(BaseModel):
+    pageid: int
+    ns: int
+    title: str
+    coordinates: List[Coordinates]
+
+
+class CoordinatesQueryResult(BaseModel):
+    batchcomplete: str
+    query: Dict[str, Dict[str, CoordinatesPage]]
