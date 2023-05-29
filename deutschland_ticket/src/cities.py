@@ -208,3 +208,10 @@ if __name__ == "__main__":
     # Scrape wikipedia to get lat lon and create new table
     conn = _city_table_connection(table_name="cities_lat_lon")
     cities_lat_lon(conn, input_table="cities", output_table="cities_lat_lon")
+
+    # ToDo
+    # 1. Run to create the tables
+    #   a. Check if it works
+    # 2. Create query for from: to: based on co-ordinates from Hamburg
+    # 3. Create Markdown string for each destination
+    # 4. Put Markdown on Vercel and test if it reads
