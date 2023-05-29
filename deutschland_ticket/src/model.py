@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any, List, Optional
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel
 
@@ -160,3 +160,18 @@ class WikiQuery(BaseModel):
 class WikiCategoryResponse(BaseModel):
     batchcomplete: str
     query: WikiQuery
+
+
+class Page(BaseModel):
+    pageid: int
+    title: str
+    extract: str
+
+
+class WikiPageQuery(BaseModel):
+    pages: Dict[str, Page]
+
+
+class WikiPageResponse(BaseModel):
+    batchcomplete: str
+    query: WikiPageQuery
