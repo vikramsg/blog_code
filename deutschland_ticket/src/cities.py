@@ -1,5 +1,8 @@
+import json
 import queue
 import re
+import sqlite3
+from pathlib import Path
 from typing import Dict, List
 
 import requests
@@ -26,6 +29,7 @@ def _page_query_params(page_title: str) -> Dict:
         "titles": page_title,
         "prop": "extracts",
         "explaintext": True,
+        "inprop": "url",
     }
 
 
@@ -53,7 +57,7 @@ def _get_points_of_interest(page_extract: str) -> List[str]:
             if point_of_interest:
                 if point_of_interest.group(1) == "St":
                     rest = re.search(r"\.+.*?(\.+)", line)
-                    point_str = "St.", rest.group(0)[1:]
+                    point_str = f"{point_of_interest.group(1)}.{rest.group(0)[1:]}"
                 else:
                     point_str = point_of_interest.group(1)
                 points_of_interest.append(point_str)
@@ -62,6 +66,28 @@ def _get_points_of_interest(page_extract: str) -> List[str]:
         print("No '== See ==' section found.")
 
     return points_of_interest
+
+
+def _city_table_connection() -> sqlite3.Connection:
+    db_path = Path(".").resolve() / "data" / "cities.db"
+    conn = sqlite3.connect(db_path)
+
+    # Create the table with a json_array column
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS cities(
+            city TEXT,
+            places_to_see TEXT,
+            url TEXT
+        )
+    """
+    )
+
+    return conn
+
+
+def _create_url_from_page_id(page_id: int) -> str:
+    return f"https://en.wikivoyage.org/?curid={page_id}"
 
 
 def parse_category_page() -> List[str]:
@@ -92,32 +118,44 @@ def parse_category_page() -> List[str]:
     return pages
 
 
-def parse_pages(page_titles: List[str]) -> None:
+def cities_table(page_titles: List[str], conn: sqlite3.Connection) -> None:
     """
     This uses a crude regex pattern to extract points of interest
     We should replace this with Pythia API calls from Huggingface
     or use something like geoapify
     """
-    for page_title in page_titles:
-        content_response = requests.get(
-            _WIKI_URL, params=_page_query_params(page_title)
-        )
-        page_content = WikiPageResponse.parse_obj(content_response.json())
+    with conn:
+        for page_title in page_titles:
+            content_response = requests.get(
+                _WIKI_URL, params=_page_query_params(page_title)
+            )
+            page_content = WikiPageResponse.parse_obj(content_response.json())
 
-        # Extract the page content
-        for _, page_info in page_content.query.pages.items():
-            page_title = page_info.title
-            page_extract = page_info.extract
+            # Extract the page content
+            for _, page_info in page_content.query.pages.items():
+                page_title = page_info.title
+                page_extract = page_info.extract
 
-            is_city = not re.search("== Regions ==", page_extract)
-            if is_city:
-                points_of_interest = _get_points_of_interest(page_extract)
+                is_city = not re.search("== Regions ==", page_extract)
+                if is_city:
+                    points_of_interest = _get_points_of_interest(page_extract)
 
-                # If it is city, we will store city name, url
-                # And places to see
+                    places_to_see_json = json.dumps(points_of_interest)
+
+                    conn.execute(
+                        "INSERT INTO cities (city, places_to_see, url) VALUES (?, ?, ?)",
+                        (
+                            page_title,
+                            places_to_see_json,
+                            _create_url_from_page_id(page_info.pageid),
+                        ),
+                    )
+
+    conn.close()
 
 
 if __name__ == "__main__":
     # pages = parse_category_page()
     # print(pages, len(pages))
-    parse_pages(["Hamburg", "Lübeck", "Baltic Sea Coast (Germany)"])
+    conn = _city_table_connection()
+    cities_table(["Hamburg", "Lübeck", "Baltic Sea Coast (Germany)"], conn)
