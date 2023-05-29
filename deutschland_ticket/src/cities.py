@@ -18,6 +18,16 @@ def _category_query_params(category: str) -> Dict:
     }
 
 
+def _page_query_params(page_title: str) -> Dict:
+    return {
+        "action": "query",
+        "format": "json",
+        "titles": page_title,
+        "prop": "extracts",
+        "explaintext": True,
+    }
+
+
 def parse_category_page() -> List[str]:
     """
     Create a queue that goes down all subcategories of the Germany category
@@ -28,7 +38,7 @@ def parse_category_page() -> List[str]:
 
     pages = []
 
-    i: int = 0
+    category_counter: int = 0
     while not categories.empty():
         category = categories.get()
 
@@ -40,25 +50,21 @@ def parse_category_page() -> List[str]:
             if member.ns == 0:
                 pages.append(member.title)
 
-        i += 1
-        print(f"Processed {i} categories")
+        category_counter += 1
+        print(f"Processed {category_counter} categories")
 
     return pages
 
 
-def temp_parse() -> None:
-    # Set the parameters for retrieving page content
-    content_params = {
-        "action": "query",
-        "format": "json",
-        # "titles": page_title,
-        "prop": "extracts",
-        "explaintext": True,
-    }
-
-    # Send a GET request to retrieve the page content
-    content_response = requests.get(_WIKI_URL, params=content_params)
-    content_data = content_response.json()
+def parse_pages(page_titles: List[str]) -> None:
+    for page_title in page_titles:
+        # Send a GET request to retrieve the page content
+        content_response = requests.get(
+            _WIKI_URL, params=_page_query_params(page_title)
+        )
+        content_data = content_response.json()
+        print(content_data)
+        return
 
     # Extract the page content
     pages = content_data["query"]["pages"]
@@ -76,5 +82,6 @@ def temp_parse() -> None:
 
 
 if __name__ == "__main__":
-    pages = parse_category_page()
-    print(pages)
+    # pages = parse_category_page()
+    # print(pages, len(pages))
+    parse_pages(["Hamburg", "Baltic Sea Coast (Germany)"])
