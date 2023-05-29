@@ -1,4 +1,5 @@
 import queue
+import re
 from typing import Dict, List
 
 import requests
@@ -26,6 +27,41 @@ def _page_query_params(page_title: str) -> Dict:
         "prop": "extracts",
         "explaintext": True,
     }
+
+
+def _get_points_of_interest(page_extract: str) -> List[str]:
+    points_of_interest = []
+
+    match = re.search("== See ==", page_extract)
+    if match:
+        start_index = match.end()
+        # Find the start and end positions of the next section (or end of string)
+        next_match = re.search(r"\n==\s+(\w+)\s+==\n|\Z", page_extract[start_index:])
+        end_index = (
+            len(page_extract)
+            if next_match is None
+            else start_index + next_match.start()
+        )
+
+        # Extract the text under the "== See ==" section
+        see_section = page_extract[start_index:end_index].strip()
+
+        # Extract the points of interest using a regex pattern
+        for line in see_section.splitlines():
+            point_of_interest = re.search(r"\d+\s(.*?)\.", line)
+
+            if point_of_interest:
+                if point_of_interest.group(1) == "St":
+                    rest = re.search(r"\.+.*?(\.+)", line)
+                    point_str = "St.", rest.group(0)[1:]
+                else:
+                    point_str = point_of_interest.group(1)
+                points_of_interest.append(point_str)
+
+    else:
+        print("No '== See ==' section found.")
+
+    return points_of_interest
 
 
 def parse_category_page() -> List[str]:
@@ -57,6 +93,11 @@ def parse_category_page() -> List[str]:
 
 
 def parse_pages(page_titles: List[str]) -> None:
+    """
+    This uses a crude regex pattern to extract points of interest
+    We should replace this with Pythia API calls from Huggingface
+    or use something like geoapify
+    """
     for page_title in page_titles:
         content_response = requests.get(
             _WIKI_URL, params=_page_query_params(page_title)
@@ -68,13 +109,15 @@ def parse_pages(page_titles: List[str]) -> None:
             page_title = page_info.title
             page_extract = page_info.extract
 
-            # Print the page title and plain text extract
-            print(f"Page Title: {page_title}")
-            print(f"Extract: {page_extract}")
-            print()
+            is_city = not re.search("== Regions ==", page_extract)
+            if is_city:
+                points_of_interest = _get_points_of_interest(page_extract)
+
+                # If it is city, we will store city name, url
+                # And places to see
 
 
 if __name__ == "__main__":
     # pages = parse_category_page()
     # print(pages, len(pages))
-    parse_pages(["Hamburg", "Baltic Sea Coast (Germany)"])
+    parse_pages(["Hamburg", "Lübeck", "Baltic Sea Coast (Germany)"])
