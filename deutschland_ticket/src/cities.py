@@ -69,7 +69,7 @@ def _get_points_of_interest(page_extract: str) -> List[str]:
 
 
 def _city_table_connection() -> sqlite3.Connection:
-    db_path = Path(".").resolve() / "data" / "cities.db"
+    db_path = Path(".").resolve() / "data" / "cities.sqlite"
     conn = sqlite3.connect(db_path)
 
     # Create the table with a json_array column
@@ -142,6 +142,7 @@ def cities_table(page_titles: List[str], conn: sqlite3.Connection) -> None:
 
                     places_to_see_json = json.dumps(points_of_interest)
 
+                    print(f"Writing info for {page_title} city.")
                     conn.execute(
                         "INSERT INTO cities (city, places_to_see, url) VALUES (?, ?, ?)",
                         (
