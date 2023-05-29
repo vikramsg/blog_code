@@ -85,16 +85,7 @@ def _city_table_connection(table_name: str) -> sqlite3.Connection:
     db_path = Path(".").resolve() / "data" / "cities.sqlite"
     conn = sqlite3.connect(db_path)
 
-    # Create the table with a json_array column
-    conn.execute(
-        f"""
-        CREATE TABLE IF NOT EXISTS {table_name}(
-            city TEXT,
-            places_to_see TEXT,
-            url TEXT
-        )
-    """
-    )
+    conn.execute(f"DROP TABLE IF EXISTS {table_name}")
 
     return conn
 
@@ -139,6 +130,17 @@ def cities_table(
     We should replace this with Pythia API calls from Huggingface
     or use something like geoapify
     """
+
+    conn.execute(
+        f"""
+        CREATE TABLE {table_name}(
+            city TEXT,
+            places_to_see TEXT,
+            url TEXT
+        )
+    """
+    )
+
     with conn:
         cursor = conn.cursor()
 
@@ -183,9 +185,19 @@ def cities_lat_lon(
     to change query response model
     We may have to fill NULLS for this
     """
-    cursor = conn.cursor()
+    conn.execute(
+        f"""
+        CREATE TABLE {output_table}(
+            city TEXT,
+            lat REAL,
+            lon REAL
+        )
+    """
+    )
 
     with conn:
+        cursor = conn.cursor()
+
         cursor.execute(f"SELECT city FROM {input_table}")
         cities = cursor.fetchall()
 
