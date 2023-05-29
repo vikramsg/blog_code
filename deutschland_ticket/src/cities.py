@@ -43,7 +43,7 @@ def _coordinate_query_params(city: str) -> Dict:
     }
 
 
-def _get_points_of_interest(page_extract: str) -> List[str]:
+def _get_points_of_interest(page_title: str, page_extract: str) -> List[str]:
     points_of_interest = []
 
     match = re.search("== See ==", page_extract)
@@ -76,7 +76,7 @@ def _get_points_of_interest(page_extract: str) -> List[str]:
                 points_of_interest.append(point_str)
 
     else:
-        print("No '== See ==' section found.")
+        print(f"No '== See ==' section found for city: {page_title}.")
 
     return points_of_interest
 
@@ -155,7 +155,9 @@ def cities_table(
 
                 is_city = not re.search("== Regions ==", page_extract)
                 if is_city:
-                    points_of_interest = _get_points_of_interest(page_extract)
+                    points_of_interest = _get_points_of_interest(
+                        page_title, page_extract
+                    )
 
                     places_to_see_json = json.dumps(points_of_interest)
 
@@ -175,6 +177,12 @@ def cities_table(
 def cities_lat_lon(
     conn: sqlite3.Connection, input_table: str, output_table: str
 ) -> None:
+    """
+    https://en.wikipedia.org/wiki/Central_German_Lake_District
+    This page has no co-ordinates, so I am assuming we need
+    to change query response model
+    We may have to fill NULLS for this
+    """
     cursor = conn.cursor()
 
     with conn:
@@ -182,6 +190,7 @@ def cities_lat_lon(
         cities = cursor.fetchall()
 
         for city in cities:
+            print(f"Querying co-ordinates for city: {city}")
             content_response = requests.get(
                 _WIKIPEDIA_URL, params=_coordinate_query_params(city)
             )
@@ -198,11 +207,11 @@ def cities_lat_lon(
 
 if __name__ == "__main__":
     # Get all pages under the category Germany
-    pages = parse_category_page()
+    # pages = parse_category_page()
 
-    # Create cities table with city name and places of interest
-    conn = _city_table_connection(table_name="cities")
-    cities_table(pages, conn, table_name="cities")
+    # # Create cities table with city name and places of interest
+    # conn = _city_table_connection(table_name="cities")
+    # cities_table(pages, conn, table_name="cities")
 
     # Use the existing db to get cities in the cities table
     # Scrape wikipedia to get lat lon and create new table
