@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List
+from typing import Dict, List
 
 import requests
 
@@ -9,6 +9,20 @@ from src.model import (
     TripDepartureArrival,
     TripResponseModel,
 )
+
+_TRANSPORT_URL = "https://v6.db.transport.rest/"
+
+
+def _journey_params(origin_id: int, destination_id: int) -> Dict:
+    return {
+        "from": origin_id,
+        "to": destination_id,
+        "bus": "false",
+        "national": "false",
+        "nationalExpress": "false",
+        "suburban": "false",
+        "subway": "false",
+    }
 
 
 def _get_trip_departure_arrival(trip_id: str) -> TripDepartureArrival:
@@ -72,6 +86,17 @@ def _get_hours_minutes(date_time: datetime) -> str:
     return date_time.time().strftime("%H:%M")
 
 
+def get_journey(origin: str, destination: str) -> None:
+    """
+    ToDo
+    1. The FROM, TO is complicated since it requires an accurate address
+    2. Therefore, we need the stop ids
+    3. We should go over all cities, and get their stops
+    4. If the city itself does not show a stop, then get one from lat, lon
+    """
+    pass
+
+
 if __name__ == "__main__":
     hamburg_stop_id = 8002549
     travel_routes = get_departures(hamburg_stop_id)
@@ -80,10 +105,3 @@ if __name__ == "__main__":
             f"Origin: {route.origin}, Destination: {route.destination}, Train: {route.train_line},"
             f" Departure: {_get_hours_minutes(route.departure)}, Arrival: {_get_hours_minutes(route.arrival)}"
         )
-
-    # ToDo
-    # Next, we want to find all departures from each destination
-    # within 120 mins of arrival from the starting point
-    # We will have to create a new models that is a composite of 2 trips
-    # It would need an id, saying which leg is the first and so on
-    # It should also exclude any trips back to the origin
