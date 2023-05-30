@@ -1,16 +1,18 @@
 from datetime import datetime
-from typing import Dict, List
+from sqlite3 import Connection
+from typing import Dict, List, Optional
 
+import pydantic
 import requests
 
+from src.common import city_table_connection
 from src.model import (
+    Stop,
     StopDeparturesResponseModel,
     TravelRoute,
     TripDepartureArrival,
     TripResponseModel,
 )
-
-_TRANSPORT_URL = "https://v6.db.transport.rest/"
 
 
 def _journey_params(origin_id: int, destination_id: int) -> Dict:
@@ -86,22 +88,67 @@ def _get_hours_minutes(date_time: datetime) -> str:
     return date_time.time().strftime("%H:%M")
 
 
-def get_journey(origin: str, destination: str) -> None:
+def _location(city_query: str) -> Optional[int]:
     """
-    ToDo
-    1. The FROM, TO is complicated since it requires an accurate address
-    2. Therefore, we need the stop ids
-    3. We should go over all cities, and get their stops
-    4. If the city itself does not show a stop, then get one from lat, lon
+    Returns stop id for the given city
+
+    The transport API has weird issues
+    1. It only unblocks after timeout is reached
+    2. It blocks if query params are used
     """
-    pass
+    location_url = (
+        f"https://v6.db.transport.rest/locations?query={city_query}&results=1"
+    )
+    location_response = requests.get(location_url, timeout=2)
+
+    try:
+        stop_response = Stop.parse_obj(location_response.json()[0])
+    except pydantic.error_wrappers.ValidationError:
+        print(f"Could not resolve {city_query}. Skipping.")
+        return None
+
+    return stop_response.id
+
+
+def get_city_stops(conn: Connection, input_table: str, output_table: str) -> None:
+    conn.execute(
+        f"""CREATE TABLE {output_table}(
+            city TEXT,
+            stop_id INTEGER
+        )
+        """
+    )
+    with conn:
+        cursor = conn.cursor()
+        cursor.execute(f"SELECT city from {input_table}")
+
+        cities = cursor.fetchall()
+
+        for city in cities:
+            city_name = city[0]
+            print(f"Processing stop ID for city: {city_name}")
+            stop_id = _location("+".join(city_name.split()))
+
+            if stop_id:
+                cursor.execute(
+                    f"INSERT INTO {output_table} (city, stop_id) VALUES (?, ?)",
+                    (city[0], stop_id),
+                )
+
+    return
 
 
 if __name__ == "__main__":
-    hamburg_stop_id = 8002549
-    travel_routes = get_departures(hamburg_stop_id)
-    for route in travel_routes:
-        print(
-            f"Origin: {route.origin}, Destination: {route.destination}, Train: {route.train_line},"
-            f" Departure: {_get_hours_minutes(route.departure)}, Arrival: {_get_hours_minutes(route.arrival)}"
-        )
+    # hamburg_stop_id = 8002549
+    # travel_routes = get_departures(hamburg_stop_id)
+    # for route in travel_routes:
+    #     print(
+    #         f"Origin: {route.origin}, Destination: {route.destination}, Train: {route.train_line},"
+    #         f" Departure: {_get_hours_minutes(route.departure)}, Arrival: {_get_hours_minutes(route.arrival)}"
+    #     )
+
+    conn = city_table_connection("city_stops")
+    get_city_stops(conn, "cities_lat_lon", "city_stops")
+
+    # ToDo
+    # 1. Run through cities tables and get stop ids of each

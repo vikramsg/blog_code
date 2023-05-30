@@ -2,11 +2,11 @@ import json
 import queue
 import re
 import sqlite3
-from pathlib import Path
 from typing import Dict, List
 
 import requests
 
+from src.common import city_table_connection
 from src.model import CoordinatesQueryResponse, WikiCategoryResponse, WikiPageResponse
 
 _WIKIVOYAGE_URL = "https://en.wikivoyage.org/w/api.php"
@@ -79,15 +79,6 @@ def _get_points_of_interest(page_title: str, page_extract: str) -> List[str]:
         print(f"No '== See ==' section found for city: {page_title}.")
 
     return points_of_interest
-
-
-def _city_table_connection(table_name: str) -> sqlite3.Connection:
-    db_path = Path(".").resolve() / "data" / "cities.sqlite"
-    conn = sqlite3.connect(db_path)
-
-    conn.execute(f"DROP TABLE IF EXISTS {table_name}")
-
-    return conn
 
 
 def _create_url_from_page_id(page_id: int) -> str:
@@ -223,12 +214,12 @@ if __name__ == "__main__":
     pages = parse_category_page()
 
     # Create cities table with city name and places of interest
-    conn = _city_table_connection(table_name="cities")
+    conn = city_table_connection(table_name="cities")
     cities_table(pages, conn, table_name="cities")
 
     # Use the existing db to get cities in the cities table
     # Scrape wikipedia to get lat lon and create new table
-    conn = _city_table_connection(table_name="cities_lat_lon")
+    conn = city_table_connection(table_name="cities_lat_lon")
     cities_lat_lon(conn, input_table="cities", output_table="cities_lat_lon")
 
     # ToDo
