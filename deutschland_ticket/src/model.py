@@ -185,12 +185,16 @@ class Coordinates(BaseModel):
 
 
 class CoordinatesPage(BaseModel):
-    pageid: int
+    pageid: Optional[int]
     ns: int
     title: str
-    coordinates: List[Coordinates]
+    coordinates: Optional[List[Coordinates]]
 
 
-class CoordinatesQueryResult(BaseModel):
+class CoordinatesPageQuery(BaseModel):
+    pages: Dict[str, CoordinatesPage]
+
+
+class CoordinatesQueryResponse(BaseModel):
     batchcomplete: str
-    query: Dict[str, Dict[str, CoordinatesPage]]
+    query: CoordinatesPageQuery

@@ -7,7 +7,7 @@ from typing import Dict, List
 
 import requests
 
-from src.model import CoordinatesQueryResult, WikiCategoryResponse, WikiPageResponse
+from src.model import CoordinatesQueryResponse, WikiCategoryResponse, WikiPageResponse
 
 _WIKIVOYAGE_URL = "https://en.wikivoyage.org/w/api.php"
 _WIKIPEDIA_URL = "https://en.wikipedia.org/w/api.php"
@@ -180,10 +180,7 @@ def cities_lat_lon(
     conn: sqlite3.Connection, input_table: str, output_table: str
 ) -> None:
     """
-    https://en.wikipedia.org/wiki/Central_German_Lake_District
-    This page has no co-ordinates, so I am assuming we need
-    to change query response model
-    We may have to fill NULLS for this
+    Scrape Wikipedia for the same cities to get co-ordinates
     """
     conn.execute(
         f"""
@@ -202,28 +199,32 @@ def cities_lat_lon(
         cities = cursor.fetchall()
 
         for city in cities:
-            print(f"Querying co-ordinates for city: {city}")
+            print(f"Querying co-ordinates for city: {city[0]}")
             content_response = requests.get(
                 _WIKIPEDIA_URL, params=_coordinate_query_params(city)
             )
-            city_coords_resp = CoordinatesQueryResult.parse_obj(content_response.json())
+            city_coords_resp = CoordinatesQueryResponse.parse_obj(
+                content_response.json()
+            )
 
-            for _, page in city_coords_resp.query["pages"].items():
-                cursor.execute(
-                    f"INSERT INTO {output_table} (city, lat, lon) VALUES (?, ?, ?)",
-                    (city[0], page.coordinates[0].lat, page.coordinates[0].lon),
-                )
+            for _, page in city_coords_resp.query.pages.items():
+                if page.coordinates:
+                    # If we don't find co-ordinates don't put in table
+                    cursor.execute(
+                        f"INSERT INTO {output_table} (city, lat, lon) VALUES (?, ?, ?)",
+                        (city[0], page.coordinates[0].lat, page.coordinates[0].lon),
+                    )
 
     conn.close()
 
 
 if __name__ == "__main__":
     # Get all pages under the category Germany
-    # pages = parse_category_page()
+    pages = parse_category_page()
 
-    # # Create cities table with city name and places of interest
-    # conn = _city_table_connection(table_name="cities")
-    # cities_table(pages, conn, table_name="cities")
+    # Create cities table with city name and places of interest
+    conn = _city_table_connection(table_name="cities")
+    cities_table(pages, conn, table_name="cities")
 
     # Use the existing db to get cities in the cities table
     # Scrape wikipedia to get lat lon and create new table
