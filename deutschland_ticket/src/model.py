@@ -1,5 +1,5 @@
-from datetime import datetime
-from typing import Any, Dict, List, Optional
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional, Tuple
 
 from pydantic import BaseModel, validator
 
@@ -249,3 +249,8 @@ class CoordinatesPageQuery(BaseModel):
 class CoordinatesQueryResponse(BaseModel):
     batchcomplete: str
     query: CoordinatesPageQuery
+
+
+class JourneySummary(BaseModel):
+    journey_time: timedelta
+    journey_info: List[List[Tuple[str, str, str, str, Optional[str]]]]

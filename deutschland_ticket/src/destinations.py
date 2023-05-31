@@ -1,7 +1,7 @@
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 from sqlite3 import Connection
-from typing import Any, Dict, List, Optional
+from typing import Dict, List, Optional
 
 import pydantic
 import requests
@@ -9,6 +9,7 @@ import requests
 from src.common import city_table_connection, session_with_retry
 from src.model import (
     JourneyResponse,
+    JourneySummary,
     Stop,
     StopDeparturesResponseModel,
     TravelRoute,
@@ -138,10 +139,10 @@ def get_city_stops(conn: Connection, input_table: str, output_table: str) -> Non
                     (city[0], stop_id),
                 )
 
-    return
+    conn.close()
 
 
-def _journey(origin: int, destination: int) -> Optional[List[List[Any]]]:
+def _journey(origin: int, destination: int) -> Optional[JourneySummary]:
     url = (
         "https://v6.db.transport.rest/journeys"
         "?from="
@@ -162,8 +163,9 @@ def _journey(origin: int, destination: int) -> Optional[List[List[Any]]]:
 
         journey_response = JourneyResponse.parse_obj(response.json())
 
-        journey_summary = []
+        journey_info = []
         if journey_response.journeys:
+            min_journey_time = timedelta(days=1)
             for journey in journey_response.journeys:
                 leg_summary = []
                 for leg in journey.legs:
@@ -177,9 +179,22 @@ def _journey(origin: int, destination: int) -> Optional[List[List[Any]]]:
                             line_name,
                         )
                     )
-                journey_summary.append(leg_summary)
+                journey_departure_time = datetime.strptime(
+                    leg_summary[0][1], "%Y-%m-%dT%H:%M:%S%z"
+                )
+                journey_arrival_time = datetime.strptime(
+                    leg_summary[-1][3], "%Y-%m-%dT%H:%M:%S%z"
+                )
 
-            return journey_summary
+                min_journey_time = min(
+                    min_journey_time, journey_arrival_time - journey_departure_time
+                )
+
+                journey_info.append(leg_summary)
+
+            return JourneySummary(
+                journey_time=min_journey_time, journey_info=journey_info
+            )
         else:
             return None
     # Even with backoff, if it does not work, then we just ignore it
@@ -194,7 +209,8 @@ def hamburg_journeys(conn: Connection, input_table: str, output_table: str) -> N
     conn.execute(
         f"""CREATE TABLE {output_table}(
             city TEXT,
-            journey TEXT
+            journey TEXT,
+            journey_time INT
         )
         """
     )
@@ -213,14 +229,18 @@ def hamburg_journeys(conn: Connection, input_table: str, output_table: str) -> N
             journey_summary = _journey(hamburg_stop_id, destination_stop_id)
 
             if journey_summary:
-                journey_summary_json = json.dumps(journey_summary)
+                journey_summary_json = json.dumps(journey_summary.journey_info)
 
                 cursor.execute(
-                    f"INSERT INTO {output_table} (city, journey) VALUES (?, ?)",
-                    (cities[it], journey_summary_json),
+                    f"INSERT INTO {output_table} (city, journey, journey_time) VALUES (?, ?, ?)",
+                    (
+                        cities[it],
+                        journey_summary_json,
+                        journey_summary.journey_time.total_seconds(),
+                    ),
                 )
 
-    return
+    conn.close()
 
 
 if __name__ == "__main__":
@@ -239,4 +259,7 @@ if __name__ == "__main__":
     hamburg_journeys(conn, "city_stops", "hamburg_journeys")
 
     # ToDo
-    # 1. Run through cities tables and get stop ids of each
+    # We don't really need lat lon at all!
+    # We should just save these as gists
+    # Actually just create another folder and save these files
+    # Helps when referencing in blog
