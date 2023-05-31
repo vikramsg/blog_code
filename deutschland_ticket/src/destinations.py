@@ -7,11 +7,7 @@ import pydantic
 import requests
 
 from src.common import city_table_connection, session_with_retry
-from src.model import (
-    JourneyResponse,
-    JourneySummary,
-    Stop,
-)
+from src.model import JourneyResponse, JourneySummary, Stop
 
 
 def _location(city_query: str) -> Optional[int]:
