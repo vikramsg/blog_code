@@ -1,6 +1,10 @@
 import sqlite3
 from pathlib import Path
 
+import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
+
 
 def city_table_connection(table_name: str) -> sqlite3.Connection:
     db_path = Path(".").resolve() / "data" / "cities.sqlite"
@@ -12,3 +16,23 @@ def city_table_connection(table_name: str) -> sqlite3.Connection:
     conn.execute(f"DROP TABLE IF EXISTS {table_name}")
 
     return conn
+
+
+def session_with_retry() -> requests.Session:
+    session = requests.Session()
+
+    retries = 3
+    backoff_factor = 0.3
+
+    retry = Retry(
+        total=retries,
+        read=retries,
+        connect=retries,
+        backoff_factor=backoff_factor,
+    )
+
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount("http://", adapter)
+    session.mount("https://", adapter)
+
+    return session

@@ -5,7 +5,7 @@ from typing import Dict, List, Optional
 import pydantic
 import requests
 
-from src.common import city_table_connection
+from src.common import city_table_connection, session_with_retry
 from src.model import (
     Stop,
     StopDeparturesResponseModel,
@@ -94,12 +94,14 @@ def _location(city_query: str) -> Optional[int]:
 
     The transport API has weird issues
     1. It only unblocks after timeout is reached
-    2. It blocks if query params are used
+    2. It blocks if query params are used as params instead of in url
     """
     location_url = (
         f"https://v6.db.transport.rest/locations?query={city_query}&results=1"
     )
-    location_response = requests.get(location_url, timeout=2)
+    request_session = session_with_retry()
+    # ToDo: We should get a retry object from urllib3 to make this more efficient
+    location_response = request_session.get(location_url, timeout=0.5)
 
     try:
         stop_response = Stop.parse_obj(location_response.json()[0])
