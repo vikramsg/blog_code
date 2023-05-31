@@ -1,12 +1,14 @@
+import json
 from datetime import datetime
 from sqlite3 import Connection
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 import pydantic
 import requests
 
 from src.common import city_table_connection, session_with_retry
 from src.model import (
+    JourneyResponse,
     Stop,
     StopDeparturesResponseModel,
     TravelRoute,
@@ -100,8 +102,7 @@ def _location(city_query: str) -> Optional[int]:
         f"https://v6.db.transport.rest/locations?query={city_query}&results=1"
     )
     request_session = session_with_retry()
-    # ToDo: We should get a retry object from urllib3 to make this more efficient
-    location_response = request_session.get(location_url, timeout=0.5)
+    location_response = request_session.get(location_url, timeout=1)
 
     try:
         stop_response = Stop.parse_obj(location_response.json()[0])
@@ -140,6 +141,88 @@ def get_city_stops(conn: Connection, input_table: str, output_table: str) -> Non
     return
 
 
+def _journey(origin: int, destination: int) -> Optional[List[List[Any]]]:
+    url = (
+        "https://v6.db.transport.rest/journeys"
+        "?from="
+        f"{origin}"
+        "&to="
+        f"{destination}"
+        "&bus=false"
+        "&national=false"
+        "&nationalExpress=false"
+        "&suburban=false"
+        "&subway=false"
+        "&departure=2023-05-27T05:00"
+    )
+
+    request_session = session_with_retry()
+    try:
+        response = request_session.get(url, timeout=1)
+
+        journey_response = JourneyResponse.parse_obj(response.json())
+
+        journey_summary = []
+        if journey_response.journeys:
+            for journey in journey_response.journeys:
+                leg_summary = []
+                for leg in journey.legs:
+                    line_name = leg.line.name if leg.line else None
+                    leg_summary.append(
+                        (
+                            leg.origin.name,
+                            leg.plannedDeparture,
+                            leg.destination.name,
+                            leg.plannedArrival,
+                            line_name,
+                        )
+                    )
+                journey_summary.append(leg_summary)
+
+            return journey_summary
+        else:
+            return None
+    # Even with backoff, if it does not work, then we just ignore it
+    except requests.exceptions.ConnectionError:
+        print("Timeout occured. Returning None.")
+        return None
+
+
+def hamburg_journeys(conn: Connection, input_table: str, output_table: str) -> None:
+    hamburg_stop_id = 8096009
+
+    conn.execute(
+        f"""CREATE TABLE {output_table}(
+            city TEXT,
+            journey TEXT
+        )
+        """
+    )
+    with conn:
+        cursor = conn.cursor()
+        cursor.execute(f"SELECT city, stop_id from {input_table}")
+
+        table_output = cursor.fetchall()
+        cities = [city_stop[0] for city_stop in table_output]
+        stop_ids = [city_stop[1] for city_stop in table_output]
+
+        for it, destination_stop_id in enumerate(stop_ids):
+            print(
+                f"Processing journey to city: {cities[it]} with stop id: {destination_stop_id}"
+            )
+            journey_summary = _journey(hamburg_stop_id, destination_stop_id)
+
+            if journey_summary:
+                journey_summary_json = json.dumps(journey_summary)
+
+                cursor.execute(
+                    f"INSERT INTO {output_table} (city, journey) VALUES (?, ?)",
+                    (cities[it], journey_summary_json),
+                )
+
+    return
+
+
 if __name__ == "__main__":
     # hamburg_stop_id = 8002549
     # travel_routes = get_departures(hamburg_stop_id)
@@ -149,8 +232,11 @@ if __name__ == "__main__":
     #         f" Departure: {_get_hours_minutes(route.departure)}, Arrival: {_get_hours_minutes(route.arrival)}"
     #     )
 
-    conn = city_table_connection("city_stops")
-    get_city_stops(conn, "cities_lat_lon", "city_stops")
+    # conn = city_table_connection("city_stops")
+    # get_city_stops(conn, "cities_lat_lon", "city_stops")
+
+    conn = city_table_connection("hamburg_journeys")
+    hamburg_journeys(conn, "city_stops", "hamburg_journeys")
 
     # ToDo
     # 1. Run through cities tables and get stop ids of each

@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 
 
 class Location(BaseModel):
@@ -48,8 +48,8 @@ class Line(BaseModel):
     productName: str
     mode: str
     product: str
-    operator: Operator
-    additionalName: str
+    operator: Optional[Operator]
+    additionalName: Optional[str]
 
 
 class Destination(BaseModel):
@@ -145,6 +145,57 @@ class TravelRoute(BaseModel):
         if isinstance(other, TravelRoute):
             return self.origin == other.origin and self.destination == other.destination
         return False
+
+
+class Leg(BaseModel):
+    origin: Stop
+    destination: Stop
+    departure: str
+    plannedDeparture: str
+    departureDelay: Optional[str]
+    arrival: str
+    plannedArrival: str
+    arrivalDelay: Optional[str]
+    reachable: Optional[bool]
+    tripId: Optional[str]
+    line: Optional[Line]
+    direction: Optional[str]
+    arrivalPlatform: Optional[str]
+    plannedArrivalPlatform: Optional[str]
+    arrivalPrognosisType: Optional[str]
+    departurePlatform: Optional[str]
+    plannedDeparturePlatform: Optional[str]
+    departurePrognosisType: Optional[str]
+
+
+class Journey(BaseModel):
+    type: str
+    legs: List[Leg]
+
+
+class JourneyResponse(BaseModel):
+    realTimeDataUpdatedAt: Optional[int]
+    earlierRef: Optional[str]
+    laterRef: Optional[str]
+    journeys: Optional[List[Journey]]
+    refreshToken: Optional[str]
+    price: Optional[str]
+
+    @validator("journeys")
+    def remove_flx_or_none_line(cls, journeys: List[Journey]) -> List[Journey]:
+        if journeys:
+            updated_journeys = []
+            for journey in journeys:
+                flag = 1
+                for leg in journey.legs:
+                    if not leg.line or leg.line.productName == "FLX":
+                        flag = 0
+                if flag:
+                    updated_journeys.append(journey)
+
+            return updated_journeys
+        else:
+            return journeys
 
 
 class WikiCategoryMember(BaseModel):
