@@ -30,7 +30,7 @@ def create_dataframe_pd() -> pd.DataFrame:
     return pd.DataFrame(data, columns=columns)
 
 
-def numpy_groupby_global_args(indices: Tuple[int, int], df: pd.DataFrame) -> pd.DataFrame:
+def numpy_interpolate_global_args(indices: Tuple[int, int], df: pd.DataFrame) -> pd.DataFrame:
     interpolated_value = np.interp(_INTERPOLATE_AT, df["x"], df["y"])
 
     return pd.DataFrame(
@@ -43,7 +43,7 @@ def numpy_groupby_global_args(indices: Tuple[int, int], df: pd.DataFrame) -> pd.
     )
 
 
-def numpy_groupby_local_args(indices: Tuple[int, int], df: pd.DataFrame, interpolate_at: float) -> pd.DataFrame:
+def numpy_interpolate_local_args(indices: Tuple[int, int], df: pd.DataFrame, interpolate_at: float) -> pd.DataFrame:
     interpolated_value = np.interp(interpolate_at, df["x"], df["y"])
 
     return pd.DataFrame(
@@ -78,12 +78,12 @@ if __name__ == "__main__":
         ]
     )
     interpolated_df_global_args = spark_df.groupBy(F.col("category"), F.col("year")).applyInPandas(
-        numpy_groupby_global_args, schema=interpolated_schema
+        numpy_interpolate_global_args, schema=interpolated_schema
     )
 
     interpolated_df_global_args.show(truncate=False)
 
-    numpy_groupby_interpolate_at = partial(numpy_groupby_local_args, interpolate_at=_INTERPOLATE_AT)
+    numpy_groupby_interpolate_at = partial(numpy_interpolate_local_args, interpolate_at=_INTERPOLATE_AT)
     interpolated_df = spark_df.groupBy(F.col("category"), F.col("year")).applyInPandas(
         numpy_groupby_interpolate_at, schema=interpolated_schema
     )
