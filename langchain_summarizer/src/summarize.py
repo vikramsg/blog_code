@@ -73,8 +73,10 @@ def predict(client: InferenceAPIClient, input: str) -> str:
     return "".join([text.strip() for text in chat])
 
 
-def summary(client: InferenceAPIClient, city_text: str) -> None:
+def summary(client: InferenceAPIClient, city_text: str) -> str:
     # FIXME: How do I switch off logging for this?
+    # It uses a logger which puts them as warning
+    # So we could change logger level
     text_splitter = CharacterTextSplitter(chunk_size=512)
 
     texts = text_splitter.split_text(city_text)
@@ -86,24 +88,19 @@ def summary(client: InferenceAPIClient, city_text: str) -> None:
     ]
 
     total_summary = "".join(text_summary)
-    final_summary = predict(client, f"Summarize the following text.\n{total_summary}")
 
-    print(final_summary)
+    summary_prompt = (
+        "Look at the following text."
+        "Describe how would I spend a day here as a tourist."
+        "Don't write text that I would not expect on a travel information page."
+        ""
+    )
+    return predict(client, f"{summary_prompt}\n{total_summary}")
 
 
 if __name__ == "__main__":
-    # wiki_text = _get_wiki_page("Hamburg")
-    # summary(wiki_text)
+    wiki_text = _get_wiki_page("Ratzeburg")
 
     client = _get_client()
-
-    # FIXME: writing and reading for testing
-    # FIXME: Replace with api calls only
-    # wiki_text = _get_wiki_page("Buxtehude")
-    # with open("wiki_text.txt", "w") as wiki_file:
-    #     wiki_file.write(wiki_text)
-    with open("wiki_text.txt", "r") as wiki_file:
-        wiki_text = wiki_file.read()
-    # FIXME: Change the above part
-
-    summary(client, wiki_text)
+    page_summary = summary(client, wiki_text)
+    print(page_summary)
