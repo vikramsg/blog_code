@@ -1,3 +1,4 @@
-numpy_groupby/__pycache__/*.nbi
-numpy_groupby/__pycache__/*.nbc
+*.nbi
+*.nbc
 *.pyc
+*.env

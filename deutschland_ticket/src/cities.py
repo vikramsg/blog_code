@@ -7,7 +7,9 @@ from typing import Dict, List
 import requests
 
 from src.common import city_table_connection
+from src.langchain_summarize import _get_client, summary
 from src.model import CoordinatesQueryResponse, WikiCategoryResponse, WikiPageResponse
+from text_generation import InferenceAPIClient
 
 _WIKIVOYAGE_URL = "https://en.wikivoyage.org/w/api.php"
 _WIKIPEDIA_URL = "https://en.wikipedia.org/w/api.php"
@@ -114,7 +116,10 @@ def parse_category_page() -> List[str]:
 
 
 def cities_table(
-    page_titles: List[str], conn: sqlite3.Connection, table_name: str
+    langchain_client: InferenceAPIClient,
+    page_titles: List[str],
+    conn: sqlite3.Connection,
+    table_name: str,
 ) -> None:
     """
     This uses a crude regex pattern to extract points of interest
@@ -148,23 +153,28 @@ def cities_table(
 
                 is_city = not re.search("== Regions ==", page_extract)
                 if is_city:
-                    points_of_interest = _get_points_of_interest(
-                        page_title, page_extract
+                    city_description = summary(
+                        langchain_client, page_extract, page_title
                     )
+                    # points_of_interest = _get_points_of_interest(
+                    #     page_title, page_extract
+                    # )
+                    print(city_description)
 
-                    places_to_see_json = json.dumps(points_of_interest)
+                    # places_to_see_json = json.dumps(points_of_interest)
+                    places_to_see_json = json.dumps(city_description)
 
-                    print(f"Writing info for {page_title} city.")
-                    cursor.execute(
-                        f"INSERT INTO {table_name} (city, places_to_see, url) VALUES (?, ?, ?)",
-                        (
-                            page_title,
-                            places_to_see_json,
-                            _create_url_from_page_id(page_info.pageid),
-                        ),
-                    )
+    #                 print(f"Writing info for {page_title} city.")
+    #                 cursor.execute(
+    #                     f"INSERT INTO {table_name} (city, places_to_see, url) VALUES (?, ?, ?)",
+    #                     (
+    #                         page_title,
+    #                         places_to_see_json,
+    #                         _create_url_from_page_id(page_info.pageid),
+    #                     ),
+    #                 )
 
-    conn.close()
+    # conn.close()
 
 
 def cities_lat_lon(
@@ -211,16 +221,19 @@ def cities_lat_lon(
 
 if __name__ == "__main__":
     # Get all pages under the category Germany
-    pages = parse_category_page()
+    # pages = parse_category_page()
 
     # Create cities table with city name and places of interest
+    # FIXME: Remove
+    pages = ["Uelzen", "Rendsburg"]
+    langchain_client = _get_client()
     conn = city_table_connection(table_name="cities")
-    cities_table(pages, conn, table_name="cities")
+    cities_table(langchain_client, pages, conn, table_name="cities")
 
     # Use the existing db to get cities in the cities table
     # Scrape wikipedia to get lat lon and create new table
-    conn = city_table_connection(table_name="cities_lat_lon")
-    cities_lat_lon(conn, input_table="cities", output_table="cities_lat_lon")
+    # conn = city_table_connection(table_name="cities_lat_lon")
+    # cities_lat_lon(conn, input_table="cities", output_table="cities_lat_lon")
 
     # ToDo
     # 1. Run to create the tables
