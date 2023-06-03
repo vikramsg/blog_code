@@ -35,6 +35,58 @@ def _get_client() -> InferenceAPIClient:
     return InferenceAPIClient(model, token=os.getenv("HF_TOKEN", None))
 
 
+def summary_of_summary(client: InferenceAPIClient, input: str) -> str:
+    preprompt, user_name, assistant_name, sep = (
+        "You are a helpful assistant.",
+        "<|prompter|>",
+        "<|assistant|>",
+        "<|endoftext|>",
+    )
+    prompt = (
+        f"{preprompt}\n"
+        f"{sep}\n"
+        f"{user_name}: I want to get a summary of Halberstadt as a tourist destination."
+        "I have a text containing details about Halberstadt."
+        "Can you help me summarize it as a tourist destination.\n"
+        f"{sep}\n"
+        f"{assistant_name}\n"
+        "Certainly. Give me the text.\n"
+        f"{sep}\n"
+        f"{user_name}\n"
+        f"{input}"
+        f"{sep}\n"
+        f"{assistant_name}\n"
+    )
+
+    iterator = client.generate_stream(
+        prompt,
+        typical_p=0.2,
+        truncate=1000,
+        watermark=False,
+        max_new_tokens=500,
+    )
+
+    partial_words = ""
+    chat = []
+
+    for i, response in enumerate(iterator):
+        if response.token.special:
+            continue
+
+        partial_words = partial_words + response.token.text
+        if partial_words.endswith(user_name.rstrip()):
+            partial_words = partial_words.rstrip(user_name.rstrip())
+        if partial_words.endswith(assistant_name.rstrip()):
+            partial_words = partial_words.rstrip(assistant_name.rstrip())
+
+        if i == 0:
+            chat.append(" " + partial_words)
+        elif response.token.text not in user_name:
+            chat[-1] = partial_words
+
+    return "".join([text.strip() for text in chat])
+
+
 def predict(client: InferenceAPIClient, input: str) -> str:
     preprompt, user_name, assistant_name, sep = (
         "",
@@ -91,17 +143,30 @@ def summary(client: InferenceAPIClient, city_text: str, city: str) -> str:
     ]
 
     total_summary = "".join(text_summary)
-    print(total_summary)
 
     summary_prompt = (
+        "Ignore all previous questions or text.Start fresh.\n"
         "Look at the following text."
-        f"It describes the tourist destination {city}."
-        "Describe how would I spend a day here as a tourist."
-        f"Make sure you are describing {city}."
-        "Don't mention meta text such as 'Day trip to'"
-        f"or 'Day Trip to {city}'"
-        "or I would spend a day."
-        "Don't talk about web servers or ip address."
+        "Describe how to spend a day here as a tourist."
+        "Use atleast 200 words."
+        "Create the summary only using the provided text."
+        "Just provide a summary, do not included additional suggestions.\n"
+        "Don't mention metadata like 'It looks like'"
+        "or 'you are looking for' or 'Great suggestions'"
+        "'This text provides' or 'It suggests'."
+        "Do not mention things like 'As a language model'"
+        "or 'As an AI language model' or"
+        "'If you have more questions' or 'I will try to help'."
+        "Ignore formatting errors and spelling mistakes."
         ""
     )
-    return predict(client, f"{summary_prompt}\n{total_summary}")
+    list_prompt = (
+        "Look at the following text."
+        "List all the interesting places to see and things to do in the text."
+        "Just provide a list."
+    )
+    summarize_prompt = (
+        "Summarize the following text into less than 500 words."
+        "Fix any mistakes you found in the text."
+    )
+    return summary_of_summary(client, total_summary)
