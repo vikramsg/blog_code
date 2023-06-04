@@ -1,32 +1,10 @@
 import os
 from typing import Dict
 
-import requests
 from dotenv import load_dotenv
 from langchain.docstore.document import Document
 from langchain.text_splitter import CharacterTextSplitter
 from text_generation import InferenceAPIClient
-
-from src.model import WikiPageResponse
-
-_WIKIVOYAGE_URL = "https://en.wikivoyage.org/w/api.php"
-
-
-def _page_query_params(page_title: str) -> Dict:
-    return {
-        "action": "query",
-        "format": "json",
-        "titles": page_title,
-        "prop": "extracts",
-        "explaintext": True,
-        "inprop": "url",
-    }
-
-
-def _get_wiki_page(city: str) -> str:
-    content_response = requests.get(_WIKIVOYAGE_URL, params=_page_query_params(city))
-    wiki_page = WikiPageResponse.parse_obj(content_response.json())
-    return list(wiki_page.query.pages.values())[0].extract
 
 
 def get_client() -> InferenceAPIClient:
@@ -35,7 +13,7 @@ def get_client() -> InferenceAPIClient:
     return InferenceAPIClient(model, token=os.getenv("HF_TOKEN", None))
 
 
-def summary_of_summary(client: InferenceAPIClient, input: str, city: str) -> str:
+def _summary_of_summary(client: InferenceAPIClient, input: str, city: str) -> str:
     preprompt, user_name, assistant_name, sep = (
         "You are a helpful assistant.",
         "<|prompter|>",
@@ -90,7 +68,7 @@ def summary_of_summary(client: InferenceAPIClient, input: str, city: str) -> str
     return f"{city}, Germany is known for {joined_summary}"
 
 
-def predict(client: InferenceAPIClient, input: str) -> str:
+def _predict(client: InferenceAPIClient, input: str) -> str:
     preprompt, user_name, assistant_name, sep = (
         "",
         "<|prompter|>",
@@ -138,7 +116,7 @@ def summary(client: InferenceAPIClient, city_text: str, city: str) -> str:
 
     docs = [Document(page_content=t) for t in texts]
     text_summary = [
-        predict(
+        _predict(
             client,
             f"Summarize the following text. Ignore all text after '== Go next =='.\n{doc.page_content}",
         )
@@ -149,4 +127,4 @@ def summary(client: InferenceAPIClient, city_text: str, city: str) -> str:
 
     # FIXME: Replace with gpt
     # Avoid overloading Huggingface by sleeping after every request
-    return summary_of_summary(client, total_summary, city)
+    return _summary_of_summary(client, total_summary, city)

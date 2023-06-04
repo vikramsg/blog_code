@@ -153,9 +153,8 @@ def cities_table(
 
                 is_city = not re.search("== Regions ==", page_extract)
                 if is_city:
-                    text_limit = page_extract.find("== Sleep ==")
                     city_description = summary(
-                        langchain_client, page_extract[:text_limit], page_title
+                        langchain_client, page_extract, page_title
                     )
                     places_to_see_json = json.dumps(city_description)
 
@@ -169,7 +168,8 @@ def cities_table(
                         ),
                     )
 
-    conn.close()
+
+# conn.close()
 
 
 def cities_lat_lon(
@@ -220,7 +220,7 @@ if __name__ == "__main__":
 
     # Create cities table with city name and places of interest
     # FIXME: Remove
-    pages = ["Verden an der Aller", "Delmenhorst"]
+    pages = ["Osnabrück", "Sassnitz"]
     langchain_client = get_client()
     conn = city_table_connection(table_name="cities")
     cities_table(langchain_client, pages, conn, table_name="cities")
