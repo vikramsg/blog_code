@@ -1,6 +1,5 @@
 import os
 import time
-from typing import Dict
 
 from dotenv import load_dotenv
 from langchain.docstore.document import Document
