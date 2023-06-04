@@ -29,13 +29,13 @@ def _get_wiki_page(city: str) -> str:
     return list(wiki_page.query.pages.values())[0].extract
 
 
-def _get_client() -> InferenceAPIClient:
+def get_client() -> InferenceAPIClient:
     load_dotenv()
     model = "OpenAssistant/oasst-sft-4-pythia-12b-epoch-3.5"
     return InferenceAPIClient(model, token=os.getenv("HF_TOKEN", None))
 
 
-def summary_of_summary(client: InferenceAPIClient, input: str) -> str:
+def summary_of_summary(client: InferenceAPIClient, input: str, city: str) -> str:
     preprompt, user_name, assistant_name, sep = (
         "You are a helpful assistant.",
         "<|prompter|>",
@@ -45,8 +45,8 @@ def summary_of_summary(client: InferenceAPIClient, input: str) -> str:
     prompt = (
         f"{preprompt}\n"
         f"{sep}\n"
-        f"{user_name}: I want to get a summary of Halberstadt as a tourist destination."
-        "I have a text containing details about Halberstadt."
+        f"{user_name}: I want to get a summary of {city} as a tourist destination."
+        f"I have a text containing details about {city}."
         "Can you help me summarize it as a tourist destination.\n"
         f"{sep}\n"
         f"{assistant_name}\n"
@@ -55,7 +55,9 @@ def summary_of_summary(client: InferenceAPIClient, input: str) -> str:
         f"{user_name}\n"
         f"{input}"
         f"{sep}\n"
-        f"{assistant_name}\n"
+        f"{assistant_name}\nHere's how I would describe {city}, Germany.\n"
+        f"There are many things to see and do in {city}."
+        f"{city}, Germany is known for"
     )
 
     iterator = client.generate_stream(
@@ -84,7 +86,8 @@ def summary_of_summary(client: InferenceAPIClient, input: str) -> str:
         elif response.token.text not in user_name:
             chat[-1] = partial_words
 
-    return "".join([text.strip() for text in chat])
+    joined_summary = "".join([text.strip() for text in chat])
+    return f"{city}, Germany is known for {joined_summary}"
 
 
 def predict(client: InferenceAPIClient, input: str) -> str:
@@ -144,29 +147,6 @@ def summary(client: InferenceAPIClient, city_text: str, city: str) -> str:
 
     total_summary = "".join(text_summary)
 
-    summary_prompt = (
-        "Ignore all previous questions or text.Start fresh.\n"
-        "Look at the following text."
-        "Describe how to spend a day here as a tourist."
-        "Use atleast 200 words."
-        "Create the summary only using the provided text."
-        "Just provide a summary, do not included additional suggestions.\n"
-        "Don't mention metadata like 'It looks like'"
-        "or 'you are looking for' or 'Great suggestions'"
-        "'This text provides' or 'It suggests'."
-        "Do not mention things like 'As a language model'"
-        "or 'As an AI language model' or"
-        "'If you have more questions' or 'I will try to help'."
-        "Ignore formatting errors and spelling mistakes."
-        ""
-    )
-    list_prompt = (
-        "Look at the following text."
-        "List all the interesting places to see and things to do in the text."
-        "Just provide a list."
-    )
-    summarize_prompt = (
-        "Summarize the following text into less than 500 words."
-        "Fix any mistakes you found in the text."
-    )
-    return summary_of_summary(client, total_summary)
+    # FIXME: Replace with gpt
+    # Avoid overloading Huggingface by sleeping after every request
+    return summary_of_summary(client, total_summary, city)

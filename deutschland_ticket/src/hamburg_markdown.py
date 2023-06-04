@@ -1,5 +1,5 @@
-from datetime import datetime, timedelta
 import json
+from datetime import datetime, timedelta
 from sqlite3 import Connection
 
 from src.common import city_table_connection

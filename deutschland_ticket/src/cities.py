@@ -5,11 +5,11 @@ import sqlite3
 from typing import Dict, List
 
 import requests
+from text_generation import InferenceAPIClient
 
 from src.common import city_table_connection
-from src.langchain_summarize import _get_client, summary
+from src.langchain_summarize import get_client, summary
 from src.model import CoordinatesQueryResponse, WikiCategoryResponse, WikiPageResponse
-from text_generation import InferenceAPIClient
 
 _WIKIVOYAGE_URL = "https://en.wikivoyage.org/w/api.php"
 _WIKIPEDIA_URL = "https://en.wikipedia.org/w/api.php"
@@ -157,25 +157,19 @@ def cities_table(
                     city_description = summary(
                         langchain_client, page_extract[:text_limit], page_title
                     )
-                    # points_of_interest = _get_points_of_interest(
-                    #     page_title, page_extract
-                    # )
-                    print(city_description)
-
-                    # places_to_see_json = json.dumps(points_of_interest)
                     places_to_see_json = json.dumps(city_description)
 
-    #                 print(f"Writing info for {page_title} city.")
-    #                 cursor.execute(
-    #                     f"INSERT INTO {table_name} (city, places_to_see, url) VALUES (?, ?, ?)",
-    #                     (
-    #                         page_title,
-    #                         places_to_see_json,
-    #                         _create_url_from_page_id(page_info.pageid),
-    #                     ),
-    #                 )
+                    print(f"Writing info for {page_title} city.")
+                    cursor.execute(
+                        f"INSERT INTO {table_name} (city, places_to_see, url) VALUES (?, ?, ?)",
+                        (
+                            page_title,
+                            places_to_see_json,
+                            _create_url_from_page_id(page_info.pageid),
+                        ),
+                    )
 
-    # conn.close()
+    conn.close()
 
 
 def cities_lat_lon(
@@ -227,7 +221,7 @@ if __name__ == "__main__":
     # Create cities table with city name and places of interest
     # FIXME: Remove
     pages = ["Verden an der Aller", "Delmenhorst"]
-    langchain_client = _get_client()
+    langchain_client = get_client()
     conn = city_table_connection(table_name="cities")
     cities_table(langchain_client, pages, conn, table_name="cities")
 
