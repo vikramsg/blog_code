@@ -9,7 +9,7 @@ from text_generation import InferenceAPIClient
 
 from src.common import city_table_connection
 from src.langchain_summarize import get_client, summary
-from src.model import CoordinatesQueryResponse, WikiCategoryResponse, WikiPageResponse
+from src.model import WikiCategoryResponse, WikiPageResponse
 
 _WIKIVOYAGE_URL = "https://en.wikivoyage.org/w/api.php"
 
@@ -92,29 +92,28 @@ def cities_table(
     with conn:
         cursor = conn.cursor()
 
-        for page_title in page_titles:
+        for city in page_titles:
             content_response = requests.get(
-                _WIKIVOYAGE_URL, params=_page_query_params(page_title)
+                _WIKIVOYAGE_URL, params=_page_query_params(city)
             )
             page_content = WikiPageResponse.parse_obj(content_response.json())
 
             # Extract the page content
             for _, page_info in page_content.query.pages.items():
-                page_title = page_info.title
+                city = page_info.title
                 page_extract = page_info.extract
 
                 is_city = not re.search("== Regions ==", page_extract)
                 if is_city:
-                    city_description = summary(
-                        langchain_client, page_extract, page_title
-                    )
+                    print(f"Getting city summary for {city}.")
+                    city_description = summary(langchain_client, page_extract, city)
                     city_description_json = json.dumps(city_description)
 
-                    print(f"Writing info for {page_title} city.")
+                    print(f"Writing info for {city} city.")
                     cursor.execute(
                         f"INSERT INTO {table_name} (city, description, url) VALUES (?, ?, ?)",
                         (
-                            page_title,
+                            city,
                             city_description_json,
                             _create_url_from_page_id(page_info.pageid),
                         ),

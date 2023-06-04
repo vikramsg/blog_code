@@ -228,29 +228,6 @@ class WikiPageResponse(BaseModel):
     query: WikiPageQuery
 
 
-class Coordinates(BaseModel):
-    lat: float
-    lon: float
-    primary: str
-    globe: str
-
-
-class CoordinatesPage(BaseModel):
-    pageid: Optional[int]
-    ns: int
-    title: str
-    coordinates: Optional[List[Coordinates]]
-
-
-class CoordinatesPageQuery(BaseModel):
-    pages: Dict[str, CoordinatesPage]
-
-
-class CoordinatesQueryResponse(BaseModel):
-    batchcomplete: str
-    query: CoordinatesPageQuery
-
-
 class JourneySummary(BaseModel):
     journey_time: timedelta
     journey_info: List[List[Tuple[str, str, str, str, Optional[str]]]]

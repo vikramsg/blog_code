@@ -1,4 +1,5 @@
 import os
+import time
 from typing import Dict
 
 from dotenv import load_dotenv
@@ -110,18 +111,20 @@ def summary(client: InferenceAPIClient, city_text: str, city: str) -> str:
     # FIXME: How do I switch off logging for this?
     # It uses a logger which puts them as warning
     # So we could change logger level
-    text_splitter = CharacterTextSplitter(chunk_size=512)
+    text_splitter = CharacterTextSplitter(chunk_size=1024)
 
     texts = text_splitter.split_text(city_text)
 
     docs = [Document(page_content=t) for t in texts]
-    text_summary = [
-        _predict(
-            client,
-            f"Summarize the following text. Ignore all text after '== Go next =='.\n{doc.page_content}",
+    text_summary = []
+    for doc in docs:
+        text_summary.append(
+            _predict(
+                client,
+                f"Summarize the following text. Ignore all text after '== Go next =='.\n{doc.page_content}",
+            )
         )
-        for doc in docs
-    ]
+        time.sleep(20)
 
     total_summary = "".join(text_summary)
 
