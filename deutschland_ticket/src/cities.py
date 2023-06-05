@@ -104,9 +104,10 @@ def cities_table(
     table_name: str,
 ) -> None:
     """
-    This uses a crude regex pattern to extract points of interest
-    We should replace this with Pythia API calls from Huggingface
-    or use something like geoapify
+    We want city description. To start with we were doing
+    crude regex which was not very good. Then we tried using
+    Pythia but summaries were pretty bad. So finally, we moved
+    over to ChatGPT
     """
 
     conn.execute(
