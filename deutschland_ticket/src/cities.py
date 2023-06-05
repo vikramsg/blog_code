@@ -111,7 +111,7 @@ def cities_table(
 
     conn.execute(
         f"""
-        CREATE TABLE {table_name}(
+        CREATE TABLE IF NOT EXISTS {table_name}(
             city TEXT,
             description TEXT,
             url TEXT
