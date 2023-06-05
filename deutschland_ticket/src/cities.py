@@ -1,14 +1,13 @@
-import json
 import queue
 import re
 import sqlite3
 from typing import Dict, List
 
 import requests
-from text_generation import InferenceAPIClient
+from langchain.chat_models import ChatOpenAI
 
 from src.common import city_table_connection
-from src.langchain_summarize import get_client, summary
+from src.langchain_summarize import _get_llm, gpt_summary
 from src.model import WikiCategoryResponse, WikiPageResponse
 
 _WIKIVOYAGE_URL = "https://en.wikivoyage.org/w/api.php"
@@ -67,8 +66,39 @@ def parse_category_page() -> List[str]:
     return pages
 
 
+def _insert_city_description_in_table(
+    llm: ChatOpenAI, cursor: sqlite3.Cursor, city: str, table_name: str
+) -> None:
+    content_response = requests.get(_WIKIVOYAGE_URL, params=_page_query_params(city))
+    page_content = WikiPageResponse.parse_obj(content_response.json())
+
+    # Extract the page content
+    for _, page_info in page_content.query.pages.items():
+        city = page_info.title
+        page_extract = page_info.extract
+
+        is_city = not re.search("== Regions ==", page_extract)
+        if is_city:
+            cursor.execute(f"SELECT city FROM {table_name} WHERE city='{city}'")
+            is_city_not_present = cursor.fetchone() is None
+
+            if is_city_not_present:
+                print(f"Getting city summary for {city}.")
+                city_description = gpt_summary(llm, page_extract, city)
+
+                print(f"Writing info for {city} city.")
+                cursor.execute(
+                    f"INSERT INTO {table_name} (city, description, url) VALUES (?, ?, ?)",
+                    (
+                        city,
+                        city_description,
+                        _create_url_from_page_id(page_info.pageid),
+                    ),
+                )
+
+
 def cities_table(
-    langchain_client: InferenceAPIClient,
+    llm: ChatOpenAI,
     page_titles: List[str],
     conn: sqlite3.Connection,
     table_name: str,
@@ -89,35 +119,11 @@ def cities_table(
     """
     )
 
-    with conn:
-        cursor = conn.cursor()
+    cursor = conn.cursor()
 
-        for city in page_titles:
-            content_response = requests.get(
-                _WIKIVOYAGE_URL, params=_page_query_params(city)
-            )
-            page_content = WikiPageResponse.parse_obj(content_response.json())
-
-            # Extract the page content
-            for _, page_info in page_content.query.pages.items():
-                city = page_info.title
-                page_extract = page_info.extract
-
-                is_city = not re.search("== Regions ==", page_extract)
-                if is_city:
-                    print(f"Getting city summary for {city}.")
-                    city_description = summary(langchain_client, page_extract, city)
-                    city_description_json = json.dumps(city_description)
-
-                    print(f"Writing info for {city} city.")
-                    cursor.execute(
-                        f"INSERT INTO {table_name} (city, description, url) VALUES (?, ?, ?)",
-                        (
-                            city,
-                            city_description_json,
-                            _create_url_from_page_id(page_info.pageid),
-                        ),
-                    )
+    for city in page_titles:
+        _insert_city_description_in_table(llm, cursor, city, table_name)
+        conn.commit()
 
     conn.close()
 
@@ -126,6 +132,7 @@ if __name__ == "__main__":
     # Get all pages under the category Germany
     pages = parse_category_page()
 
-    langchain_client = get_client()
-    conn = city_table_connection(table_name="cities")
-    cities_table(langchain_client, pages, conn, table_name="cities")
+    # Add city descriptions using ChatGPT
+    llm = _get_llm()
+    conn = city_table_connection()
+    cities_table(llm, pages, conn, table_name="cities")
