@@ -3,6 +3,37 @@ from sqlite3 import Connection
 
 from src.common import city_table_connection
 
+"""
+WITH hamburg_stop AS
+(
+    SELECT stop_id FROM city_stops WHERE city='Hamburg'
+),
+hamburg_destinations AS
+(
+    SELECT cities.city as city,
+    cities.description as description,
+    cities.url as url,
+    hamburg_journeys.journey_time as journey_time
+    FROM cities
+    JOIN hamburg_journeys
+    ON cities.city = hamburg_journeys.city
+),
+hamburg_destinations_stops AS
+(
+    SELECT hamburg_destinations.city as city,
+--    hamburg_destinations.description as description,
+    hamburg_destinations.url as url,
+    hamburg_destinations.journey_time as journey_time,
+    city_stops.stop_id as destination_stop,
+    hamburg_stop.stop_id as destination_stop
+    FROM hamburg_destinations
+    JOIN city_stops
+    ON hamburg_destinations.city = city_stops.city
+    CROSS JOIN hamburg_stop
+)
+SELECT * FROM hamburg_destinations_stops;
+"""
+
 
 def join_cities_journeys(
     conn: Connection, cities_table: str, hamburg_journeys_table: str, joined_table: str
