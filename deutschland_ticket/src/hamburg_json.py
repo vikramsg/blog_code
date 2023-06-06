@@ -4,11 +4,7 @@ from sqlite3 import Connection
 from src.common import city_table_connection
 
 """
-WITH hamburg_stop AS
-(
-    SELECT stop_id FROM city_stops WHERE city='Hamburg'
-),
-hamburg_destinations AS
+WITH hamburg_destinations AS
 (
     SELECT cities.city as city,
     cities.description as description,
@@ -25,11 +21,10 @@ hamburg_destinations_stops AS
     hamburg_destinations.url as url,
     hamburg_destinations.journey_time as journey_time,
     city_stops.stop_id as destination_stop,
-    hamburg_stop.stop_id as destination_stop
+    (SELECT stop_id FROM city_stops WHERE city='Hamburg') as origin_stop
     FROM hamburg_destinations
     JOIN city_stops
     ON hamburg_destinations.city = city_stops.city
-    CROSS JOIN hamburg_stop
 )
 SELECT * FROM hamburg_destinations_stops;
 """
