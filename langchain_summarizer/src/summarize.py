@@ -6,6 +6,9 @@ from dotenv import load_dotenv
 from langchain.docstore.document import Document
 from langchain.text_splitter import CharacterTextSplitter
 from text_generation import InferenceAPIClient
+from langchain.chat_models import ChatOpenAI
+from langchain import PromptTemplate
+from langchain.chains.summarize import load_summarize_chain
 
 from src.model import WikiPageResponse
 
@@ -73,10 +76,7 @@ def predict(client: InferenceAPIClient, input: str) -> str:
     return "".join([text.strip() for text in chat])
 
 
-def summary(client: InferenceAPIClient, city_text: str) -> str:
-    # FIXME: How do I switch off logging for this?
-    # It uses a logger which puts them as warning
-    # So we could change logger level
+def summary(client: InferenceAPIClient, city_text: str, city: str) -> str:
     text_splitter = CharacterTextSplitter(chunk_size=512)
 
     texts = text_splitter.split_text(city_text)
@@ -90,17 +90,44 @@ def summary(client: InferenceAPIClient, city_text: str) -> str:
     total_summary = "".join(text_summary)
 
     summary_prompt = (
-        "Look at the following text."
-        "Describe how would I spend a day here as a tourist."
-        "Don't write text that I would not expect on a travel information page."
-        ""
+        f"Combine all the summaries on {city} provided within backticks"
+        f"""```{total_summary}```.
+            Can you summarize it as a tourist destination in 8-10 sentences.\n"""
     )
     return predict(client, f"{summary_prompt}\n{total_summary}")
 
 
+def gpt_summary(city_text: str, city: str) -> str:
+    load_dotenv()
+    # Base model uses is gpt3.5-turbo
+    llm = ChatOpenAI(temperature=0)  # type: ignore
+
+    city_string = f"Combine all the summaries on {city} provided within backticks "
+    combine_prompt = PromptTemplate(
+        template=(
+            city_string
+            + """```{text}```.
+            Can you summarize it as a tourist destination in 8-10 sentences.\n"
+            """
+        ),
+        input_variables=["text"],
+    )
+
+    text_splitter = CharacterTextSplitter()
+    texts = text_splitter.split_text(city_text)
+
+    docs = [Document(page_content=t) for t in texts]
+
+    chain = load_summarize_chain(
+        llm, chain_type="map_reduce", combine_prompt=combine_prompt
+    )
+    return chain.run(docs)
+
+
 if __name__ == "__main__":
-    wiki_text = _get_wiki_page("Ratzeburg")
+    city = "Ratzeburg"
+    wiki_text = _get_wiki_page(city)
 
     client = _get_client()
-    page_summary = summary(client, wiki_text)
+    page_summary = summary(client, wiki_text, city)
     print(page_summary)
