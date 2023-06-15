@@ -125,9 +125,12 @@ def gpt_summary(city_text: str, city: str) -> str:
 
 
 if __name__ == "__main__":
-    city = "Ratzeburg"
+    city = "Allgäu"
     wiki_text = _get_wiki_page(city)
 
     client = _get_client()
     page_summary = summary(client, wiki_text, city)
     print(page_summary)
+
+    gpt_page_summary = gpt_summary(wiki_text, city)
+    print(gpt_page_summary)

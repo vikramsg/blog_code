@@ -21,10 +21,18 @@ Once you have Poetry setup, you can simply go to the root of the directory and d
 make install
 ```
 
-## Run
+## Summary 
 
-Run a city using
+For summarizing using `gpt-3.5` and `pythia` use
+
 
 ```
-make city_journeys CITY=Hamburg 
+make summary 
 ```
+
+## GPT4ALL
+
+`gpt4all` is more complicated. There is an installer available on the official website, but for the older OS on my Mac, I had to install from source. 
+
+The installation instructions are available [here](https://github.com/nomic-ai/gpt4all/tree/main/gpt4all-bindings/python), and it will not work simply with `poetry`. 
+ 
