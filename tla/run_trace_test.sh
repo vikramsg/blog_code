@@ -11,6 +11,5 @@ if command -v uv >/dev/null 2>&1; then
     # uv handles dependencies (pydantic) automatically via script metadata
     uv run test_tcp.py
 else
-    echo "uv not found. Please install uv or ensure pydantic is installed in your python environment."
-    python3 test_tcp.py
+    echo "uv not found. Please install uv."
 fi
