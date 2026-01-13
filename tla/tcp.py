@@ -1,6 +1,14 @@
+# /// script
+# requires-python = ">=3.13"
+# dependencies = [
+#   "pydantic>2.11",
+# ]
+# ///
 from enum import Enum
-from typing import Literal, Union, Annotated
-from pydantic import BaseModel, Field, RootModel, ValidationError
+from typing import Annotated, Literal, Union
+
+from pydantic import BaseModel, Field, ValidationError
+
 
 class State(str, Enum):
     INIT = "INIT"
@@ -8,40 +16,54 @@ class State(str, Enum):
     SYN_RCVD = "SYN_RCVD"
     ESTABLISHED = "ESTABLISHED"
 
+
 # We define each valid "System State" as a separate Model.
-# This makes invalid combinations (like Server=ESTABLISHED, Client=INIT) 
+# This makes invalid combinations (like Server=ESTABLISHED, Client=INIT)
 # UNREPRESENTABLE in these types.
+
 
 class InitState(BaseModel):
     tag: Literal["Init"] = "Init"
     client_state: Literal[State.INIT] = State.INIT
     server_state: Literal[State.INIT] = State.INIT
 
+
 class SynSentState(BaseModel):
     tag: Literal["SynSent"] = "SynSent"
     client_state: Literal[State.SYN_SENT] = State.SYN_SENT
     server_state: Literal[State.INIT] = State.INIT
+
 
 class SynRcvdState(BaseModel):
     tag: Literal["SynRcvd"] = "SynRcvd"
     client_state: Literal[State.SYN_SENT] = State.SYN_SENT
     server_state: Literal[State.SYN_RCVD] = State.SYN_RCVD
 
+
 class ClientEstablishedState(BaseModel):
     tag: Literal["ClientEstablished"] = "ClientEstablished"
     client_state: Literal[State.ESTABLISHED] = State.ESTABLISHED
     server_state: Literal[State.SYN_RCVD] = State.SYN_RCVD
+
 
 class FullyEstablishedState(BaseModel):
     tag: Literal["FullyEstablished"] = "FullyEstablished"
     client_state: Literal[State.ESTABLISHED] = State.ESTABLISHED
     server_state: Literal[State.ESTABLISHED] = State.ESTABLISHED
 
+
 # The "Network" state can ONLY be one of these 5 specific valid combinations.
 TCPState = Annotated[
-    Union[InitState, SynSentState, SynRcvdState, ClientEstablishedState, FullyEstablishedState],
-    Field(discriminator="tag")
+    Union[
+        InitState,
+        SynSentState,
+        SynRcvdState,
+        ClientEstablishedState,
+        FullyEstablishedState,
+    ],
+    Field(discriminator="tag"),
 ]
+
 
 class TCPModel:
     def __init__(self):
@@ -83,18 +105,21 @@ class TCPModel:
     def __repr__(self):
         return f"TCPModel(client={self.state.client_state}, server={self.state.server_state})"
 
+
 if __name__ == "__main__":
     model = TCPModel()
     print(f"Start: {model}")
-    
+
     model.send_syn()
     print(f"After SendSyn: {model}")
-    
+
     # Attempting an "unrepresentable" state transition or manual corruption
     print("\n--- Testing Protection ---")
     try:
         # Pydantic prevents creating an invalid state object
         # e.g. Server Established but Client INIT
-        invalid = FullyEstablishedState(client_state=State.INIT, server_state=State.ESTABLISHED)
+        invalid = FullyEstablishedState(
+            client_state=State.INIT, server_state=State.ESTABLISHED
+        )
     except ValidationError as e:
         print(f"Successfully blocked invalid state creation: {e.errors()[0]['msg']}")

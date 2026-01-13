@@ -1,8 +1,8 @@
 # Introduction to Formal Methods (Part 1): Why Spec First?
 
 Formal methods, sounds very... formal!
-But I have been trying to dive a bit into what they are and so I decided to write down my learnings.
-Hopefully this proves a good starting point for someone else who was curious about the idea but didn't have a good starting point.
+But I have been trying to explore what they are and so I decided to write down my learnings.
+Hopefully this proves a good starting point for someone else who is curious about the idea but doesn't have a good starting point.
 
 This post is part 1 of 2. 
 In part 1, I will try to give a more conceptual understanding, while also introducing tooling using `Quint`.
@@ -12,7 +12,7 @@ In part 2, I will try to show how it can be wired up so that we make sure softwa
 
 First a warning, and then if you stick around, we can go deeper.
 My dive into formal methods was motivated by posts like [this](https://martin.kleppmann.com/2025/12/08/ai-formal-verification.html).
-I have been increasingly using AI/Agents and I believe something is required to make the use of AI more productive. 
+I have been increasingly using AI Agents and I believe something is required to make the use of AI more productive. 
 And if the word AI is triggering, then this would be a good time to stop reading.
 If you are still here, let's talk about AI a little bit, and the programming language for AI - English.
 
@@ -48,7 +48,7 @@ If that feels familiar, hopefully the following points to a way forward.
 This isn't a new problem. 
 Decades ago, Leslie Lamport (the creator of LaTeX and distributed systems legend) gave us [TLA+](https://en.wikipedia.org/wiki/TLA%2B) (Temporal Logic of Actions).
 It is the gold standard for formal verification. 
-It is used by AWS to design DynamoDB and S3. It is used by Azure. It works.
+It is used by AWS (DynamoDB, S3) and Azure. It works.
 
 But then I looked at TLA+. 
 And this is what it looks like.
@@ -97,7 +97,7 @@ module tcp_simple {
   var server_state: State
 
   // Initial State
-  action init = all {
+  action Init = all {
     client_state' = INIT,
     server_state' = INIT,
   }
@@ -138,6 +138,13 @@ Next, we define what *can* happen. These are the rules of the road.
     server_state' = ESTABLISHED,
     client_state' = client_state
   }
+
+  action step = any {
+    SendSyn,
+    ReceiveSyn,
+    ReceiveSynAck,
+    ReceiveAck,
+  }
 }
 ```
 
@@ -149,7 +156,7 @@ We are not saying "Run `SendSyn` then `ReceiveSyn`".
 In Quint, these actions are a menu of choices.
 At every step, the system (the Quint simulator) asks: "Which of these actions is allowed to happen right now?",
 for example,
-at the beginning everyone is `INIT`.
+at the beginning, everyone is in the `INIT` state.
 
 -   Can `ReceiveSyn` happen? No. It requires `client_state == SYN_SENT`.
 -   Can `SendSyn` happen? Yes. It requires `client_state == INIT`.
@@ -191,6 +198,18 @@ To summarize, with Quint we get:
 1.  **A Readable Spec**: A precise description of the system (State & Transitions) that is easy to read.
 2.  **Simulation**: A way to run the spec and explore behaviors (like fuzzing).
 3.  **Invariants**: A way to define properties that must *always* be true.
+
+### Caveats
+
+Having just gone through all of that, I do have to warn about shortcomings.
+Formal methods and spec driven development isn't the single solution to all our problems.
+Notably:
+
+1. The model is only as good as our description of the world. If we don't model the complete system (or are unable to) then there are gaps. 
+  - Note that tools like TLA+ and Quint are best suited for modeling a state machine. 
+  - So figure out which parts of your system is a state machine and which parts pure functions.
+  - Model functions using unit tests.
+2. We are not solving for non functional requirements like performance, readability etc. 
 
 ## What's Next?
 

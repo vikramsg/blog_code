@@ -16,7 +16,7 @@ We will use what is called Model-Based Testing to ensure our Python implementati
 
 We can't easily "compile" Quint to Python (yet).
 And we probably don't want to, because the spec is an abstraction, not an implementation.
-The spec doesn't care about memory management, sockets, or cache lines. 
+The spec doesn't care about hardware, dependencies or deployment! 
 The implementation does.
 
 Instead, we treat the spec as a test case generator.
@@ -32,7 +32,10 @@ If the test passes, we know our code handles the scenarios defined by the spec c
 
 In Part 1, we ran `quint run` to see text output.
 Now, we want a machine-readable format. 
-Quint supports the **ITF** (Json Trace Format).
+Quint supports the a format known as ITF. 
+Luckily, its a JSON format, meaning its both easy to read as well as integrate in code.
+
+Running:
 
 ```bash
 quint run --mbt --max-steps=10 --out-itf=trace.itf.json tcp_simple.qnt
@@ -62,14 +65,14 @@ This produces a JSON file that looks roughly like this:
 ```
 
 It captures the exact state of the system at every step.
-Note that this is just *one* possible execution path. 
+Note that this is just one possible execution path. 
 In the "Scaling Up" section below, we will discuss how to test against many random traces.
 
 ### Step 2: The Python Implementation
 
-Now let's write our "production" code.
-We want to make sure that **unrepresentable states** are actually unrepresentable. 
-We can use **Pydantic**, **Enums**, and **Tagged Unions** for this.
+Now let's write an implementation.
+We want to make sure that unrepresentable states are actually unrepresentable. 
+We will use Pydantic, Enums, Tagged Unions, and one of my favourite newish feature of Python - Pattern Matching for this.
 
 ```python
 # tcp.py
@@ -116,8 +119,9 @@ class TCPModel:
     # ... receive_syn, receive_syn_ack, receive_ack, etc.
 ```
 
-This looks simple, but notice how the logic in `send_syn` uses Python's `match` statement?
-By using specific Pydantic models for each state, it becomes impossible to even construct an invalid state (like Server being `ESTABLISHED` while Client is `INIT`). If we messed up the transition logic, the state wouldn't match the spec.
+This looks simple, but notice how the logic in `send_syn` uses the `match` statement?
+By using specific Pydantic models for each state, it becomes impossible to even construct an invalid state (like Server being `ESTABLISHED` while Client is `INIT`). 
+If we messed up the transition logic, the state wouldn't match the spec.
 
 ### Step 3: The Replay Test
 
@@ -154,21 +158,21 @@ def main():
     print("Trace verified successfully!")
 ```
 
-The test reads the action from the trace, executes it on the model, and asserts that the resulting state matches the spec.
+Its a little bit finicky, since we will have to do a match between the action as specified in the spec vs the function/method in the code.
+But, it does what we want, namely reads the action from the trace, executes it on the model, and asserts that the resulting state matches the spec.
 If the implementation (Python) and the Spec (Quint) disagree, this test fails.
 
 ## Why is this powerful?
 
-1.  **Fuzzing for Free**: Quint's random simulation generates edge cases we might forget to test manually.
-2.  **Living Documentation**: The spec *is* the documentation, and the tests ensure the code respects it.
-3.  **Refactoring Safety**: If we optimize the internals of `TCPModel`, as long as the external behavior (states) remains the same, the trace tests will pass.
-4.  **Type Safety**: By using Tagged Unions in Python, we ensure that the code can only ever be in a valid state.
+1.  It gives us fuzzing for free. Quint's random simulation generates edge cases we might forget to test manually.
+2.  The spec is documentation, and the tests ensure the code respects it.
+3.  It makes an unrepresentatble state impossible. By using Tagged Unions, we ensure that the code can only ever be in a valid state.
 
 ### Scaling Up
 
 In this simple TCP example, the logic is linear, so every random trace looks identical.
-However, for complex protocols, we typically run this process in a loop (generating 100+ traces).
-Since Quint picks random paths, this effectively fuzzes our Python implementation against the spec.
+However, for complex protocols, we typically run this process in a loop (generating lots of traces).
+Since Quint picks random paths, this effectively fuzzes any implementation against the spec.
 
 However, note that the scale of this approach has a limit. 
 More complicated specs have many different trace paths.
@@ -200,12 +204,17 @@ The spec assumes `encrypt` works mathematically.
 It doesn't check if your AES-GCM implementation handles padding correctly, or if you have an off-by-one error in your buffer allocation.
 For those lower-level implementation details, standard unit tests are still required.
 We use formal methods to verify the orchestration and logic, and unit tests to verify the primitives.
+I believe verification aware languages like Dafny could possibly bridge the gap but that is a topic for another day.
 
 ## Conclusion
 
-We've gone from a high-level requirement ("The connection must be safe") -> Formal spec (Quint) -> Verification (Model Checking) -> Concrete Implementation (Python with Pydantic) -> Verified Code.
+So, we went form high level requirement to a formal spec in Quint.
+We did verification via model checking in Quint.
+Then actually did an implementation and showed the mechanism for proving the implementation matches the spec.
+Pretty neat!
 
-Instead of struggling with English and producing concrete requirements,
+I hope that is a convincing argument to think about adopting specs to make working with Agents easier.
+Instead of struggling with English to produce concrete requirements,
 we can collaborate with our favourite agent to produce a spec for the set of components we are building.
 And if the tooling is in place, we can just tell the agent to build the component, 
 and the trace tests will make sure we adhere to the spec.
