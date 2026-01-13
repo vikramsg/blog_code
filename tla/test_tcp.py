@@ -1,7 +1,15 @@
+# /// script
+# requires-python = ">=3.13"
+# dependencies = [
+#   "pydantic>2.11",
+# ]
+# ///
 import json
 import os
 import sys
-from tcp import TCPModel, State
+
+from tcp import TCPModel
+
 
 def main():
     trace_path = os.getenv("QUINT_TRACE_PATH", "trace.itf.json")
@@ -20,9 +28,9 @@ def main():
     for i in range(1, len(states)):
         state_json = states[i]
         action = state_json["mbt::actionTaken"]
-        
+
         print(f"Step {i}: Applying {action}")
-        
+
         success = False
         match action:
             case "SendSyn":
@@ -46,7 +54,7 @@ def main():
         # Verify state
         expected_client = state_json["client_state"]["tag"]
         expected_server = state_json["server_state"]["tag"]
-        
+
         if model.state.client_state != expected_client:
             print(f"Client mismatch: {model.state.client_state} != {expected_client}")
             sys.exit(1)
@@ -55,6 +63,7 @@ def main():
             sys.exit(1)
 
     print("Python Trace verified successfully!")
+
 
 if __name__ == "__main__":
     main()
