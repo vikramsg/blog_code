@@ -96,6 +96,8 @@ Start with `review_examples.csv`, follow the HN source links, and use local `rev
 
 Before using these measurements as strong evidence in a post, create a separately labeled, representative benchmark across eras and assess precision and recall. Manual example inspection does not replace that benchmark. Inspect the charts directly for readability, missing-period gaps, and denominator labels; these visual checks are not automated screenshot tests.
 
+One concrete subject-ambiguity case to include in that audit is [Wordware's May 2025 advertisement, comment 43866209](https://news.ycombinator.com/item?id=43866209). Its product description says it “lets you design, test, and deploy AI systems,” referring to product users rather than assigning that work to the applicant. The current rules detect AI-product work in this passage. Matched keywords and source-locatable evidence do not establish the action's subject; examine product-user descriptions separately from hiring requirements.
+
 ## Development checks
 
 ```sh

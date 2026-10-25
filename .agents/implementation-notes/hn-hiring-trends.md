@@ -202,6 +202,13 @@
     - Where: `hn_hiring_trends/tests/test_analyze.py`; `hn_hiring_trends/tests/test_collect.py`
     - Source: agent
 
+- Preserve the residual product-user/applicant ambiguity as a manual audit case
+    - Decision: Document Wordware comment 43866209 as a concrete manual audit case in the operational README and review focus. Keep the exploratory warning and benchmark prerequisite; do not restart a grammar/test expansion loop or claim this residual error is corrected.
+    - Why: Product descriptions can address their users as “you,” which the rules may mistake for applicant context. This is a measurement limitation to assess against a representative labeled benchmark, not evidence that passing selected contracts validates classification accuracy.
+    - Where: `hn_hiring_trends/README.md::Review classifications manually`; `hn_hiring_trends/src/hn_hiring_trends/classify.py::_duty_context`
+    - Source: reviewer
+    - Origin: Final advisory review identified Wordware's product-user “you” in 43866209 and recommended preserving it for manual audit rather than extending the grammar/test catalog.
+
 ## Review focus
 
 - Review classification boundaries and advertisement-level denominators, especially multi-role ads.
@@ -214,6 +221,7 @@
 - Review AI action/object and applicant-subject grammar against both actual duties and company/customer descriptions.
 - The results are a transparent rules-based baseline, not a validated benchmark; do not interpret the test count as classification accuracy.
 - Review whether the remaining tests protect useful measurement/pipeline behavior, rather than exact wording, ordering, or code structure.
+- Manually audit [Wordware 43866209](https://news.ycombinator.com/item?id=43866209): product-user “you” currently supplies an AI-product-duty label. This is a known residual classification error, not a corrected case or a benchmark accuracy result.
 - Reviewer-driven changes:
     - Narrow AI-product action/object and applicant-subject matching.
     - Require explicit product-discovery participation.
@@ -224,3 +232,4 @@
     - Recognize explicit AI-assisted and parenthesized-assistant workflows.
     - Bound duty context to the action's clause/subject.
     - Support coordinated AI-system action verbs.
+    - Preserve the residual Wordware subject-ambiguity case for manual audit.
