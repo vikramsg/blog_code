@@ -1,0 +1,750 @@
+selection,month,comment_id,source_url,included,exclusion_reason,role_families,positive_signals,evidence,text_excerpt
+era_sample_2011_2015,2015-04,9313647,https://news.ycombinator.com/item?id=9313647,True,,engineering_unspecified,,"{""engineering_unspecified"": [""We are looking for senior developers who are comfortable owning an entire feature, from the schema all the way to the CSS.""]}","West Hollywood, CA - Talenthouse, http://www.talenthouse.com/
+At Talenthouse, we're building a platform that is home to the world's most creative people; Musicians, Film Makers, DJs, Fashion designers, Painters, Digital artists, Photographers, and more.
+We want to help artists grow, find new audiences, and make money by doing what they love.
+Our platform is a social network for creatives where they can connect, get inspired, and also collaborate with brands who want to engage with the artistic community.
+We are on a journey to build the largest platform of our kind. Our bar for quality is high, and we take pride in our work (both user facing and behind the scenes).
+Primary Stack: Scala/Play2.0, PostgreSQL, jQuery/Angular/ReactJS/Less; Mac/Linux friendly
+We are looking for senior developers who are comfortable owning an entire feature, from the schema all the way to the CSS.
+Perks: Flexible vacation and sick days; Health/Dental/Vision; Quiet, spacious, comfortable working environment; Free coffee and snacks; Flexible work hours, responsible remote work a possibility; 401K and Stock options; 15 paid vacation days
+To apply, email jobs@talenthouse.com"
+era_sample_2011_2015,2013-07,5970371,https://news.ycombinator.com/item?id=5970371,True,,,,{},"London, UK - Microco.sm - Front-end Developer
+We want to fix forums. We don't think it should require any technical knowledge to create one, be a member of one, and it should work on mobile, and be accessible, and be a joy to use.
+We've built a killer back-end http://microcosm-cc.github.io/ and we're looking for someone to help us build a killer front-end for it.
+We've got out first pass done, and it uses Bootstrap 3, a sprinkling of jQuery, some nice HTML forms, all basic stuff. Help us make that great, help us improve the UX, help us make it work everywhere, and help us then iterate faster and improve it.
+Contact details in my profile."
+era_sample_2011_2015,2013-08,6143916,https://news.ycombinator.com/item?id=6143916,True,,,,{},"StudyBlue is hiring in San Francisco, CA and Madison, WI. We're a small startup with a big reach. Come help us improve education for millions of students worldwide.
+We're currently looking for a client-side application architect.
+Send me an email at dale (at) studyblue (dot) com if you'd like to hear more."
+era_sample_2011_2015,2015-08,10001703,https://news.ycombinator.com/item?id=10001703,True,,data;engineering_unspecified;product_management,,"{""data"": [""cisco, CA | Full-time | Software developers, data scientists, and product managers""], ""engineering_unspecified"": [""Hired | San Francisco, CA | Full-time | Software developers, data scientists, and product managers""], ""product_management"": [""| Software developers, data scientists, and product managers""]}","Hired | San Francisco, CA | Full-time | Software developers, data scientists, and product managers
+Hired has done a great job in bringing efficiency and transparency to the job hunting process.  Top developers, data scientists, PMs, and sales professionals sign up on the site, and companies can give an offer to interview with upfront compensation.
+Hired is a Ruby on Rails application, and gets deployed multiple times a day to Heroku.
+We encourage developers that are interested in working at Hired to join the Hired platform.  That may mean that they end up finding a great job elsewhere, but that's great too.  Even our VP of Engineering was hired through the platform.
+http://join.hired.com/x/Fi4oin https://hired.com/careers"
+era_sample_2011_2015,2011-12,3300689,https://news.ycombinator.com/item?id=3300689,True,,frontend;mobile;data;qa;engineering_unspecified;product_management,,"{""engineering_unspecified"": [""* Software Engineers""], ""frontend"": [""* Frontend Engineers""], ""qa"": [""* QA Engineers""], ""product_management"": [""* Product Managers""], ""data"": [""* Data Scientists""], ""mobile"": [""* Mobile Developers""]}","New York, NY
+Lot18 (http://www.lot18.com) is revolutionizing the way people buy wine and epicurean food online.
+Hiring:
+* Software Engineers
+* Frontend Engineers
+* QA Engineers
+* Director of Engineering
+* Engineer Leads
+* Product Managers
+* Project Managers
+* Data Scientists
+* Mobile Developers
+Why you should work here:
+- We work with a ton of great technologies: Python, JavaScript, Tornado, Chef, git, Vagrant, MySQL, Linux, Apache, nginx, HAProxy, Amazon Web Services, Varnish, memcached, Capistrano, RabbitMQ, jQuery and more.
+- Well funded. We’ve raised $45M in 3 rounds over the last 12 months. Led by NEA, Accel & FirstMark.
+- People actually use our product. Over 600k users have joined since we launched in Nov 2010.
+- We have a real business model and do 7 figures a month in transactions.
+- Benefits: Competitive salary, stock options, medical/dental paid in full, unlimited vacation, plenty of wine, lots of challenges and interesting business/tech problems to solve.
+Apply by emailing jobs@lot18.com."
+era_sample_2011_2015,2015-09,10157331,https://news.ycombinator.com/item?id=10157331,True,,frontend,,"{""frontend"": [""Front-End Developer: We're entirely web-based and have been prototyping our latest stuff with React.js - our customers love what w""]}","Insight Informatics - http://libero.com.au/ - Brisbane, Australia or REMOTE (within Australia)
+We're a team of 12 responsible for delivering a world-class Library Management Platform to Public, Corporate and University Libraries around Australia, Germany, Italy, Switzerland and the United Kingdom. Our mission is to provide the best set of tools that empower libraries to build communities, simplify their day to day running and provide exactly what their members need.
+Front-End Developer: We're entirely web-based and have been prototyping our latest stuff with React.js - our customers love what we've come up with so far. We're after experienced people passionate about user experience to invent new ways to interact with your library, as well as build upon what we have at the moment.
+Shoot us an email at seb@libero.com.au to chat if you're interested, or even if you were/still are that kid that likes hanging out at the library."
+era_sample_2011_2015,2011-10,3060879,https://news.ycombinator.com/item?id=3060879,True,,,,{},"INTERN, H1B acceptable
+Generalist or Backend Engineer
+Palo Alto - Tinfoil Security (http://www.tinfoilsecurity.com) - 500startups company
+About Tinfoil Security:
+Tinfoil Security is the simplest way to secure your website. To the user, we provide an easy-to-use reporting interface that tells you where we found vulnerabilities, what they are, and provides a step-by-step wizard of how to fix them. Behind the scenes, we're crawling the site looking for every potential input vector and attempting to infiltrate, just like any external hacker would. The catch is we do this non-maliciously and without leaving a trace. Sound interesting?
+We're looking for incredibly smart guys (or girls) who like to get their hands dirty. If you don't know the answer, find it. If you can't find it, build it; but don't reinvent the wheel. If all the wheels suck though, build a better one.
+We're revolutionizing the stale and boring security industry, and making website and mobile security accessible to the world, so no business has to continue being the ""low hanging fruit."" It's absurd that security is only understood by so few developers and business owners in the world, when so much of it is actually pretty simple to understand. We want to change that. Join us.
+About you:
+You'll be employee #1.
+Our entire stack is Ruby at the moment, but we have a strong affinity for Python, Scala, and C, in no particular order. We're of the mindset that you pick the best tool for the job, much as you wouldn't hammer in a nail with a wrench (unless you didn't have a hammer and really needed to get it done fast).
+Yo"
+era_sample_2011_2015,2015-07,9814005,https://news.ycombinator.com/item?id=9814005,True,,backend,,"{""backend"": [""Looking for fullstack or server-side devs interested in working on APIs and related tools using JVM languages (Scala at present) on AWS.""]}","The Guardian | LONDON | ONSITE
+Looking for fullstack or server-side devs interested in working on APIs and related tools using JVM languages (Scala at present) on AWS. The work is really interesting and the Guardian is a great company - both from a tech perspective because of our scale, and because of the journalism we do. I head this team from a tech side so any questions get in touch! (nicolas.long@theguardian.com).
+More details here (ignore the technology list - more important is good ideas and a willingness to learn):
+http://underscore.io/jobs/2015-05-20-guardian-discussion/"
+era_sample_2011_2015,2015-11,10496160,https://news.ycombinator.com/item?id=10496160,True,,data,,"{""data"": [""Data Scientist:""]}","Exabeam | San Mateo, California | Full time | On site
+Data Scientist:
+------------------
+• Collaborate with security domain experts, data scientists, and platform engineering team to identify security threats with data-driven methods
+• Perform data processing and transformation to maximize informational value
+• Conduct research activities including idea proposition, literature review, fast algorithm and learning model prototyping, experiments running, and documentation
+• Implement performance-efficient models and algorithms for production
+• Be responsible for accuracy and performance of models in production. Review and improve where necessary.
+• Work under general guidance with minimal close supervision
+• Communicate and demonstrate success of data science-based methodologies for internal and external use.
+To get in touch, send an email to"
+era_sample_2011_2015,2015-09,10153492,https://news.ycombinator.com/item?id=10153492,True,,full_stack,technical_breadth,"{""full_stack"": [""Full-stack software engineers""], ""technical_breadth"": [""Full-stack software engineers""]}","TXN - San Francisco, CA
+== About us
+- We’re a seed stage startup company based in San Francisco.
+- We’re building a market research analytics tool for businesses based on consumer credit card transaction information (think “Nielsen for transactions”).
+- We’re well funded by great investors and are looking for our first engineering hires.
+- We use AWS for all of our development and production environments. Today, we use Scala, Node.js and MySQL but we’re always evaluating new tools that can help us build more awesome things.
+- We are hackers at heart - crazy about using technology to create something valuable.
+== Positions:
+Full-stack software engineers
+Looking for our first engineering hires: people who want to build something great from scratch, take lots of ownership and do a ton of learning.
+Examples of things you will do:
+- Design and implement scripts that process millions of credit card transactions and remove duplicates, identify types of transactions, extract canonic business names.
+- Figure out how to store this data to make it efficiently queryable by applications.
+- Figure out how to build tools in our applications for users to gain non-trivial insights from these millions of transactions.
+- Make our applications blazing fast.
+- Build UX that looks like it’s from the future: beautiful, obvious and extremely smart.
+Apply at: jobs@txn.com"
+era_sample_2011_2015,2011-04,2397597,https://news.ycombinator.com/item?id=2397597,True,,engineering_unspecified,,"{""engineering_unspecified"": [""PiCloud (San Francisco, CA) is hiring software engineers to develop its cloud computing platform.""]}","PiCloud (San Francisco, CA) is hiring software engineers to develop its cloud computing platform.
+Quick description:
+We allow developers, scientists, and engineers to leverage the power of the cloud with only a few lines of code.  We do this by abstracting away individual servers, in favor of a simple language-integrated API.
+We do extensive amounts of systems work, from scheduling algorithms to user sandboxing to bytecode introspection.
+Apply @: http://www.picloud.com/jobs/"
+era_sample_2011_2015,2014-06,7829708,https://news.ycombinator.com/item?id=7829708,True,,frontend;backend;data;sales_marketing,,"{""backend"": [""* Backend Engineer: Distributed systems experience, passion for large scale systems.""], ""frontend"": [""* Frontend Engineer: Architecting interesting fully client side apps, dashboards, live updates, etc...""], ""data"": [""* Data Engineer: Designing and building systems to handle big data.""], ""sales_marketing"": [""* Marketing managers (Mailgun and Exceptional.io): Taking the lead on these teams' marketing efforts.""]}","Rackspace - San Francisco, CA (will relocate and remote possible)
+Come work at Rackspace in the heart of San Francisco (2nd and Folsom). We have 28k sq feet that we also share with Geekdom, our collaborative co-working space. Rackspace focuses on building big systems to serve other technologists and builders. Being the founder of OpenStack, we encourage OSS development and will fund time spent on OSS side projects.
+There are various roles available. Below are some general outlines:
+* All: Get stuff done, people that are motivated to make an impact.
+* All: Excited to build new products, passion for new technology, new programming models.
+* Backend Engineer: Distributed systems experience, passion for large scale systems.
+* Frontend Engineer: Architecting interesting fully client side apps, dashboards, live updates, etc...
+* Quality Engineering Manager: Continuous integration and deployment.
+* Data Engineer: Designing and building systems to handle big data.
+* Spam Fighting Engineer (Mailgun): Finding spammers and fraudsters with smart algorithms.
+* Deliverability Engineer (Mailgun): Automating email deliverability best practices into code.
+* Marketing managers (Mailgun and Exceptional.io): Taking the lead on these teams' marketing efforts.
+H1B transfers are fine, obviously the cap on applications this year limits applications 'til next year...
+I was one of the Mailgun founders and run the San Francisco office so please ping me directly, taylor.wakefield@rackspace.com"
+boundary_2011_2015_technical_breadth_True,2015-09,10153492,https://news.ycombinator.com/item?id=10153492,True,,full_stack,technical_breadth,"{""full_stack"": [""Full-stack software engineers""], ""technical_breadth"": [""Full-stack software engineers""]}","TXN - San Francisco, CA
+== About us
+- We’re a seed stage startup company based in San Francisco.
+- We’re building a market research analytics tool for businesses based on consumer credit card transaction information (think “Nielsen for transactions”).
+- We’re well funded by great investors and are looking for our first engineering hires.
+- We use AWS for all of our development and production environments. Today, we use Scala, Node.js and MySQL but we’re always evaluating new tools that can help us build more awesome things.
+- We are hackers at heart - crazy about using technology to create something valuable.
+== Positions:
+Full-stack software engineers
+Looking for our first engineering hires: people who want to build something great from scratch, take lots of ownership and do a ton of learning.
+Examples of things you will do:
+- Design and implement scripts that process millions of credit card transactions and remove duplicates, identify types of transactions, extract canonic business names.
+- Figure out how to store this data to make it efficiently queryable by applications.
+- Figure out how to build tools in our applications for users to gain non-trivial insights from these millions of transactions.
+- Make our applications blazing fast.
+- Build UX that looks like it’s from the future: beautiful, obvious and extremely smart.
+Apply at: jobs@txn.com"
+boundary_2011_2015_technical_breadth_False,2015-04,9313647,https://news.ycombinator.com/item?id=9313647,True,,engineering_unspecified,,"{""engineering_unspecified"": [""We are looking for senior developers who are comfortable owning an entire feature, from the schema all the way to the CSS.""]}","West Hollywood, CA - Talenthouse, http://www.talenthouse.com/
+At Talenthouse, we're building a platform that is home to the world's most creative people; Musicians, Film Makers, DJs, Fashion designers, Painters, Digital artists, Photographers, and more.
+We want to help artists grow, find new audiences, and make money by doing what they love.
+Our platform is a social network for creatives where they can connect, get inspired, and also collaborate with brands who want to engage with the artistic community.
+We are on a journey to build the largest platform of our kind. Our bar for quality is high, and we take pride in our work (both user facing and behind the scenes).
+Primary Stack: Scala/Play2.0, PostgreSQL, jQuery/Angular/ReactJS/Less; Mac/Linux friendly
+We are looking for senior developers who are comfortable owning an entire feature, from the schema all the way to the CSS.
+Perks: Flexible vacation and sick days; Health/Dental/Vision; Quiet, spacious, comfortable working environment; Free coffee and snacks; Flexible work hours, responsible remote work a possibility; 401K and Stock options; 15 paid vacation days
+To apply, email jobs@talenthouse.com"
+boundary_2011_2015_product_responsibility_True,2014-01,6996284,https://news.ycombinator.com/item?id=6996284,True,,engineering_unspecified,product_responsibility;customer_contact,"{""engineering_unspecified"": [""echnology field, is looking for a JavaScript developer to maintain and enhance DICOM Grid’s front-end medical image sharing and reading web application.""], ""customer_contact"": [""- Work with customers and professional services to gather requirements.""], ""product_responsibility"": [""- Work with customers and professional services to gather requirements.""]}","DICOM Grid - Phoenix AZ, or REMOTE - JavaScript Developer
+DICOM Grid, a SaaS start-up in the healthcare technology field, is looking for a JavaScript developer to maintain and enhance DICOM Grid’s front-end medical image sharing and reading web application. You will report to the Director of Dev Ops.
+Familiarity with modern front-end web development is essential, including but not limited to HTML5, CSS, JavaScript, LESS, JQuery, Underscore, Handlebars, Backbone. Experience working in the medical industry (DICOM, HL7, PACS, etc.) would be a bonus, but is not required. The ideal candidate would be able to work independently with minimal supervision, and be enthusiastic about keeping up-to-date with the latest web technologies.
+The team is distributed with team members working remotely in Phoenix, Los Angeles, Boston, and New York.
+Position Responsibilities
+- Plan, evaluate, implement, test and document new features and bug fixes for the DICOM Grid web application.
+- Work with other development team members to integrate with backend services.
+- Work with DevOps to deploy code into our production and UAT environments.
+- Work with customers and professional services to gather requirements.
+- Conform to company standard operating procedures.
+What qualifies you to join?
+- A combination of a college degree in CS, Math, Physics, or related, relevant work experience, and/or a strong open source portfolio.
+- General interest in the healthcare field.
+- Strong communication and interpersonal skills.
+- High enthusiasm and desire to work on an entrepreneurial team.
+- Roll-up-the sleeves a"
+boundary_2011_2015_product_responsibility_False,2015-04,9313647,https://news.ycombinator.com/item?id=9313647,True,,engineering_unspecified,,"{""engineering_unspecified"": [""We are looking for senior developers who are comfortable owning an entire feature, from the schema all the way to the CSS.""]}","West Hollywood, CA - Talenthouse, http://www.talenthouse.com/
+At Talenthouse, we're building a platform that is home to the world's most creative people; Musicians, Film Makers, DJs, Fashion designers, Painters, Digital artists, Photographers, and more.
+We want to help artists grow, find new audiences, and make money by doing what they love.
+Our platform is a social network for creatives where they can connect, get inspired, and also collaborate with brands who want to engage with the artistic community.
+We are on a journey to build the largest platform of our kind. Our bar for quality is high, and we take pride in our work (both user facing and behind the scenes).
+Primary Stack: Scala/Play2.0, PostgreSQL, jQuery/Angular/ReactJS/Less; Mac/Linux friendly
+We are looking for senior developers who are comfortable owning an entire feature, from the schema all the way to the CSS.
+Perks: Flexible vacation and sick days; Health/Dental/Vision; Quiet, spacious, comfortable working environment; Free coffee and snacks; Flexible work hours, responsible remote work a possibility; 401K and Stock options; 15 paid vacation days
+To apply, email jobs@talenthouse.com"
+boundary_2011_2015_product_engineer_title_True,2013-04,5475326,https://news.ycombinator.com/item?id=5475326,True,,engineering_unspecified,product_engineer_title,"{""engineering_unspecified"": [""ur San Francisco Office we are looking for a product engineer / integration engineer to help game developers integrate our monetization products.""], ""product_engineer_title"": [""ur San Francisco Office we are looking for a product engineer / integration engineer to help game developers integrate our monetization products.""]}","San Francisco, CA
+For our San Francisco Office we are looking for a product engineer / integration engineer to help game developers integrate our monetization products. Basic technical skills (especially SQL and HTML/CSS/Javascript) as well as a customer oriented mindset are key for the position.
+For this position, we would train you in our Berlin office for the first weeks.
+If you are not from the US, we take care of your (H1B) visa.
+Details: http://www.jobscore.com/jobs/sponsorpay/product-engineer-m-f...
+for this position as well as"
+boundary_2011_2015_product_engineer_title_False,2015-04,9313647,https://news.ycombinator.com/item?id=9313647,True,,engineering_unspecified,,"{""engineering_unspecified"": [""We are looking for senior developers who are comfortable owning an entire feature, from the schema all the way to the CSS.""]}","West Hollywood, CA - Talenthouse, http://www.talenthouse.com/
+At Talenthouse, we're building a platform that is home to the world's most creative people; Musicians, Film Makers, DJs, Fashion designers, Painters, Digital artists, Photographers, and more.
+We want to help artists grow, find new audiences, and make money by doing what they love.
+Our platform is a social network for creatives where they can connect, get inspired, and also collaborate with brands who want to engage with the artistic community.
+We are on a journey to build the largest platform of our kind. Our bar for quality is high, and we take pride in our work (both user facing and behind the scenes).
+Primary Stack: Scala/Play2.0, PostgreSQL, jQuery/Angular/ReactJS/Less; Mac/Linux friendly
+We are looking for senior developers who are comfortable owning an entire feature, from the schema all the way to the CSS.
+Perks: Flexible vacation and sick days; Health/Dental/Vision; Quiet, spacious, comfortable working environment; Free coffee and snacks; Flexible work hours, responsible remote work a possibility; 401K and Stock options; 15 paid vacation days
+To apply, email jobs@talenthouse.com"
+boundary_2011_2015_ai_product_work_True,2015-04,9303571,https://news.ycombinator.com/item?id=9303571,True,,engineering_unspecified,ai_product_work,"{""engineering_unspecified"": [""More specifically, we're looking for engineers with interests or experience in:""], ""ai_product_work"": [""* Designing and implementing scalable machine learning models (particularly Bayesian approaches, topic models, deep belief nets)""]}","Permutive (YC S14) — London, UK — http://permutive.com
+We're focused on understanding and recommending content at scale.  We use ML and NLP techniques to algorithmically understand the meaning behind content and people's wide and nuanced interests.  Our first product is an intelligent native ad server for sponsored content.
+We have a ton of interesting problems to solve, and we're looking for people who want the responsibility of taking some of them on and delivering working solutions.  More specifically, we're looking for engineers with interests or experience in:
+* Building large-scale distributed systems (we run a microservices architecture on AWS)
+* Designing and implementing scalable machine learning models (particularly Bayesian approaches, topic models, deep belief nets)
+* Working extensively in functional languages (we mostly use Scala, some Haskell)
+* Building low-latency personalized recommender systems
+We’re a VC and Y Combinator-backed startup at the beginning of our journey.  As one of our first engineers you’ll play a central role in defining our tech culture and direction, and have direct influence on product and strategy.
+If you're interested, email us at jobs@permutive.com with your resume/CV and anything else that helps us know more about who you are!"
+boundary_2011_2015_ai_product_work_False,2015-04,9313647,https://news.ycombinator.com/item?id=9313647,True,,engineering_unspecified,,"{""engineering_unspecified"": [""We are looking for senior developers who are comfortable owning an entire feature, from the schema all the way to the CSS.""]}","West Hollywood, CA - Talenthouse, http://www.talenthouse.com/
+At Talenthouse, we're building a platform that is home to the world's most creative people; Musicians, Film Makers, DJs, Fashion designers, Painters, Digital artists, Photographers, and more.
+We want to help artists grow, find new audiences, and make money by doing what they love.
+Our platform is a social network for creatives where they can connect, get inspired, and also collaborate with brands who want to engage with the artistic community.
+We are on a journey to build the largest platform of our kind. Our bar for quality is high, and we take pride in our work (both user facing and behind the scenes).
+Primary Stack: Scala/Play2.0, PostgreSQL, jQuery/Angular/ReactJS/Less; Mac/Linux friendly
+We are looking for senior developers who are comfortable owning an entire feature, from the schema all the way to the CSS.
+Perks: Flexible vacation and sick days; Health/Dental/Vision; Quiet, spacious, comfortable working environment; Free coffee and snacks; Flexible work hours, responsible remote work a possibility; 401K and Stock options; 15 paid vacation days
+To apply, email jobs@talenthouse.com"
+boundary_2011_2015_ai_tool_use_False,2015-04,9313647,https://news.ycombinator.com/item?id=9313647,True,,engineering_unspecified,,"{""engineering_unspecified"": [""We are looking for senior developers who are comfortable owning an entire feature, from the schema all the way to the CSS.""]}","West Hollywood, CA - Talenthouse, http://www.talenthouse.com/
+At Talenthouse, we're building a platform that is home to the world's most creative people; Musicians, Film Makers, DJs, Fashion designers, Painters, Digital artists, Photographers, and more.
+We want to help artists grow, find new audiences, and make money by doing what they love.
+Our platform is a social network for creatives where they can connect, get inspired, and also collaborate with brands who want to engage with the artistic community.
+We are on a journey to build the largest platform of our kind. Our bar for quality is high, and we take pride in our work (both user facing and behind the scenes).
+Primary Stack: Scala/Play2.0, PostgreSQL, jQuery/Angular/ReactJS/Less; Mac/Linux friendly
+We are looking for senior developers who are comfortable owning an entire feature, from the schema all the way to the CSS.
+Perks: Flexible vacation and sick days; Health/Dental/Vision; Quiet, spacious, comfortable working environment; Free coffee and snacks; Flexible work hours, responsible remote work a possibility; 401K and Stock options; 15 paid vacation days
+To apply, email jobs@talenthouse.com"
+era_sample_2016_2019,2019-05,19801244,https://news.ycombinator.com/item?id=19801244,True,,frontend;engineering_unspecified;design,,"{""engineering_unspecified"": [""- Senior software engineer (Ruby/JS/React experience is a plus)""], ""design"": [""- UI / UX designer""], ""frontend"": [""- Frontend dev (React Native experience a plus)""]}","desertcart | Dubai, UAE | Full-time | ONSITE | $70k-$120k | https://www.desertcart.ae/careers
+We're looking to build a team of experienced software developers to help us bring new products to market in cross-border ecommerce space. Our stack is based mainly on a Ruby backend and we have a number of different technologies we use at a smaller scale. We deal with directly with the logistics, e-commerce, search, and web crawling. There's tons of interesting opportunities in the space and we love to move fast. Also happy to sponsor visa / help with relo.
+Email me if you're interested, or want to chat further: rahul [at] [companyname].ae or apply at link above.
+Open Positions:
+- Senior software engineer (Ruby/JS/React experience is a plus)
+- UI / UX designer
+- Product Manager / Product Lead (experience in ecommerce / logistics is a plus)
+- Frontend dev (React Native experience a plus)"
+era_sample_2016_2019,2019-08,20593407,https://news.ycombinator.com/item?id=20593407,True,,engineering_unspecified,,"{""engineering_unspecified"": [""Sock Club | Web Developer (Ruby on Rails, Javascript) | Austin, TX | FULL-TIME, ONSITE, https://custom.sockclub.com and https://www.sockclub.c""]}","Sock Club | Web Developer (Ruby on Rails, Javascript) | Austin, TX | FULL-TIME, ONSITE, https://custom.sockclub.com and https://www.sockclub.com
+The retail landscape is shifting it's reorganizing from around the automobile to around the smartphone. We are working to capitalize on this change by building a DNVB (digitally native vertical brand) and also working on the discovery problem for ecommerce. If you're interested in this opportunity contact me at dane@sotmclub.com"
+era_sample_2016_2019,2018-04,16735346,https://news.ycombinator.com/item?id=16735346,True,,engineering_unspecified,,"{""engineering_unspecified"": [""ThoughtWorks | Senior Developer | New York, Atlanta, Chicago, Dallas, Denver, San Francisco, Nationwide | ONSITE plus travel | thoughtworks.com"", ""ThoughtWorks is hiring talented Senior Developers across the United States!""]}","ThoughtWorks | Senior Developer | New York, Atlanta, Chicago, Dallas, Denver, San Francisco, Nationwide | ONSITE plus travel | thoughtworks.com
+ThoughtWorks is hiring talented Senior Developers across the United States! We have offices in New York, Atlanta, Chicago, Dallas, Denver, and San Francisco, but our technologists live all across the country. This is because, as consultants, we work almost exclusively on site at our client’s offices. Most of our consultants travel during the week and fly home for weekends. We know extensive travel is not for everyone, which is why we’re up front about it.
+ThoughtWorks developers have contributed code to enterprise organizations, nonprofits, and open source projects for over 25 years. They also write books, speak at conferences, and help push software development forward—changing companies and industries along the way.
+Senior Developers play work on a huge variety of projects and play an important role in making our work a success. You could be helping to influence the digital strategy of a retail giant, building a new mobile application for a bank, or redesigning platforms using event sourcing and intelligent data pipelines. You’ll use the latest Lean and Agile thinking, solve mission-critical problems and challenge yourself everyday.
+What we're looking for:
+* Ability to write high-quality, well-tested code. We don’t limit ourselves to one language; experience in any of Java, Scala, C#, Javascript, Ruby or Python is preferred
+* Experience working with Agile, Lean and/or Continuous Delivery approaches such as Continuous Integration, "
+era_sample_2016_2019,2018-06,17213237,https://news.ycombinator.com/item?id=17213237,True,,frontend;backend;mobile;qa,,"{""frontend"": [""Developer, Backend Engineer, Test Engineer, Frontend Engineer | Berlin, Sofia, São Paulo | ONSITE, VISA | https://sumup.com"", ""- Frontend Engineer (Berlin): https://sumup.com/careers/positions/10969B9646/ (React, Jest, Emotion, Webpack, Node)"", ""- Frontend Engineer (Cologne): https://sumup.com/careers/positions/8E383875D5/""], ""backend"": [""SumUp | Android Developer, Backend Engineer, Test Engineer, Frontend Engineer | Berlin, Sofia, São Paulo | ONSITE, VISA | https://sumup.com"", ""- Backend Engineer (Berlin): https://sumup.com/careers/positions/5FDB12E43C/ (Ruby, Scala, Go)"", ""- Senior Backend Engineer (Berlin): https://sumup.com/careers/positions/4C0396E0DB/ (Erlang, Elixir)""], ""mobile"": [""SumUp | Android Developer, Backend Engineer, Test Engineer, Frontend Engineer | Berlin, Sofia, São Paulo | ONSITE, VISA | https://sumup.co"", ""- Android Developer (Berlin): https://sumup.com/careers/positions/BF2411A781/ (Java)"", ""- iOS Engineer (São Paulo): https://sumup.com/careers/positions/622F5BCB9F/""], ""qa"": [""SumUp | Android Developer, Backend Engineer, Test Engineer, Frontend Engineer | Berlin, Sofia, São Paulo | ONSITE, VISA | https://sumup.com"", ""- QA Engineer (Berlin): https://sumup.com/careers/positions/E09019CD05/""]}","SumUp | Android Developer, Backend Engineer, Test Engineer, Frontend Engineer | Berlin, Sofia, São Paulo | ONSITE, VISA | https://sumup.com
+SumUp's mission is to empower small businesses to grow by accepting card payments in their stores, online, and mobile. We ship more than 2,000 card terminals every day, and we were recently named Europe's fastest growing company by Inc. Headquartered in London, our major offices are in Berlin, Sofia and São Paulo. The Berlin office alone comprises more than 200 people from over 30 countries. Our office is very social, and if you're worried about learning German to move to Berlin -- don't be! We're here to support you in coming to Berlin and getting adapted.
+If you're interested in working in Cologne, Sofia, or São Paulo, we also have positions open in multiple locations, just send in your application and indicate the office.
+We offer an education budget, language classes, the opportunity to travel abroad, gym subsidies, and dedicated time for side projects and open source. Here are a few of our open positions!
+- Android Developer (Berlin): https://sumup.com/careers/positions/BF2411A781/ (Java)
+- Backend Engineer (Berlin): https://sumup.com/careers/positions/5FDB12E43C/ (Ruby, Scala, Go)
+- Senior Backend Engineer (Berlin): https://sumup.com/careers/positions/4C0396E0DB/ (Erlang, Elixir)
+- QA Engineer (Berlin): https://sumup.com/careers/positions/E09019CD05/
+- Frontend Engineer (Berlin): https://sumup.com/careers/positions/10969B9646/ (React, Jest, Emotion, Webpack, Node)
+- Frontend Engineer (Cologne): https://sumup.com/careers/positions/"
+era_sample_2016_2019,2017-11,15606113,https://news.ycombinator.com/item?id=15606113,True,,engineering_unspecified,,"{""engineering_unspecified"": [""intech firm located in NYC we're looking for software engineers we're a python shop our stack consists of Django, React, Apache Mesos running on AWS we're also building out ou""]}","OctaneLending.com a Fintech firm located in NYC we're looking for software engineers we're a python shop our stack consists of Django, React, Apache Mesos running on AWS we're also building out our data pipeline on top of AWS Glue and Redshift send your resumes to rodrick<@>octanelending<.>com"
+era_sample_2016_2019,2019-02,19058770,https://news.ycombinator.com/item?id=19058770,True,,frontend,,"{""frontend"": [""Pacific Medical Data Solutions | Frontend Developer | Full-Time | Denver, CO | Onsite"", ""We're looking for a frontend developer to join our engineering team focusing on our new SaaS product.""]}","Pacific Medical Data Solutions | Frontend Developer | Full-Time | Denver, CO | Onsite
+PMDS is a healthcare technology company which provides a physician productivity and compensation platform to hospitals around the US. We're looking for a frontend developer to join our engineering team focusing on our new SaaS product. An ideal candidate should have experience working in Angular 4+ or similar frontend framework and the ability to develop and deliver an intuitive and polished user experience to our customers.
+This role is onsite in our office in the DTC just south of Denver. Please reach out to chris.vanlaw@pacificmds.com for more information or to apply. Please include ""HN"" in the subject line."
+era_sample_2016_2019,2019-12,21683732,https://news.ycombinator.com/item?id=21683732,True,,data;engineering_unspecified,,"{""data"": [""Senior Data Engineer (Oslo): https://grnh.se/5abff5f81"", ""Senior Data Engineer (NYC): https://grnh.se/d9a1994c1""], ""engineering_unspecified"": [""Software Engineer (Oslo):  https://grnh.se/840e2fa91""]}","Tapad | Full-Time | Onsite: Oslo & Oslo | Open Compensation
+Tapad is known for inventing and introducing the Tapad Graph™ to the industry. At the heart of it, we dig data.
+Tapad's Open Source tech stack (below) handle:
+___________________________________________
+Distributed Applications... Scala, Python
+Distributed Computing... Google Cloud, BigQuery, DataFlow/Beam,
+Open Source Technologies… Apache Spark, Apache Beam, Kubernetes
+___________________________________________
+Here are our open roles in Engineering:
+Senior Data Engineer (Oslo): https://grnh.se/5abff5f81
+Software Engineer (Oslo):  https://grnh.se/840e2fa91
+Senior Data Engineer (NYC): https://grnh.se/d9a1994c1"
+era_sample_2016_2019,2017-06,14464355,https://news.ycombinator.com/item?id=14464355,True,,ml_ai,,"{""ml_ai"": [""Development Seed | Machine Learning Engineer | Washington, DC +  Lisbon, Portugal | Full-Time, On-site Preferred | https://developmentseed.org/career""]}","Development Seed | Machine Learning Engineer | Washington, DC +  Lisbon, Portugal | Full-Time, On-site Preferred | https://developmentseed.org/careers/machine-learning/
+Development Seed seeks an engineer with experience in machine learning. Here, you will work with us to build tools that extract insights from large datasets, especially satellite imagery data. You will help solve pressing social and environmental challenges, and create powerful new knowledge for organizations like UNICEF, the World Bank, The Washington Post, and NASA. Our work is a combination of research, implementation, and delivery, and you’ll partner with researchers at half a dozen universities to explore novel machine learning approaches. Ultimately, you’ll build tools that help our clients make better decisions and deliver better services.
+Development Seed is a group of developers and designers who create positive social impact with open tech and open knowledge. We specialize in platforms that derive useful insights from complex data. We are currently building a suite of tools to allow these global organizations to benefit from powerful machine learning methods. At the heart of this effort is our Skynet suite, which automates mapping in developing countries using OSM as a training set:
+https://developmentseed.org/blog/2017/01/30/machine-learning....
+If this sounds like something you want to work on, send your resume to jobs@developmentseed.org. Tell us about yourself and what you’d love to work on at Development Seed."
+era_sample_2016_2019,2018-11,18355791,https://news.ycombinator.com/item?id=18355791,True,,engineering_unspecified,,"{""engineering_unspecified"": [""We’re looking for a senior developer with experience in extracting unstructured data out of PDFs, preferably with Perl.""]}","Inforuptcy | Senior Tesseract & PDF Scraping Developer, Preferably in Perl | REMOTE| Market | Full-time or Part-time | Inforuptcy.com
+At Inforuptcy.com, we are building solutions that enable investors and traders in bankruptcy to become more efficient by automating daily tasks. We’re based in Los Angeles but have a remote team worldwide (Canada, Europe, Armenia to name a few).
+We’re looking for a senior developer with experience in extracting unstructured data out of PDFs, preferably with Perl.
+Testimonial from a team member: “Long story, but I worked there for maybe 6ish months part time a while back. They offered me full time, but I ended up going to a startup because I wanted to learn some specific technologies + up my skills in Data Science. That job was definitely good for some people, but it wasn’t as remote as they advertised it (had me fly in alot), and the team was somewhat difficult to work with ;) I ended up starting my own consulting and at the same time CourtDrive reached back out to me (perfect timing). Point I was trying to make was that I went back to work with them because they were so nice to work with. Not super demanding and very open to listening to ideas/suggestions - just a pleasant environment.”
+Job listing and specific skills we are looking for: https://docs.google.com/document/d/14g2cxI0Ci6b9MkucbO2fvcTO..."
+era_sample_2016_2019,2019-02,19058069,https://news.ycombinator.com/item?id=19058069,True,,infrastructure,,"{""infrastructure"": [""Adjust | Platform Engineer | Berlin, Germany | Full-Time | ONSITE | VISA & RELOCATION | https://www.adjust.com/""]}","Adjust | Platform Engineer | Berlin, Germany | Full-Time | ONSITE | VISA & RELOCATION | https://www.adjust.com/
+As a member of our Platform Engineering team, you will be working closely together with our development and marketing teams to address their needs, and help design and scale out the infrastructure of our massive attribution pipeline and related technologies.
+Our system is built upon a 450+ bare metal machines running Gentoo Linux to satisfy our needs for a highly customized and specialized environment. We process a few petabytes of incoming data every month, with an increasing rate of growth.
+You will help us wrap up the decentralization of our infrastructure over various locations and continuously scale it, making sure that our servers run smoothly and at their highest efficiency.
+You will be proactively looking for improvements, offering your help, taking over shifts for on call duties and executing solutions following your automation drive.
+Your profile:
+- Hands-on experience with Linux, preferably in a sysadmin/devops role
+- Experience debugging and fixing code in various languages (Go, C, Perl preferred, but not mandatory)
+- A desire to automate things away so that you can focus on less repetitive tasks
+Interesting? Let's have a chat. My email: jovica@adjust.com
+Our careers page: https://www.adjust.com/company/careers/"
+era_sample_2016_2019,2018-01,16101656,https://news.ycombinator.com/item?id=16101656,True,,frontend,,"{""frontend"": [""Capsule8 | Front-end Developer | Javascript, CSS | ONSITE: Brooklyn, NY | Full Time""]}","Capsule8 | Front-end Developer | Javascript, CSS | ONSITE: Brooklyn, NY | Full Time
+Capsule8 is building the industry’s only real-time attack disruption platform purpose built for the cloud-native world of Linux, containers and microservices. Capsule8 automates the detection, isolation, and shut down of attacks in the instant they happen.
+The job is onsite in Brooklyn. Ideal candidates have 2-4 years of professional experience (with React or Angular) and know how to apply engineering techniques and discipline to both Javascript and CSS.
+I lead the front-end team; email me at phil@capsule8.com if you'd like to chat!"
+era_sample_2016_2019,2018-11,18356552,https://news.ycombinator.com/item?id=18356552,True,,backend;ml_ai;engineering_unspecified,,"{""backend"": [""Signifyd | Backend Engineer, Machine Learning Engineer, Infrastructure Lead Engineer, Security Engineer | Anywhere""], ""ml_ai"": [""Signifyd | Backend Engineer, Machine Learning Engineer, Infrastructure Lead Engineer, Security Engineer | Anywhere""], ""engineering_unspecified"": [""this problem, we're looking for world-class engineers who are eager to learn, adopt, and contribute to a reactive style of programming."", ""We are hiring remote engineers in the US, as well as engineers to build out our new team in Belfast, UK.""]}","Signifyd | Backend Engineer, Machine Learning Engineer, Infrastructure Lead Engineer, Security Engineer | Anywhere
+www.signifyd.com
+Our engineers build systems that catch bad guys.  Using all available payment, user, and machine data, we have to separate legitimate credit card transactions from fraudulent in under 400ms.  That means doing just-in-time mash-ups of internal data with external APIs and reducing it all into a single score with a few critical insights for end-users.
+To solve this problem, we're looking for world-class engineers who are eager to learn, adopt, and contribute to a reactive style of programming. The tools you build will immediately impact the 5000+ merchants that already rely on Signifyd to help them grow without fear of fraud.
+Our stack: Java, Python, Cassandra, MySQL, Solr, Apache Spark, Play! framework, Linux, Docker, AWS
+Apply here: https://www.signifyd.com/careers/
+We are hiring remote engineers in the US, as well as engineers to build out our new team in Belfast, UK.
+PS: Some of our awards include * Best Company Culture, Entrepreneur Magazine, 2017 * Fraud Innovation Firm of the Year, Finance Monthly, 2017 * 50 Most Promising Startups, Bloomberg, 2017 * Best Places to Work in the Bay Area,2016, 2017, and 2018 * Forbes FinTech 50, Forbes, 2016"
+boundary_2016_2019_technical_breadth_True,2018-03,16493773,https://news.ycombinator.com/item?id=16493773,True,,full_stack;mobile,technical_breadth,"{""mobile"": [""* Senior iOS Engineer""], ""full_stack"": [""* Fullstack Engineers""], ""technical_breadth"": [""* Fullstack Engineers""]}","Babylist | Oakland, CA | Full Time | ONSITE
+Babylist is an e-commerce and gifting platform for new parents and parents-to-be. In 2017 $150 million of gifts were purchased through Babylist.
+In addition to our e-commerce platform Babylist is a trusted resource for parents/parent-to-be to make product decisions. Our thoroughly researched product guides and videos are viewed by millions every month.
+Babylist is profitable and growing quickly. We're hiring for a number of roles across the engineering team including:
+* Senior iOS Engineer
+* Fullstack Engineers
+* Support and Operations Engineers
+For more information on these positions (as well as other openings) please see our jobs page - https://www.babylist.com/jobs
+If you have any questions or would like to apply you can contact me directly august[at]babylist.com"
+boundary_2016_2019_technical_breadth_False,2019-05,19801244,https://news.ycombinator.com/item?id=19801244,True,,frontend;engineering_unspecified;design,,"{""engineering_unspecified"": [""- Senior software engineer (Ruby/JS/React experience is a plus)""], ""design"": [""- UI / UX designer""], ""frontend"": [""- Frontend dev (React Native experience a plus)""]}","desertcart | Dubai, UAE | Full-time | ONSITE | $70k-$120k | https://www.desertcart.ae/careers
+We're looking to build a team of experienced software developers to help us bring new products to market in cross-border ecommerce space. Our stack is based mainly on a Ruby backend and we have a number of different technologies we use at a smaller scale. We deal with directly with the logistics, e-commerce, search, and web crawling. There's tons of interesting opportunities in the space and we love to move fast. Also happy to sponsor visa / help with relo.
+Email me if you're interested, or want to chat further: rahul [at] [companyname].ae or apply at link above.
+Open Positions:
+- Senior software engineer (Ruby/JS/React experience is a plus)
+- UI / UX designer
+- Product Manager / Product Lead (experience in ecommerce / logistics is a plus)
+- Frontend dev (React Native experience a plus)"
+boundary_2016_2019_product_responsibility_True,2016-08,12203236,https://news.ycombinator.com/item?id=12203236,True,,engineering_unspecified,product_responsibility;customer_contact,"{""engineering_unspecified"": [""We’re looking for a Software Engineer or Researcher to help define and standardize the public REST APIs for the Watson Developer Cloud platform.""], ""customer_contact"": [""ing your software engineering expertise with user research to improve API usability and consistency?""], ""product_responsibility"": [""ing your software engineering expertise with user research to improve API usability and consistency?""]}","IBM Watson Senior Software Engineer, APIs | Littleton, MA | Full-Time | Onsite
+Join IBM Watson and help build the leading cognitive API platform! We’re looking for a Software Engineer or Researcher to help define and standardize the public REST APIs for the Watson Developer Cloud platform.
+Are you passionate about creating usable developer experiences? Are you interested in combining your software engineering expertise with user research to improve API usability and consistency?
+Responsibilities:
+Work with service teams to help define new REST and SDK APIs and updates to existing APIs in the Watson Developer Cloud.
+Work with teams to revise and drive alignment around a set of API guidelines (https://github.com/watson-developer-cloud/api-guidelines).
+Willingness to relocate to Littleton, MA.
+Identify and prioritize usability and consistency issues with the current APIs to be fixed in future versions.
+Next Steps:
+Apply at: https://krb-sjobs.brassring.com/TGnewUI/Search/Home/Home?par...
+Email jsstylos@us.ibm.com with an assessment of the current Watson Developer Cloud REST and SDK APIs for bonus points."
+boundary_2016_2019_product_responsibility_False,2019-05,19801244,https://news.ycombinator.com/item?id=19801244,True,,frontend;engineering_unspecified;design,,"{""engineering_unspecified"": [""- Senior software engineer (Ruby/JS/React experience is a plus)""], ""design"": [""- UI / UX designer""], ""frontend"": [""- Frontend dev (React Native experience a plus)""]}","desertcart | Dubai, UAE | Full-time | ONSITE | $70k-$120k | https://www.desertcart.ae/careers
+We're looking to build a team of experienced software developers to help us bring new products to market in cross-border ecommerce space. Our stack is based mainly on a Ruby backend and we have a number of different technologies we use at a smaller scale. We deal with directly with the logistics, e-commerce, search, and web crawling. There's tons of interesting opportunities in the space and we love to move fast. Also happy to sponsor visa / help with relo.
+Email me if you're interested, or want to chat further: rahul [at] [companyname].ae or apply at link above.
+Open Positions:
+- Senior software engineer (Ruby/JS/React experience is a plus)
+- UI / UX designer
+- Product Manager / Product Lead (experience in ecommerce / logistics is a plus)
+- Frontend dev (React Native experience a plus)"
+boundary_2016_2019_product_engineer_title_True,2018-05,16975087,https://news.ycombinator.com/item?id=16975087,True,,infrastructure;engineering_unspecified,product_engineer_title,"{""infrastructure"": [""Zego | Lead Platform Engineer, Senior Product Engineer | London, UK | Onsite | £65k - £75k""], ""engineering_unspecified"": [""Zego | Lead Platform Engineer, Senior Product Engineer | London, UK | Onsite | £65k - £75k"", ""r an experienced platform lead, and a senior product developer to join our engineering team in London.""], ""product_engineer_title"": [""Zego | Lead Platform Engineer, Senior Product Engineer | London, UK | Onsite | £65k - £75k""]}","Zego | Lead Platform Engineer, Senior Product Engineer | London, UK | Onsite | £65k - £75k
+Zego offers insurance tailored to today’s flexible workforce that enjoy the freedom of choosing how, where, and when they work. We are looking for an experienced platform lead, and a senior product developer to join our engineering team in London. Zego provides drivers with flexible, hourly insurance while they are working. We are building a modern insurance platform with which to drive innovation in the industry. We are VC backed and looking to expand our current engineering team.
+Our platform is currently built on top of the Django web framework, hosted on AWS. We have built a cross platform app using React Native. We're looking for people with a strong working knowledge of Python and/or Javascript and a commitment to building, nurturing, and iterating on an ever-evolving codebase."
+boundary_2016_2019_product_engineer_title_False,2019-05,19801244,https://news.ycombinator.com/item?id=19801244,True,,frontend;engineering_unspecified;design,,"{""engineering_unspecified"": [""- Senior software engineer (Ruby/JS/React experience is a plus)""], ""design"": [""- UI / UX designer""], ""frontend"": [""- Frontend dev (React Native experience a plus)""]}","desertcart | Dubai, UAE | Full-time | ONSITE | $70k-$120k | https://www.desertcart.ae/careers
+We're looking to build a team of experienced software developers to help us bring new products to market in cross-border ecommerce space. Our stack is based mainly on a Ruby backend and we have a number of different technologies we use at a smaller scale. We deal with directly with the logistics, e-commerce, search, and web crawling. There's tons of interesting opportunities in the space and we love to move fast. Also happy to sponsor visa / help with relo.
+Email me if you're interested, or want to chat further: rahul [at] [companyname].ae or apply at link above.
+Open Positions:
+- Senior software engineer (Ruby/JS/React experience is a plus)
+- UI / UX designer
+- Product Manager / Product Lead (experience in ecommerce / logistics is a plus)
+- Frontend dev (React Native experience a plus)"
+boundary_2016_2019_ai_product_work_True,2017-05,14238257,https://news.ycombinator.com/item?id=14238257,True,,data;ml_ai;engineering_unspecified,ai_product_work,"{""data"": [""ClearBrain | Software Engineer / Data Engineer / ML Engineer | San Mateo, CA | Full-Time | ONSITE | www.clearbrain.com""], ""ml_ai"": [""rBrain | Software Engineer / Data Engineer / ML Engineer | San Mateo, CA | Full-Time | ONSITE | www.clearbrain.com""], ""engineering_unspecified"": [""ClearBrain | Software Engineer / Data Engineer / ML Engineer | San Mateo, CA | Full-Time | ONSITE | www.clearbrain.com"", ""We’re hiring our first engineers, where you would lead our architecture development across O(terabyte) datasets, build scalable API driver platforms, and""], ""ai_product_work"": [""ts, build scalable API driver platforms, and design an automated machine learning pipeline.""]}","ClearBrain | Software Engineer / Data Engineer / ML Engineer | San Mateo, CA | Full-Time | ONSITE | www.clearbrain.com
+ClearBrain is an early-stage startup building a self-service machine learning layer to predict users' propensity to buy/churn. We dabble in Spark, Scala, Go, and Node every day, thinking about optimal matrix design and statistical feature extraction. We're pushing limits of distributed systems to automatically connect disparate datasets across millions of users, and extract predictive insights across billions of events.
+We’re led by a team from Google & Optimizely, well funded by investors in Dropbox and Optimizely, and with customers in mid-market to public markets. We’re hiring our first engineers, where you would lead our architecture development across O(terabyte) datasets, build scalable API driver platforms, and design an automated machine learning pipeline.
+Please contact us directly at bilal@clearbrain.com if interested!"
+boundary_2016_2019_ai_product_work_False,2019-05,19801244,https://news.ycombinator.com/item?id=19801244,True,,frontend;engineering_unspecified;design,,"{""engineering_unspecified"": [""- Senior software engineer (Ruby/JS/React experience is a plus)""], ""design"": [""- UI / UX designer""], ""frontend"": [""- Frontend dev (React Native experience a plus)""]}","desertcart | Dubai, UAE | Full-time | ONSITE | $70k-$120k | https://www.desertcart.ae/careers
+We're looking to build a team of experienced software developers to help us bring new products to market in cross-border ecommerce space. Our stack is based mainly on a Ruby backend and we have a number of different technologies we use at a smaller scale. We deal with directly with the logistics, e-commerce, search, and web crawling. There's tons of interesting opportunities in the space and we love to move fast. Also happy to sponsor visa / help with relo.
+Email me if you're interested, or want to chat further: rahul [at] [companyname].ae or apply at link above.
+Open Positions:
+- Senior software engineer (Ruby/JS/React experience is a plus)
+- UI / UX designer
+- Product Manager / Product Lead (experience in ecommerce / logistics is a plus)
+- Frontend dev (React Native experience a plus)"
+boundary_2016_2019_ai_tool_use_False,2019-05,19801244,https://news.ycombinator.com/item?id=19801244,True,,frontend;engineering_unspecified;design,,"{""engineering_unspecified"": [""- Senior software engineer (Ruby/JS/React experience is a plus)""], ""design"": [""- UI / UX designer""], ""frontend"": [""- Frontend dev (React Native experience a plus)""]}","desertcart | Dubai, UAE | Full-time | ONSITE | $70k-$120k | https://www.desertcart.ae/careers
+We're looking to build a team of experienced software developers to help us bring new products to market in cross-border ecommerce space. Our stack is based mainly on a Ruby backend and we have a number of different technologies we use at a smaller scale. We deal with directly with the logistics, e-commerce, search, and web crawling. There's tons of interesting opportunities in the space and we love to move fast. Also happy to sponsor visa / help with relo.
+Email me if you're interested, or want to chat further: rahul [at] [companyname].ae or apply at link above.
+Open Positions:
+- Senior software engineer (Ruby/JS/React experience is a plus)
+- UI / UX designer
+- Product Manager / Product Lead (experience in ecommerce / logistics is a plus)
+- Frontend dev (React Native experience a plus)"
+era_sample_2020_2022,2021-07,27713495,https://news.ycombinator.com/item?id=27713495,True,,backend,,"{""backend"": [""Estuary Development | Senior Backend Engineer | NY or Columbus | Full time | estuary.dev""]}","Estuary Development | Senior Backend Engineer | NY or Columbus | Full time | estuary.dev
+Estuary is a DataOps platform built by successful repeat founders that makes it far simpler for engineering teams to build real-time, data intensive applications at scale. The platform unifies a team's databases, pub/sub, and SaaS around their data, without requiring new investments in infrastructure or development. Estuary develops in the open, implementing in Rust & Go.
+Role:
+This is a hands-on position where the individual will be responsible for taking on large backend projects from design to implementation to management in production.  This candidate will start as an individual contributor and potentially additionally manage engineers over time.  The ideal candidate will be very senior with 7+ years of backend development experience.
+Responsibilities:
+- Design, implement, deploy, test and maintain substantial projects in Rust and Go
+- Evolve http://gazette.dev to meet our needs.
+- Solve technical problems of extremely high scope and complexity
+- Collaborate with other engineers, founders and product management
+To apply, email careers@estuary.dev"
+era_sample_2020_2022,2020-05,23047025,https://news.ycombinator.com/item?id=23047025,True,,engineering_unspecified,,"{""engineering_unspecified"": [""Avalara.com | Seattle, USA| Full-time |  Software Engineer | Onsite  | https://www.avalara.com/""]}","Avalara.com | Seattle, USA| Full-time |  Software Engineer | Onsite  | https://www.avalara.com/
+https://www.avalara.com/us/en/about/jobs/job-details.oGRU9fw...
+I actually have 2 positions open.
+C#, Python, MySQL
+About Avalara
+Avalara helps businesses of all sizes achieve compliance with transaction taxes, including sales and use, VAT, excise, communications, and other tax types. The company delivers comprehensive, automated, cloud-based solutions designed to be fast, accurate, and easy to use. The Avalara Compliance Cloud® platform helps customers manage complicated and burdensome tax compliance obligations imposed by state, local, and other taxing authorities throughout the world.
+Avalara offers more than 600 pre-built connectors into leading accounting, ERP, ecommerce and other business applications, making the integration of tax and compliance solutions easy for customers. Each year, the company processes billions of indirect tax transactions for customers and users, files more than a million tax returns, and manages millions of tax exemption certificates and other compliance documents."
+era_sample_2020_2022,2021-10,28719566,https://news.ycombinator.com/item?id=28719566,True,,engineering_unspecified,,"{""engineering_unspecified"": ["", UK | Remote | Full-time permanent | Senior Software Engineer-Data, MLOps Engineer, ML Engineer- NLP, Tech Lead-Core Infrastructure, Senior Software Engineer - QA | Python, P""]}","BenchSci-AI Software | www.benchsci.com/careers | Canada, USA, UK | Remote | Full-time permanent | Senior Software Engineer-Data, MLOps Engineer, ML Engineer- NLP, Tech Lead-Core Infrastructure, Senior Software Engineer - QA | Python, Pytorch, React, GCP, BigQuery, Beam, PostgreSQL, Kubernetes, Docker, Cypress, Javascript | Email: talent@benchsci.com
+At BenchSci, our aim is to exponentially increase the speed and quality of life-saving research by empowering scientists with advanced biomedical AI to run more successful experiments. Our vision as an organization is to bring medicine to patients 50% faster by 2025. Backed by F-Prime, Inovia, Golden Ventures, and Google’s AI fund, Gradient Ventures, we provide an indispensable tool for more than 41,000 scientists at 15 top 20 pharmaceutical companies and 4,300 leading academic centers. Currently, there are 165 of us, and we are expanding! For more information, please email us at talent@benchsci.com."
+era_sample_2020_2022,2020-11,24975443,https://news.ycombinator.com/item?id=24975443,True,,full_stack,technical_breadth;product_engineer_title,"{""full_stack"": [""SBLY | Full-Stack Product Engineer | Los Angeles HQ + US Remote | 1-2 years experience | $120k yearly salary + 0.05% equity""], ""technical_breadth"": [""SBLY | Full-Stack Product Engineer | Los Angeles HQ + US Remote | 1-2 years experience | $120k yearly salary + 0.05% equity""], ""product_engineer_title"": [""SBLY | Full-Stack Product Engineer | Los Angeles HQ + US Remote | 1-2 years experience | $120k yearly salary + 0.05% equity""]}","SBLY | Full-Stack Product Engineer | Los Angeles HQ + US Remote | 1-2 years experience | $120k yearly salary + 0.05% equity
+https://sbly.com/jobs/product-engineer.html
+SBLY, formerly known as Shareably, has been using media and technology to build digital brands and audiences since 2015. Our first product Shareably, a web publishing network, has reached over 1 billion unique users and profitably generated more than $75M in revenue with $0 in outside funding. As a private, independent, and profitable company, no one influences major company decisions except ourselves.
+We pride ourselves on a culture that optimizes for lifestyle, impactful work, and transparency. We're also of the strong belief that a company is only as good as the people in it. Our current team members have studied at universities such as UC Berkeley, UCLA, Northwestern and worked at industry-leading companies such as Affirm, Clutter, Instagram, Instacart, Indiegogo, and Stripe.
+SBLY is seeking a full-time member to join its Product Engineering team! We're looking to fill this role by December 2020 with a flexible start date in January 2021. This will be the first time the product engineering team will be hiring a non-senior position and we're excited about the possibility of working with someone that's looking to learn, grow, and make an impact with their work."
+era_sample_2020_2022,2022-02,30170216,https://news.ycombinator.com/item?id=30170216,True,,engineering_unspecified;design,,"{""engineering_unspecified"": [""ri — Apple’s Siri is looking for exceptional engineers, designers, and project managers well versed in machine learning, natural language, speech recognition, server automatio"", ""ty Engineering & Architecture is looking for engineers who can help make sense of complex hardware and software systems, distilling essential qualities, threat models, and vul"", ""We’re hiring for software engineers with 2+ years experience who love building large-scale distributed solutions to protect hundreds of millions of""], ""design"": [""s Siri is looking for exceptional engineers, designers, and project managers well versed in machine learning, natural language, speech recognition, server automation, and/or m""]}","Apple, Inc.
+We’re perfectionists. Idealists. Inventors. Forever tinkering with products and processes, always on the lookout for better. Whether you work at one of our global offices, offsite, or even at home, a job at Apple will be demanding. But it also rewards bright, original thinking and hard work. And none of us here would have it any other way.
+Where do you see yourself at Apple?
+-- Siri — Apple’s Siri is looking for exceptional engineers, designers, and project managers well versed in machine learning, natural language, speech recognition, server automation, and/or mobile software development. Siri is used on countless iOS, tvOS and watchOS devices and handles over a billion requests per week. Note that in addition to Cupertino, we are hiring in many locations such as Seattle, Pittsburgh, Beijing, Cambridge MA and Cambridge UK too.
+If you’re passionate about Music, Productivity, or one of a variety of our open positions, you’ll be right at home.
+Apply online or send a resume to steve_rath@apple.com
+-- SEAR -- Security Engineering & Architecture is looking for engineers who can help make sense of complex hardware and software systems, distilling essential qualities, threat models, and vulnerabilities from volumes of structured data. We have two open roles, both related to malware detection, analysis, and remediation.  We are looking for individuals able to build scalable compute services, and individuals for reverse engineering malware threats.  These roles are a unique opportunity to be part of the team that architects and delivers groundbreaking security to more th"
+era_sample_2020_2022,2021-03,26309878,https://news.ycombinator.com/item?id=26309878,True,,frontend,,"{""frontend"": [""Malone Tuning | Frontend Developer, Vue + TypeScript | Surrey, BC, Canada | Full-time | ONSITE post-COVID""]}","Malone Tuning | Frontend Developer, Vue + TypeScript | Surrey, BC, Canada | Full-time | ONSITE post-COVID
+Malone Tuning[1] is a profit-generating company bringing ECU tuning to the web. The industry is dominated by outdated, clunky software, and we're revolutionizing that.
+Join our small (less than 5 people) development team and reap the benefits:
+- Excellent work-life balance
+- Greenfield projects
+- Free tunes :)
+Email us at join-frontend@malonetuning.com or apply through AngelList at https://angel.co/company/malone-tuning/jobs
+[1]: https://malonetuning.com/"
+era_sample_2020_2022,2021-02,26121481,https://news.ycombinator.com/item?id=26121481,True,,,,{},"Head of Technology
+_West-Coast Based Search Fund & Private Equity Firm_
+Location: Phoenix, AZ. In person (Covid-permitting), not remote.
+Company & Role: We are looking for an entrepreneurial Head of Technology to manage the ground-up systems design and buildout for a consumer subscription-based services business. We recently acquired the company, which sells a popular service to an already-sizeable base of monthly subscribers. The company is not a true startup, but the role requires a startup-minded technologist who can build scalable systems to support startup-like growth: 5-10x over the next 5-10 years. To unlock this growth, the Head of Tech will (1) first design and implement thoughtful, scalable systems - building on widely used platforms, and (2) over time, build teams and grow as a senior technology executive. The Head of Tech will report to CEO, present to the Board and PE owners, and have broad responsibilities spanning technology, operations, and strategy.
+The Situation: An established, profitable, 15-person company sells a popular service to consumers (no physical product). Under previous owners, company made minimal investment in technology, which hindered growth. The team is eager to move from paper-based processes to higher-value activities, and the new owner is excited to implement modern systems. Technology need not be novel – this is a straightforward B2C business with a B2B sales component. We need not reinvent the wheel and prefer to adopt platforms popular with other modern DTC SaaS companies.
+Candidate Profile: - First-time Head of Tech who grows into r"
+era_sample_2020_2022,2022-03,30519288,https://news.ycombinator.com/item?id=30519288,True,,engineering_unspecified,,"{""engineering_unspecified"": [""Lokker | US & Ireland | Remote | Full-time | Software Engineers | https://lokker.com""]}","Lokker | US & Ireland | Remote | Full-time | Software Engineers | https://lokker.com
+Lokker gives companies visibility and control over third-party data collection and risks so they can protect their customers’ privacy and comply with new privacy laws. We’re a team of experienced technologists and data experts with a deep devotion to privacy on the internet.
+Our stack:
+• JavaScript/TypeScript, React, Redux, Vue.js, GCP, PostgreSQL, Redis, Elasticsearch, Sisense, BigQuery, Puppeteer and more!
+Here are our open roles (please apply there):
+• Senior Software Engineer » https://lokker.com/jobs/senior-software-engineer/
+• Full Stack Engineer » https://lokker.com/jobs/full-stack-software-engineer/"
+era_sample_2020_2022,2021-07,27702885,https://news.ycombinator.com/item?id=27702885,True,,,,{},"simplesurance GmbH | Berlin | Onsite, Full Time https://www.simplesurance.com/
+We are building one of the world’s leading platforms to make insurance accessible.
+Since 2012, we are proudly “Made in Berlin”: we are very international with 150+ people from over 30+ countries working daily in our central Berlin office. Our internationalism is reflected also in our business since we are active in over 28 countries.
+We are looking for:
+- Golang Software Engineers (f/m/d) https://www.simplesurance.com/careers/#golang-software-engin...
+Email: jobs@simplesurance.com | https://www.simplesurance.com/careers/"
+era_sample_2020_2022,2021-04,26790352,https://news.ycombinator.com/item?id=26790352,True,,design,,"{""design"": [""UX/UI designer - https://amun.bamboohr.com/jobs/view.php?id=43&source=aWQ9MjI...""]}","Amun / 21Shares | Blockchain Architect, Frontend, UX/UI design, Fullstack, QA Analyst | NY, Zurich, Remote | Full Time | https://amun.com | https://21shares.com
+Amun is a financial technology company that runs two branches. The first is 21shares, which is operating financial instruments that bridge gaps between crypto asset and traditional markets and listed on various securities exchanges. The other branch (Amun) is offering products in the Decentralized finance and blockchain space, with Tokens listed on major exchanges and other platforms aimed for DeFi users.
+Blockchain Architect - https://amun.bamboohr.com/jobs/view.php?id=53&source=aWQ9MjI...
+Frontend - https://amun.bamboohr.com/jobs/view.php?id=52&source=aWQ9MjI...
+UX/UI designer - https://amun.bamboohr.com/jobs/view.php?id=43&source=aWQ9MjI...
+Fullstack - https://amun.bamboohr.com/jobs/view.php?id=51&source=aWQ9MjI...
+QA analyst - https://amun.bamboohr.com/jobs/view.php?id=48&source=aWQ9MjI...
+Peace upon your head"
+era_sample_2020_2022,2022-05,31237678,https://news.ycombinator.com/item?id=31237678,True,,engineering_unspecified,founding_engineer,"{""engineering_unspecified"": [""Claypot AI | Founding Engineer (Infra / ML / Frontend / Full-stack) | REMOTE (US & OUTSIDE US) | Full-time | https://claypot.ai/careers.html"", ""We’re looking for engineers excited about machine learning and streaming tech to be the foundation of our engineering team.""], ""founding_engineer"": [""Claypot AI | Founding Engineer (Infra / ML / Frontend / Full-stack) | REMOTE (US & OUTSIDE US) | Full-time | https://claypot.ai/careers.html""]}","Claypot AI | Founding Engineer (Infra / ML / Frontend / Full-stack) | REMOTE (US & OUTSIDE US) | Full-time | https://claypot.ai/careers.html
+Claypot AI is a platform for real-time machine learning. Our platform unifies streaming and batch systems to make it easier and cheaper for companies to do online prediction, continuous evaluation, and continual learning.
+We’re looking for engineers excited about machine learning and streaming tech to be the foundation of our engineering team.
+What makes Claypot AI special?
+* A culture of transparency, collaboration, ownership, and learning
+* A very high bar for engineering craftsmanship
+* Expertise in both distributed systems and ML
+* An opportunity to win over a large, growing, yet untapped market for fast ML delivery
+What will you get?
+* Competitive compensation package
+* Flexible remote-first culture with options for in-person collaboration
+* Learn how to build a startup from the ground up
+* Public speaking opportunities
+* An environment for you to grow into the career you want
+Reach out if you're interested, even if you don’t find a job description that fits you. We believe in creating an environment for people to do their best, not squeezing people to fit into job descriptions. As the company grows, you can define the role that you want with us.
+My email is chip at claypot dot ai (cofounder).
+Thanks for considering us!"
+era_sample_2020_2022,2020-03,22472874,https://news.ycombinator.com/item?id=22472874,True,,,,{},"Bitwarden | Director of Engineering / Technical Lead | Full-time | 100% REMOTE
+Bitwarden is an open source password manager that has had success growing organically through the open source community and Reddit group, as well as being featured in Wired, HackerNews, and by many tech vloggers.
+We're looking for a hands-on technical lead with remote management experience to work alongside our CTO while mentoring and growing our engineering team.
+Must have recent experience in our stack: SQL Server, .NET Core, JavaScript, HTML, Docker, Azure
+https://bitwarden.com/careers/director-of-engineering/
+Email careeers@bitwarden.com and mention Hacker News"
+boundary_2020_2022_technical_breadth_True,2020-11,24975443,https://news.ycombinator.com/item?id=24975443,True,,full_stack,technical_breadth;product_engineer_title,"{""full_stack"": [""SBLY | Full-Stack Product Engineer | Los Angeles HQ + US Remote | 1-2 years experience | $120k yearly salary + 0.05% equity""], ""technical_breadth"": [""SBLY | Full-Stack Product Engineer | Los Angeles HQ + US Remote | 1-2 years experience | $120k yearly salary + 0.05% equity""], ""product_engineer_title"": [""SBLY | Full-Stack Product Engineer | Los Angeles HQ + US Remote | 1-2 years experience | $120k yearly salary + 0.05% equity""]}","SBLY | Full-Stack Product Engineer | Los Angeles HQ + US Remote | 1-2 years experience | $120k yearly salary + 0.05% equity
+https://sbly.com/jobs/product-engineer.html
+SBLY, formerly known as Shareably, has been using media and technology to build digital brands and audiences since 2015. Our first product Shareably, a web publishing network, has reached over 1 billion unique users and profitably generated more than $75M in revenue with $0 in outside funding. As a private, independent, and profitable company, no one influences major company decisions except ourselves.
+We pride ourselves on a culture that optimizes for lifestyle, impactful work, and transparency. We're also of the strong belief that a company is only as good as the people in it. Our current team members have studied at universities such as UC Berkeley, UCLA, Northwestern and worked at industry-leading companies such as Affirm, Clutter, Instagram, Instacart, Indiegogo, and Stripe.
+SBLY is seeking a full-time member to join its Product Engineering team! We're looking to fill this role by December 2020 with a flexible start date in January 2021. This will be the first time the product engineering team will be hiring a non-senior position and we're excited about the possibility of working with someone that's looking to learn, grow, and make an impact with their work."
+boundary_2020_2022_technical_breadth_False,2021-07,27713495,https://news.ycombinator.com/item?id=27713495,True,,backend,,"{""backend"": [""Estuary Development | Senior Backend Engineer | NY or Columbus | Full time | estuary.dev""]}","Estuary Development | Senior Backend Engineer | NY or Columbus | Full time | estuary.dev
+Estuary is a DataOps platform built by successful repeat founders that makes it far simpler for engineering teams to build real-time, data intensive applications at scale. The platform unifies a team's databases, pub/sub, and SaaS around their data, without requiring new investments in infrastructure or development. Estuary develops in the open, implementing in Rust & Go.
+Role:
+This is a hands-on position where the individual will be responsible for taking on large backend projects from design to implementation to management in production.  This candidate will start as an individual contributor and potentially additionally manage engineers over time.  The ideal candidate will be very senior with 7+ years of backend development experience.
+Responsibilities:
+- Design, implement, deploy, test and maintain substantial projects in Rust and Go
+- Evolve http://gazette.dev to meet our needs.
+- Solve technical problems of extremely high scope and complexity
+- Collaborate with other engineers, founders and product management
+To apply, email careers@estuary.dev"
+boundary_2020_2022_product_responsibility_True,2021-09,28381414,https://news.ycombinator.com/item?id=28381414,True,,full_stack,technical_breadth;product_responsibility;product_decisions,"{""full_stack"": [""645 Ventures | Senior Full Stack Engineer | Full-time | REMOTE (Any US-ish timezone, NY or SF office available) | http://645ventures.com"", ""We're hiring a full stack engineer to lead our team at 645 Ventures.""], ""technical_breadth"": [""645 Ventures | Senior Full Stack Engineer | Full-time | REMOTE (Any US-ish timezone, NY or SF office available) | http://645ventures.com"", ""We're hiring a full stack engineer to lead our team at 645 Ventures.""], ""product_decisions"": [""You'll be shaping the product direction of our Voyager software, play around with large data sets, and if you'd like also have  time to dedi""], ""product_responsibility"": [""You'll be shaping the product direction of our Voyager software, play around with large data sets, and if you'd like also have  time to dedi""]}","645 Ventures | Senior Full Stack Engineer | Full-time | REMOTE (Any US-ish timezone, NY or SF office available) | http://645ventures.com
+Are you passionate about startups, but looking to broaden your experience beyond just one?
+We're hiring a full stack engineer to lead our team at 645 Ventures. You'll be shaping the product direction of our Voyager software, play around with large data sets, and if you'd like also have  time to dedicate to speaking, open source, etc. Our stack is Rails + React, Postgres + Redis, hosted on Heroku.
+Full description: https://645ventures.com/join-the-645-engineering-team-as-a-s... Apply: https://airtable.com/shrtKi9hCxy8hGeeN
+If you have any Qs, email is in my profile, but apply through the Airtable link just so the whole team can track it there!"
+boundary_2020_2022_product_responsibility_False,2021-07,27713495,https://news.ycombinator.com/item?id=27713495,True,,backend,,"{""backend"": [""Estuary Development | Senior Backend Engineer | NY or Columbus | Full time | estuary.dev""]}","Estuary Development | Senior Backend Engineer | NY or Columbus | Full time | estuary.dev
+Estuary is a DataOps platform built by successful repeat founders that makes it far simpler for engineering teams to build real-time, data intensive applications at scale. The platform unifies a team's databases, pub/sub, and SaaS around their data, without requiring new investments in infrastructure or development. Estuary develops in the open, implementing in Rust & Go.
+Role:
+This is a hands-on position where the individual will be responsible for taking on large backend projects from design to implementation to management in production.  This candidate will start as an individual contributor and potentially additionally manage engineers over time.  The ideal candidate will be very senior with 7+ years of backend development experience.
+Responsibilities:
+- Design, implement, deploy, test and maintain substantial projects in Rust and Go
+- Evolve http://gazette.dev to meet our needs.
+- Solve technical problems of extremely high scope and complexity
+- Collaborate with other engineers, founders and product management
+To apply, email careers@estuary.dev"
+boundary_2020_2022_product_engineer_title_True,2020-11,24975443,https://news.ycombinator.com/item?id=24975443,True,,full_stack,technical_breadth;product_engineer_title,"{""full_stack"": [""SBLY | Full-Stack Product Engineer | Los Angeles HQ + US Remote | 1-2 years experience | $120k yearly salary + 0.05% equity""], ""technical_breadth"": [""SBLY | Full-Stack Product Engineer | Los Angeles HQ + US Remote | 1-2 years experience | $120k yearly salary + 0.05% equity""], ""product_engineer_title"": [""SBLY | Full-Stack Product Engineer | Los Angeles HQ + US Remote | 1-2 years experience | $120k yearly salary + 0.05% equity""]}","SBLY | Full-Stack Product Engineer | Los Angeles HQ + US Remote | 1-2 years experience | $120k yearly salary + 0.05% equity
+https://sbly.com/jobs/product-engineer.html
+SBLY, formerly known as Shareably, has been using media and technology to build digital brands and audiences since 2015. Our first product Shareably, a web publishing network, has reached over 1 billion unique users and profitably generated more than $75M in revenue with $0 in outside funding. As a private, independent, and profitable company, no one influences major company decisions except ourselves.
+We pride ourselves on a culture that optimizes for lifestyle, impactful work, and transparency. We're also of the strong belief that a company is only as good as the people in it. Our current team members have studied at universities such as UC Berkeley, UCLA, Northwestern and worked at industry-leading companies such as Affirm, Clutter, Instagram, Instacart, Indiegogo, and Stripe.
+SBLY is seeking a full-time member to join its Product Engineering team! We're looking to fill this role by December 2020 with a flexible start date in January 2021. This will be the first time the product engineering team will be hiring a non-senior position and we're excited about the possibility of working with someone that's looking to learn, grow, and make an impact with their work."
+boundary_2020_2022_product_engineer_title_False,2021-07,27713495,https://news.ycombinator.com/item?id=27713495,True,,backend,,"{""backend"": [""Estuary Development | Senior Backend Engineer | NY or Columbus | Full time | estuary.dev""]}","Estuary Development | Senior Backend Engineer | NY or Columbus | Full time | estuary.dev
+Estuary is a DataOps platform built by successful repeat founders that makes it far simpler for engineering teams to build real-time, data intensive applications at scale. The platform unifies a team's databases, pub/sub, and SaaS around their data, without requiring new investments in infrastructure or development. Estuary develops in the open, implementing in Rust & Go.
+Role:
+This is a hands-on position where the individual will be responsible for taking on large backend projects from design to implementation to management in production.  This candidate will start as an individual contributor and potentially additionally manage engineers over time.  The ideal candidate will be very senior with 7+ years of backend development experience.
+Responsibilities:
+- Design, implement, deploy, test and maintain substantial projects in Rust and Go
+- Evolve http://gazette.dev to meet our needs.
+- Solve technical problems of extremely high scope and complexity
+- Collaborate with other engineers, founders and product management
+To apply, email careers@estuary.dev"
+boundary_2020_2022_ai_product_work_True,2022-08,32319910,https://news.ycombinator.com/item?id=32319910,True,,ml_ai,ai_product_work,"{""ml_ai"": [""SiteZeus is hiring a Machine Learning Engineer to join our growing product team!""], ""ai_product_work"": [""Develop machine learning applications according to requirements provided by Product Owner""]}","SiteZeus is hiring a Machine Learning Engineer to join our growing product team!
+SiteZeus is a location intelligence SaaS platform based out of Tampa, FL and founded in 2013. We are a remote organization focused on company culture, industry changing technology, and employee value.
+About You
+You are kind and fun to work with.
+You are smart and strive for excellence in everything that you do.
+You are a passionate engineer with a strong desire to provide the best possible user experience and delight customers.
+You love learning and working with new technologies.
+Responsibilities
+Study and transform data science prototypes into scalable solutions
+Research and implement appropriate ML algorithms and tools, including pipelines
+Develop machine learning applications according to requirements provided by Product Owner
+Perform statistical analyses and fine-tune test results
+Train and restrain systems as appropriate to support product integrity
+Extend existing ML libraries and frameworks
+Skills
+Proven experience in a software development role
+Deep knowledge of mathematics, probabilities, statistics, and algorithms
+Ability to write robust code in Python or related language
+Strong familiarity with machine learning frameworks and libraries
+Great communication skills
+Apply
+https://sitezeus.applytojob.com/apply/FYYlbW8sFF/Machine-Lea..."
+boundary_2020_2022_ai_product_work_False,2021-07,27713495,https://news.ycombinator.com/item?id=27713495,True,,backend,,"{""backend"": [""Estuary Development | Senior Backend Engineer | NY or Columbus | Full time | estuary.dev""]}","Estuary Development | Senior Backend Engineer | NY or Columbus | Full time | estuary.dev
+Estuary is a DataOps platform built by successful repeat founders that makes it far simpler for engineering teams to build real-time, data intensive applications at scale. The platform unifies a team's databases, pub/sub, and SaaS around their data, without requiring new investments in infrastructure or development. Estuary develops in the open, implementing in Rust & Go.
+Role:
+This is a hands-on position where the individual will be responsible for taking on large backend projects from design to implementation to management in production.  This candidate will start as an individual contributor and potentially additionally manage engineers over time.  The ideal candidate will be very senior with 7+ years of backend development experience.
+Responsibilities:
+- Design, implement, deploy, test and maintain substantial projects in Rust and Go
+- Evolve http://gazette.dev to meet our needs.
+- Solve technical problems of extremely high scope and complexity
+- Collaborate with other engineers, founders and product management
+To apply, email careers@estuary.dev"
+boundary_2020_2022_ai_tool_use_False,2021-07,27713495,https://news.ycombinator.com/item?id=27713495,True,,backend,,"{""backend"": [""Estuary Development | Senior Backend Engineer | NY or Columbus | Full time | estuary.dev""]}","Estuary Development | Senior Backend Engineer | NY or Columbus | Full time | estuary.dev
+Estuary is a DataOps platform built by successful repeat founders that makes it far simpler for engineering teams to build real-time, data intensive applications at scale. The platform unifies a team's databases, pub/sub, and SaaS around their data, without requiring new investments in infrastructure or development. Estuary develops in the open, implementing in Rust & Go.
+Role:
+This is a hands-on position where the individual will be responsible for taking on large backend projects from design to implementation to management in production.  This candidate will start as an individual contributor and potentially additionally manage engineers over time.  The ideal candidate will be very senior with 7+ years of backend development experience.
+Responsibilities:
+- Design, implement, deploy, test and maintain substantial projects in Rust and Go
+- Evolve http://gazette.dev to meet our needs.
+- Solve technical problems of extremely high scope and complexity
+- Collaborate with other engineers, founders and product management
+To apply, email careers@estuary.dev"
+era_sample_2023_9999,2023-03,34995566,https://news.ycombinator.com/item?id=34995566,True,,full_stack;mobile;product_management,technical_breadth,"{""mobile"": [""- Mobile Developer - Android""], ""full_stack"": [""- Full-Stack Developer - PHP""], ""technical_breadth"": [""- Full-Stack Developer - PHP""], ""product_management"": [""- Product Manager""]}","blaulichtSMS | Berlin/Vienna or Remote | German+English | Full-time | https://blaulichtsms.net
+PRODUCT: SaaS alarming solution for firefighters and ambulances \w 4,000+ fire brigades as customers, 250k users and 10M alarms processed per year. Exciting back-end, DevOps, mobile engineering challenges and a product with a purpose. A lot of responsibility: if our product stops working, firefighters don't get alarms anymore.
+COMPANY: Profitable, new management, now setting up international growth
+- Mobile Developer - Android
+- Full-Stack Developer - PHP
+- Product Manager
+More details on all roles here:
+https://blaulichtsms.net/karriere
+--> jobs@blaulichtsms.net"
+era_sample_2023_9999,2023-07,36574167,https://news.ycombinator.com/item?id=36574167,True,,engineering_unspecified,,"{""engineering_unspecified"": [""Atomic Object | Senior Software Developer & Consultant | ONSITE | Full Time | Raleigh, NC""]}","Atomic Object | Senior Software Developer & Consultant | ONSITE | Full Time | Raleigh, NC
+https://atomicobject.com/
+As a senior software developer in a recently established office, you will have a unique opportunity to help build and shape the development team from the ground up. Your experience and expertise can help establish a strong foundation of technical best practices and contribute to our hiring process for future team members. Additionally, you will have broad influence shaping the technology and technical processes used to ensure the delivery of high-quality software that exceeds clients’ expectations.
+More details and application here - https://atomicobject.applytojob.com/apply/4GSNOJOkrx/Senior-..."
+era_sample_2023_9999,2023-05,35801576,https://news.ycombinator.com/item?id=35801576,True,,full_stack,technical_breadth,"{""full_stack"": [""tus AS | Onsite | Oslo, Norway | Full-time | Full Stack developer (React/.Net Core)"", ""We are looking for both junior and senior full stack developers, preferably with experience in .Net and Javascript, but we also consider candidates with experience in other""], ""technical_breadth"": [""tus AS | Onsite | Oslo, Norway | Full-time | Full Stack developer (React/.Net Core)"", ""We are looking for both junior and senior full stack developers, preferably with experience in .Net and Javascript, but we also consider candidates with experience in other""]}","Proventus AS | Onsite | Oslo, Norway | Full-time | Full Stack developer (React/.Net Core)
+Proventus is the company behind the Headless CMS & E-commerce solution Relatude (https://relatude.com). Relatude is a unique content platform with deep support for two-way relations between content objects (Content Graph). This combined with a superfast core engine gives it a much wider usage area than ""just"" publishing content to a website.
+We are looking for both junior and senior full stack developers, preferably with experience in .Net and Javascript, but we also consider candidates with experience in other technologies.
+Your tasks will include:
+- Help improve our AI functionality, like semantic search, image manipulation and text analysis.
+- Help implementation partners and customers to develop advanced websites and E-commerce solutions using Relatude software.
+- Help other departments in Proventus in various .Net and web projects.
+- Cooperate closely with the Relatude core team
+You need to speak Norwegian and English.
+Interested? Feel free to send us an email to:
+post [at] proventus [dot] no or read more about the position and apply here: https://www.finn.no/job/fulltime/ad.html?finnkode=300743080"
+era_sample_2023_9999,2026-01,46468311,https://news.ycombinator.com/item?id=46468311,True,,engineering_unspecified,product_engineer_title,"{""engineering_unspecified"": [""Spill (https://www.spill.chat/) | Senior I Product Engineer (£84-101k) Senior II Backend Engineer (£108-121k) | London, UK (HQ) | ONSITE | Full-time""], ""product_engineer_title"": [""Spill (https://www.spill.chat/) | Senior I Product Engineer (£84-101k) Senior II Backend Engineer (£108-121k) | London, UK (HQ) | ONSITE | Full-time""]}","Spill (https://www.spill.chat/) | Senior I Product Engineer (£84-101k) Senior II Backend Engineer (£108-121k) | London, UK (HQ) | ONSITE | Full-time
+Our mission is to make talk therapy free at the point of use for as many people as possible. Right now, we're doing this by selling a mental health support product to businesses. We're a small product-focused company and were cashflow positive in 2025.
+If you're interested in the mission and one of the roles, email calvin[at]spill[dot]chat with your CV"
+era_sample_2023_9999,2024-07,40854703,https://news.ycombinator.com/item?id=40854703,True,,frontend;backend;design,,"{""frontend"": [""We’re hiring a backend engineer, frontend engineer, sites reliability engineer and product designer to join our growing team in London.""], ""backend"": [""We’re hiring a backend engineer, frontend engineer, sites reliability engineer and product designer to join our growing team in London.""], ""design"": [""end engineer, sites reliability engineer and product designer to join our growing team in London.""]}","Ameba | Multiple Roles | London | Full-time | On-site
+Join us in building Ameba, the AI-powered platform revolutionising supply chains!
+We’re hiring a backend engineer, frontend engineer, sites reliability engineer and product designer to join our growing team in London.
+We're a startup made up of experienced entrepreneurs (who have previously raised $160m+) and builders (formerly at Google, Microsoft, Snap, Palantir & MIT). We have big ambitions and are backed by the best investors in Europe.
+You can apply to our open roles on LinkedIn: https://www.linkedin.com/company/amebasystems/
+Or email me: craig at ameba.ai"
+era_sample_2023_9999,2023-02,34626656,https://news.ycombinator.com/item?id=34626656,True,,engineering_unspecified,,"{""engineering_unspecified"": [""Software Engineer: https://grnh.se/da6189893us""]}","Branch | Multiple Roles | Remote (USA) | Full-Time
+Branch is on a mission to help working Americans grow financially. We do this by helping companies accelerate payments and empower working Americans with accessible, fee-free financial services. We’re committed to building and delivering more inclusive and transparent financial products.
+Senior Database Reliability Engineer: https://grnh.se/7eed5e503us
+Software Engineer: https://grnh.se/da6189893us
+Other Roles: https://grnh.se/e69676963us"
+era_sample_2023_9999,2025-06,44161365,https://news.ycombinator.com/item?id=44161365,True,,engineering_unspecified,end_to_end_ownership,"{""end_to_end_ownership"": [""You'll have the opportunity to lead and own new projects / initiatives from idea to production end-to-end (architecture to deployment).""], ""engineering_unspecified"": [""e looking for a self-starter and resourceful engineer with strong communication skills and experience building things from scratch.""]}","Levels.fyi | Backend & Frontend Engineer | Remote (India, Open to other countries) | Full-time | https://www.levels.fyi | $30-60k USD
+Levels.fyi's mission is to help every professional build a better career through the most accurate insights and services. We're building the future of compensation & hiring by centering ourselves around professionals.
+You'll be joining a close-knit team of 4 engineers to work across our product verticals. You'll have the opportunity to lead and own new projects / initiatives from idea to production end-to-end (architecture to deployment). We move fast and have come an incredibly long way on a tiny team. We're looking for a self-starter and resourceful engineer with strong communication skills and experience building things from scratch.
+Backend: https://levelsfyi.notion.site/Backend-Software-Engineer-14f8...
+Frontend: https://levelsfyi.notion.site/Software-Engineer-Frontend-1e3..."
+era_sample_2023_9999,2023-08,36967504,https://news.ycombinator.com/item?id=36967504,True,,engineering_unspecified,founding_engineer;ai_product_work,"{""engineering_unspecified"": [""InScope | Full-Time | Founding Engineer | San Francisco Bay Area, ONSITE"", ""ech accelerator and are looking for a senior founding engineer.""], ""founding_engineer"": [""InScope | Full-Time | Founding Engineer | San Francisco Bay Area, ONSITE"", ""ech accelerator and are looking for a senior founding engineer.""], ""ai_product_work"": [""full stack product engineering problems, and build AI-infused data workflows.""]}","InScope | Full-Time | Founding Engineer | San Francisco Bay Area, ONSITE
+I'm Avy, CTO and co-founder at [InScope](https://inscopehq.com), where we're automating financial statements and audits. My co-founders, Mary and Kelsey, suffered many audits first-hand as finance and accounting leaders at high-growth tech companies like Flexport, Miro, Yelp, and Dropbox.
+Investors and other stakeholders require audited financials from every private company that hits certain growth milestones, ensuring the health of the company before they can receive funding or raise debt. Today, finance teams prepare for their audits using Word, Excel, and a whole lot of human effort. We're seeking to change that with software.
+We are participating in Better Tomorrow Ventures' fintech accelerator and are looking for a senior founding engineer. The role will be fast-paced: You will set up systems from scratch, solve a mix of full stack product engineering problems, and build AI-infused data workflows. Our early prototypes are built with Python, React, dbt, and DuckDB, but you'll help us choose our production stack.
+We believe in distributed teams and will be flexible about remote work, but early-on we expect you to be based in San Francisco to allow for fast collaboration cycles.
+Send me a note at avy@<the-domain-listed-above>, or you can find more info here:
+https://www.notion.so/inscope/Founding-Engineer-Full-Stack-3..."
+era_sample_2023_9999,2025-09,45097832,https://news.ycombinator.com/item?id=45097832,True,,full_stack;engineering_unspecified,technical_breadth,"{""full_stack"": [""- Full Stack Engineer | Full-time""], ""technical_breadth"": [""- Full Stack Engineer | Full-time""], ""engineering_unspecified"": [""We’re looking for product-minded engineers who want to push the boundaries of generative AI, RAG, and intelligent automation.""]}","PetsApp – The future of pet care | Minneapolis | Remote (US/EU)
+Open roles:
+- Full Stack Engineer | Full-time
+We’re building an AI-powered clinic assistant that actually gets things done—booking appointments, managing vaccine records, handling FAQs, and even sounding like the clinic itself. This is multi-modal AI in the real world, not a demo.
+⸻
+We’re looking for product-minded engineers who want to push the boundaries of generative AI, RAG, and intelligent automation. You’ll ship fast, solve real user problems, and help us make AI feel magical, not clunky.
+Tech stack: TypeScript, NestJS, React, React Native, AWS. Bonus: AI experience, but what matters most is product intuition and the drive to build useful things.
+Apply here: https://forms.gle/5fww8HDwRrP6c6Fo9"
+era_sample_2023_9999,2023-04,35434718,https://news.ycombinator.com/item?id=35434718,True,,backend,,"{""backend"": [""Eppo | Backend Engineer | Remote (SFO hybrid option) | Full-Time - Eppo is building an experimentation platform for the modern data stack"", ""We're looking for backend engineers of all levels to help us grow, more information here:""]}","Eppo | Backend Engineer | Remote (SFO hybrid option) | Full-Time - Eppo is building an experimentation platform for the modern data stack
+Our goal is nothing short of changing how companies work by making experimentation available to everyone.
+This means we solve some really hard problems like:
+1. Performing statistical analysis on very large data sets (belonging to some of the most recognizable companies in the world).
+2. Making complex mathematical concepts approachable to non-mathematicians.
+3. Visualizing data and how it changes over time.
+4. Segmenting users at scale with minimal latency.
+We've already cleared seven figures of ARR (only 9 months after signing our first customer). We have plenty of money in the bank and are continuing to grow very quickly. Join some of the best minds from companies like AirBnb, StitchFix, Uber, and more.
+We're looking for backend engineers of all levels to help us grow, more information here:
+https://www.geteppo.com/careers?ashby_jid=2c10b227-c4c2-41e1..."
+era_sample_2023_9999,2023-06,36171072,https://news.ycombinator.com/item?id=36171072,True,,engineering_unspecified,founding_engineer,"{""engineering_unspecified"": [""Obviant | Founding Engineers | Full-time | Remote / Washington, DC""], ""founding_engineer"": [""Obviant | Founding Engineers | Full-time | Remote / Washington, DC""]}","Obviant | Founding Engineers | Full-time | Remote / Washington, DC
+We’re on a mission to get better tech into government by fixing how companies sell to gov & defense. We’ve started by building a marketplace that solves the most critical pain point for companies - access to relationships + knowledge & skills to navigate the process. And we have a big vision for where we go from here.
+A few reasons you might be excited:
+- Raised from institutional investors and have heavy-hitting national security veterans and technology industry advisors
+- We’re looking for founding team members; first in on the ground floor.
+- You’ll get to build & own something + have a substantial equity stake
+- Bonus: Building AI at the intersection of technology and gov/defense
+Email me at brendan [at] obviant [dot] com
+https://100hires.com/j/96E58ne https://100hires.com/j/biyR8Yy"
+era_sample_2023_9999,2024-10,41712172,https://news.ycombinator.com/item?id=41712172,True,,infrastructure,,"{""infrastructure"": [""EdgeDB | SREs / Infrastructure Engineers | Full-time | Fully remote | https://www.edgedb.com/"", ""We are looking for experienced SREs / infrastructure / devops engineers to help scale out our cloud.""]}","EdgeDB | SREs / Infrastructure Engineers | Full-time | Fully remote | https://www.edgedb.com/
+EdgeDB is an open-source database built on top of Postgres. It’s designed to give developers a better end-to-end user experience than traditional SQL databases. We provide a more expressive schema modeling & query language (EdgeQL), and ""batteries included"" features such as built-in schema migrations and a graphical schema browser, data explorer, and access control/auth.
+We offer a hosted cloud service for EdgeDB, with the goal of doing developer-friendly cloud hosting ""the right way"" - we want users to use our hosted service because it's great, not because they're locked-in by restrictive licensing or cloud-only features.
+We are looking for experienced SREs / infrastructure / devops engineers to help scale out our cloud. Unlike many infrastructure roles, this is not supporting a separate product team - for us, our infrastructure is our product. We are looking for people who care about not just building reliable infrastructure but also exposing that infrastructure to end-users as a seamless product.
+Our tech stack is Hashicorp tools (Terraform, Consul, Nomad, Vault); Postgres; Golang with some Python & Rust; and AWS (with eventual expansion to other cloud platforms)
+We are a remote-first company, headquartered in San Francisco, with most of the team working in US/Canada timezones and a few people in Europe. Unfortunately we are unable to provide any visa/immigration sponsorship at this time.
+To apply, send your resume to jobs at edgedb dot com and mention you saw this post on Hacke"
+boundary_2023_9999_technical_breadth_True,2023-03,34995566,https://news.ycombinator.com/item?id=34995566,True,,full_stack;mobile;product_management,technical_breadth,"{""mobile"": [""- Mobile Developer - Android""], ""full_stack"": [""- Full-Stack Developer - PHP""], ""technical_breadth"": [""- Full-Stack Developer - PHP""], ""product_management"": [""- Product Manager""]}","blaulichtSMS | Berlin/Vienna or Remote | German+English | Full-time | https://blaulichtsms.net
+PRODUCT: SaaS alarming solution for firefighters and ambulances \w 4,000+ fire brigades as customers, 250k users and 10M alarms processed per year. Exciting back-end, DevOps, mobile engineering challenges and a product with a purpose. A lot of responsibility: if our product stops working, firefighters don't get alarms anymore.
+COMPANY: Profitable, new management, now setting up international growth
+- Mobile Developer - Android
+- Full-Stack Developer - PHP
+- Product Manager
+More details on all roles here:
+https://blaulichtsms.net/karriere
+--> jobs@blaulichtsms.net"
+boundary_2023_9999_technical_breadth_False,2023-07,36574167,https://news.ycombinator.com/item?id=36574167,True,,engineering_unspecified,,"{""engineering_unspecified"": [""Atomic Object | Senior Software Developer & Consultant | ONSITE | Full Time | Raleigh, NC""]}","Atomic Object | Senior Software Developer & Consultant | ONSITE | Full Time | Raleigh, NC
+https://atomicobject.com/
+As a senior software developer in a recently established office, you will have a unique opportunity to help build and shape the development team from the ground up. Your experience and expertise can help establish a strong foundation of technical best practices and contribute to our hiring process for future team members. Additionally, you will have broad influence shaping the technology and technical processes used to ensure the delivery of high-quality software that exceeds clients’ expectations.
+More details and application here - https://atomicobject.applytojob.com/apply/4GSNOJOkrx/Senior-..."
+boundary_2023_9999_product_responsibility_True,2024-12,42306988,https://news.ycombinator.com/item?id=42306988,True,,full_stack,technical_breadth;product_responsibility;product_decisions;product_engineer_title,"{""full_stack"": [""Maven.com | Full stack product engineer | Full-time | Remote (USA, Canada)"", ""We’re looking for full-stack product engineers to own big parts of our fast growing marketplace, from recommendation systems to data infrastructure""], ""technical_breadth"": [""Maven.com | Full stack product engineer | Full-time | Remote (USA, Canada)"", ""We’re looking for full-stack product engineers to own big parts of our fast growing marketplace, from recommendation systems to data infrastructure""], ""product_engineer_title"": [""Maven.com | Full stack product engineer | Full-time | Remote (USA, Canada)"", ""We’re looking for full-stack product engineers to own big parts of our fast growing marketplace, from recommendation systems to data infrastructure""], ""product_decisions"": [""ility as they want, you will also be able to shape our product direction and the evolution of your own role.""], ""product_responsibility"": [""ility as they want, you will also be able to shape our product direction and the evolution of your own role.""]}","Maven.com | Full stack product engineer | Full-time | Remote (USA, Canada)
+Maven is the missing grad school for technology jobs. We have the largest collection of expert-led cohort-based-courses on the topics that matter most for today's careers.
+We’re looking for full-stack product engineers to own big parts of our fast growing marketplace, from recommendation systems to data infrastructure to the course experience at the center of it.
+The ideal candidate has shipped meaningful features to a real user base and is comfortable with the broad set of concerns that come with building production web apps.
+You will have a high degree of ownership over our technical systems, and because we believe in giving people as much responsibility as they want, you will also be able to shape our product direction and the evolution of your own role.
+We are a team of just under 20, have raised $25 million from a16z and First Round, and are growing towards profitability in the coming year and half.
+We use React+Nextjs, Python+FastAPI, Postgres+OpenSearch, OpenAI, dbt+Snowflake.
+Read more and apply at https://maven.com/s/eng-jd"
+boundary_2023_9999_product_responsibility_False,2023-03,34995566,https://news.ycombinator.com/item?id=34995566,True,,full_stack;mobile;product_management,technical_breadth,"{""mobile"": [""- Mobile Developer - Android""], ""full_stack"": [""- Full-Stack Developer - PHP""], ""technical_breadth"": [""- Full-Stack Developer - PHP""], ""product_management"": [""- Product Manager""]}","blaulichtSMS | Berlin/Vienna or Remote | German+English | Full-time | https://blaulichtsms.net
+PRODUCT: SaaS alarming solution for firefighters and ambulances \w 4,000+ fire brigades as customers, 250k users and 10M alarms processed per year. Exciting back-end, DevOps, mobile engineering challenges and a product with a purpose. A lot of responsibility: if our product stops working, firefighters don't get alarms anymore.
+COMPANY: Profitable, new management, now setting up international growth
+- Mobile Developer - Android
+- Full-Stack Developer - PHP
+- Product Manager
+More details on all roles here:
+https://blaulichtsms.net/karriere
+--> jobs@blaulichtsms.net"
+boundary_2023_9999_product_engineer_title_True,2026-01,46468311,https://news.ycombinator.com/item?id=46468311,True,,engineering_unspecified,product_engineer_title,"{""engineering_unspecified"": [""Spill (https://www.spill.chat/) | Senior I Product Engineer (£84-101k) Senior II Backend Engineer (£108-121k) | London, UK (HQ) | ONSITE | Full-time""], ""product_engineer_title"": [""Spill (https://www.spill.chat/) | Senior I Product Engineer (£84-101k) Senior II Backend Engineer (£108-121k) | London, UK (HQ) | ONSITE | Full-time""]}","Spill (https://www.spill.chat/) | Senior I Product Engineer (£84-101k) Senior II Backend Engineer (£108-121k) | London, UK (HQ) | ONSITE | Full-time
+Our mission is to make talk therapy free at the point of use for as many people as possible. Right now, we're doing this by selling a mental health support product to businesses. We're a small product-focused company and were cashflow positive in 2025.
+If you're interested in the mission and one of the roles, email calvin[at]spill[dot]chat with your CV"
+boundary_2023_9999_product_engineer_title_False,2023-03,34995566,https://news.ycombinator.com/item?id=34995566,True,,full_stack;mobile;product_management,technical_breadth,"{""mobile"": [""- Mobile Developer - Android""], ""full_stack"": [""- Full-Stack Developer - PHP""], ""technical_breadth"": [""- Full-Stack Developer - PHP""], ""product_management"": [""- Product Manager""]}","blaulichtSMS | Berlin/Vienna or Remote | German+English | Full-time | https://blaulichtsms.net
+PRODUCT: SaaS alarming solution for firefighters and ambulances \w 4,000+ fire brigades as customers, 250k users and 10M alarms processed per year. Exciting back-end, DevOps, mobile engineering challenges and a product with a purpose. A lot of responsibility: if our product stops working, firefighters don't get alarms anymore.
+COMPANY: Profitable, new management, now setting up international growth
+- Mobile Developer - Android
+- Full-Stack Developer - PHP
+- Product Manager
+More details on all roles here:
+https://blaulichtsms.net/karriere
+--> jobs@blaulichtsms.net"
+boundary_2023_9999_ai_product_work_True,2023-08,36967504,https://news.ycombinator.com/item?id=36967504,True,,engineering_unspecified,founding_engineer;ai_product_work,"{""engineering_unspecified"": [""InScope | Full-Time | Founding Engineer | San Francisco Bay Area, ONSITE"", ""ech accelerator and are looking for a senior founding engineer.""], ""founding_engineer"": [""InScope | Full-Time | Founding Engineer | San Francisco Bay Area, ONSITE"", ""ech accelerator and are looking for a senior founding engineer.""], ""ai_product_work"": [""full stack product engineering problems, and build AI-infused data workflows.""]}","InScope | Full-Time | Founding Engineer | San Francisco Bay Area, ONSITE
+I'm Avy, CTO and co-founder at [InScope](https://inscopehq.com), where we're automating financial statements and audits. My co-founders, Mary and Kelsey, suffered many audits first-hand as finance and accounting leaders at high-growth tech companies like Flexport, Miro, Yelp, and Dropbox.
+Investors and other stakeholders require audited financials from every private company that hits certain growth milestones, ensuring the health of the company before they can receive funding or raise debt. Today, finance teams prepare for their audits using Word, Excel, and a whole lot of human effort. We're seeking to change that with software.
+We are participating in Better Tomorrow Ventures' fintech accelerator and are looking for a senior founding engineer. The role will be fast-paced: You will set up systems from scratch, solve a mix of full stack product engineering problems, and build AI-infused data workflows. Our early prototypes are built with Python, React, dbt, and DuckDB, but you'll help us choose our production stack.
+We believe in distributed teams and will be flexible about remote work, but early-on we expect you to be based in San Francisco to allow for fast collaboration cycles.
+Send me a note at avy@<the-domain-listed-above>, or you can find more info here:
+https://www.notion.so/inscope/Founding-Engineer-Full-Stack-3..."
+boundary_2023_9999_ai_product_work_False,2023-03,34995566,https://news.ycombinator.com/item?id=34995566,True,,full_stack;mobile;product_management,technical_breadth,"{""mobile"": [""- Mobile Developer - Android""], ""full_stack"": [""- Full-Stack Developer - PHP""], ""technical_breadth"": [""- Full-Stack Developer - PHP""], ""product_management"": [""- Product Manager""]}","blaulichtSMS | Berlin/Vienna or Remote | German+English | Full-time | https://blaulichtsms.net
+PRODUCT: SaaS alarming solution for firefighters and ambulances \w 4,000+ fire brigades as customers, 250k users and 10M alarms processed per year. Exciting back-end, DevOps, mobile engineering challenges and a product with a purpose. A lot of responsibility: if our product stops working, firefighters don't get alarms anymore.
+COMPANY: Profitable, new management, now setting up international growth
+- Mobile Developer - Android
+- Full-Stack Developer - PHP
+- Product Manager
+More details on all roles here:
+https://blaulichtsms.net/karriere
+--> jobs@blaulichtsms.net"
+boundary_2023_9999_ai_tool_use_True,2026-04,47604162,https://news.ycombinator.com/item?id=47604162,True,,backend,ai_tool_use,"{""backend"": [""Courted (https://courted.io) | Senior Backend Engineer, Engineering Leadership | NYC (In-Office 3-4 days) | Python/Django""], ""ai_tool_use"": [""perience, strong SQL optimization chops, and comfort with AI coding tools.""]}","Courted (https://courted.io) | Senior Backend Engineer, Engineering Leadership | NYC (In-Office 3-4 days) | Python/Django
+We're building AI-powered recruiting and market intelligence for real estate — an industry that moves $100B+ in annual commissions and still runs on spreadsheets and cold calls.
+Our backend ingests data from dozens of sources, processes millions of records daily through Celery pipelines, and serves real-time analytics via a Django REST API backed by PostgreSQL/PostGIS. Integrations with OpenAI, HubSpot, Twilio, and MLS data providers. Sub-second response requirements at scale.
+Stack: Python, Django/DRF, PostgreSQL/PostGIS, Celery, Redis, AWS (ECS, RDS, S3, Lambda). Looking for 5+ years backend experience, strong SQL optimization chops, and comfort with AI coding tools. LLM integration experience is a plus. Early-stage, high-growth SaaS. Small team, ship fast. Fully covered health/dental/vision, 401k, generous PTO.
+Shoot me your resume at joe@courted.io if you're interested."
+boundary_2023_9999_ai_tool_use_False,2023-03,34995566,https://news.ycombinator.com/item?id=34995566,True,,full_stack;mobile;product_management,technical_breadth,"{""mobile"": [""- Mobile Developer - Android""], ""full_stack"": [""- Full-Stack Developer - PHP""], ""technical_breadth"": [""- Full-Stack Developer - PHP""], ""product_management"": [""- Product Manager""]}","blaulichtSMS | Berlin/Vienna or Remote | German+English | Full-time | https://blaulichtsms.net
+PRODUCT: SaaS alarming solution for firefighters and ambulances \w 4,000+ fire brigades as customers, 250k users and 10M alarms processed per year. Exciting back-end, DevOps, mobile engineering challenges and a product with a purpose. A lot of responsibility: if our product stops working, firefighters don't get alarms anymore.
+COMPANY: Profitable, new management, now setting up international growth
+- Mobile Developer - Android
+- Full-Stack Developer - PHP
+- Product Manager
+More details on all roles here:
+https://blaulichtsms.net/karriere
+--> jobs@blaulichtsms.net"
+excluded_comment_sample,2014-05,7698117,https://news.ycombinator.com/item?id=7698117,False,not_identified_as_hiring,,,{},"Boston, MA. Full-time. http://ginkgobioworks.com/careers
+Ginkgo BioWorks is a young company out of MIT with the mission of making biology easier to engineer. We engineer organisms to address fundamental challenges the world is facing today. We aren't trying to study biology, we are trying to build it - constructing, editing, and redesigning the living world. Our bioengineers make use of an in-house pipeline of synthetic biology technologies to design and build new organisms.
+You will be working closely with our biological engineers to design and implement our computer aided design and manufacturing (CAD/CAM) platform. Work includes programming robots to build metabolic pathways and new genomes, automate measurement processes, and implementing gene and pathway design algorithms. You don't need previous biology experience; Ginkgo is a great environment for amazing programmers to learn to hack biology.
+Ginkgo's programming languages of choice are Ruby, Python, and DNA, but you must be someone who loves writing elegant code in any language. Most importantly, you should be passionate about making biology the next engineering discipline, and learning new things.
+Interested? See http://ginkgobioworks.com/careers"
+excluded_comment_sample,2013-01,4994190,https://news.ycombinator.com/item?id=4994190,False,not_identified_as_hiring,,,{},"Smarkets, London, Software Engineer, Python & Erlang
+Smarkets is disrupting the global betting industry by offering a modern betting exchange with significantly lower transaction fees than the competition. We're a well-funded company with a small, agile development team. We've handled over £200 million of bets since launching in 2010.
+Our office near Old Street in London is shared with other exciting startups and has a pool table, foosball table, and fully stocked fridge.
+We're heavily driven by user-focused design and a focus on technology and engineering as a first class discipline.
+We write our software in Python and Erlang, and rely heavily on asynchronous programming techniques and REST. We build on a modern, open-source software stack which includes Linux, Vagrant, Flask, Eventlet, PostgreSQL, RabbitMQ, ElasticSearch, Graphite, Chef, and Git.
+For more info: https://smarkets.com/about/jobs/engineering"
+excluded_comment_sample,2018-11,18356946,https://news.ycombinator.com/item?id=18356946,False,not_identified_as_hiring,,,{},"Standard | Head of ML Data and Infrastructure | SF
+We're using an all vision pipeline to build the checkout process of the future, and the data and ML infrastructure is as complex as for autonomous vehicles. We're looking for a fantastic lead to build a world class team and internal infra to enable our cutting edge research and product.
+https://venturebeat.com/2018/09/07/standard-cognition-beats-...
+Send me a message at jordan [at] standard [dot] ai"
+excluded_comment_sample,2019-04,19545196,https://news.ycombinator.com/item?id=19545196,False,not_identified_as_hiring,,,{},"SEEKING FREELANCERS/EMPLOYEES - NYC preferred, but remote quite conceivable
+HappyFunCorp (https://happyfuncorp.com) - We're currently seeking:
+- good Rails, React, WordPress, and .NET developers, as well as excellent technical project managers. We prefer people with a reasonable amount of experience under their belt, but there are always exceptions.
+- a couple of excellent, principal-level, general-specialist software engineers who are comfortable leading tech teams, helping to identify and solve clients' real (as opposed to reported) problems, architecting solutions from scratch, refactoring existing codebases, putting out occasional fires, and moving fairly seamlessly from one project / language / framework to another.
+We do web and app (and occasionally some blockchain) development for a panoply of clients ranging from Fortune 500 to brand-new startups -- right now the distribution is roughly 50-50 -- and we pay well."
+excluded_comment_sample,2018-11,18398578,https://news.ycombinator.com/item?id=18398578,False,same_month_exact_text_duplicate,,,{},"Curve | DevOps Engineer - SRE (all levels), Software Engineer(all levels) | London | Full-time | Onsite
+Curve (https://www.curve.app/) was founded with a rebellious spirit, and a lofty vision; to truly simplify your finances, so you can focus on what matters most in life.
+That’s why Curve puts your finances simply at your fingertips, so you can make smart choices on how to spend, send, see and save your money. We help you control your financial life, so you can go out and live the life you want to live.
+With Curve you can spend from all your accounts, track spend behaviour and provide insights, and security to protect you from fraud. For the first time giving you bright insights and control of all your money in one beautiful place.
+We’re developing a ground-breaking product with our customers at the core. Our user base is growing rapidly and we have exceptional metrics. We have funding from the leading names in tech investment, and a visionary leadership team who wants everyone who joins this remarkable adventure, to have the autonomy to masterfully develop their expertise.
+Welcome to Curve. On a mission to help you live inspired.
+Cool pieces of our Stack:
+* Istio
+* Envoy
+* Ambassador
+* Kubernetes
+* Golang microservices.
+For a software engineering role, knowledge of golang is not a prerequisite; we are happy for you to learn as you go (excuse the pun).
+If you're interested or have any further questions please feel free to contact me on matthew [dot] boyle [at] imaginecurve [dot] com"
+excluded_comment_sample,2013-06,5803974,https://news.ycombinator.com/item?id=5803974,False,not_identified_as_hiring,,,{},"Arlington, VA and San Francisco, CA
+http://opower.com/careers
+http://opower.com/company/people/engineering"
+excluded_comment_sample,2015-09,10155987,https://news.ycombinator.com/item?id=10155987,False,not_identified_as_hiring,,,{},"Senior Ruby Engineers and Senior DevOps Engineers, San Francisco
+ONSITE, VISA
+https://www.mavenlink.com/careers
+Mavenlink empowers businesses to understand their productivity while providing the advanced project management, resource planning, collaboration, and financial tools necessary for improved profitability -- all in one place. By combining these tools, we’re replacing cumbersome and expensive business processes that are currently handled by a hodge-podge of spreadsheets, aging competitors, and repetitive human tasks.
+Our large Rails and JS codebase is pleasant and habitable due to our focus on well-tested code and continuous refactoring and improvements. Every Mavenlink engineer majors in code and minors in product; we all love working through data designs as well as complex user interactions. Whether its through pair-programming, flexible roles, or our obsession for quality, well-tested code, our engineers (from grasshopper to black belt) are always learning.
+Did we mention that Mavenlink is an awesome place to work? You’ll have the opportunity to work in a fast-paced, energetic environment with a smart team that loves what they do. A fully stocked kitchen, ping pong table, and hackathons are just a few of the perks."
+excluded_comment_sample,2012-02,3538672,https://news.ycombinator.com/item?id=3538672,False,not_identified_as_hiring,,,{},"Redwood City, CA - Numenta
+Build the future of machine learning and big data.
+Learn more on our website:  http://www.numenta.com/
+Job Requirements:
+* BS or MS in Computer Science, or equivalent experience
+* Outstanding programming skills, preferably in Python
+* 3-5 years experience implementing high traffic web applications
+* 3-5 years experience with high performance systems in a commercial setting
+* Familiarity with entire web stack: Javascript, HTML, CSS, Memcached, application layer, and databases
+* Experience with SQL and no-SQL databases
+* Experience with unix/linux shell
+* Experience programming Amazon EC2 a plus
+* Experience with Agile / Scrum and/or test driven methodologies a plus
+* Able to demonstrate strong intellectual capabilities and significant individual contributions
+* Excellent written and verbal communication skills
+Qualified applicants should email a resume and cover letter to resume-web@numenta.com."
+excluded_comment_sample,2011-11,3182155,https://news.ycombinator.com/item?id=3182155,False,not_identified_as_hiring,,,{},"San Francisco, fulltime/internships/H1B
+Causes - http://www.causes.com/joinus
+At Causes, use your programming powers to help nonprofits effect change on the world! Ruby on Rails + jQuery stack, 10-ish person engineering team, the usual startup perks (catering, snacks, soda, etc), gym membership reimbursement, open source contributions encouraged:
+https://github.com/causes/suggestomatic -- item based collaborative filter
+https://github.com/causes/buffet -- distributed testing framework for Ruby
+https://github.com/causes/mock_redis -- mock redis Ruby gem
+Apply through the site or adam@causes.com if interested!"
+excluded_comment_sample,2011-06,2609336,https://news.ycombinator.com/item?id=2609336,False,not_identified_as_hiring,,,{},"Khan Academy - full time devs and interns. Mountain View preferred, but remote is not off the table.
+Full details at http://www.khanacademy.org/jobs/dev"
+excluded_comment_sample,2022-03,30520616,https://news.ycombinator.com/item?id=30520616,False,not_identified_as_hiring,,,{},"Hello fellow Kubernauts!!  |  https://superorbital.io/careers
+Feeling overwhelmed after the apocalypse? Is that #fullyremote #vanlife lookin’ kinda sweet lately?
+We’re a (very) small band of highly experienced devops who help our clients with the most interesting of Kubernetes-related problems. This is _actually_ devops, meaning we often develop production-grade code to solve unusual requirements.
+We’ve always been 100% remote (GMT-4 through GMT-7 only), have great benefits, matching 401k, practice transparent salaries (between $180-$210k/yr),  spend a day each week on internal projects, and if I may say so myself have an outstanding culture.
+If you’re interested, please do read on (https://superorbital.io/careers) or just email us at join-us@superorbital.io"
+excluded_comment_sample,2016-06,11814917,https://news.ycombinator.com/item?id=11814917,False,not_identified_as_hiring,,,{},////

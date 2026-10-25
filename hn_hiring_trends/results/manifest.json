@@ -1,0 +1,38 @@
+{
+  "requested_start": "2011-04",
+  "requested_end": "2026-09",
+  "expected_months": 186,
+  "threads": 186,
+  "missing_months": [],
+  "hn_listed_comments": 101908,
+  "indexed_listed_comments": 94954,
+  "unindexed_listed_comments": 6954,
+  "advertisements": 88170,
+  "engineering_advertisements": 64358,
+  "excluded_comments": 6784,
+  "duplicate_comments": 167,
+  "outside_thread_month_comments": 6,
+  "comparison_months": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "classification_method": "explicit-language rules; advertisement-level, overlapping labels",
+  "comment_source": "Algolia indexed top-level comments intersected with official HN comment IDs",
+  "causal_inference": false,
+  "classified_sha256": "8854fbd3c0b0f544f0c356a35e49e4ee1373871fc9d5e4d69058b3db3c938e78",
+  "charts": [
+    "annual_role_shares.png",
+    "quarterly_broadening_product.png",
+    "quarterly_ai_signals.png",
+    "quarterly_advertisement_counts.png",
+    "comparable_year_signals.png",
+    "monthly_indexed_coverage.png"
+  ]
+}
