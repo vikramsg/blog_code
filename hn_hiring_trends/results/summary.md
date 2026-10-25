@@ -16,7 +16,7 @@ Every percentage uses **all retained hiring advertisements** as its denominator,
 
 ## Total hiring advertisements by year
 
-These are advertisement counts, not exact vacancy counts. Partial years are labeled and must not be compared directly with complete calendar years.
+These are advertisement counts, not exact vacancy counts. Partial years are labeled and must not be compared directly with complete calendar years. The monthly breakdown is in `monthly_totals.csv` and the monthly-by-year chart, including the latest observed year.
 
 | Year | Months observed | Total hiring advertisements |
 |---|---:|---:|
@@ -57,6 +57,8 @@ Every eligible year uses the same calendar months: **01, 02, 03, 04, 05, 06, 07,
 ![comparable year roles](comparable_year_roles-92061c34f5.webp)
 
 ![annual hiring volume](annual_hiring_volume-2e3a45f803.webp)
+
+![monthly hiring volume](monthly_hiring_volume-30c16d2d26.webp)
 
 ## Inspect product-engineer capture
 

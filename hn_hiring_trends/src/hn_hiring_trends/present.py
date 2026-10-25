@@ -151,8 +151,7 @@ def _annual_heatmap(rows: list[dict], directory: Path) -> str:
             ]
             for role, _, _ in ROLES
         ]
-        colormap = plt.get_cmap("Blues").copy()
-        colormap.set_bad("#eeeeee")
+        colormap = plt.get_cmap("Blues").with_extremes(bad="#eeeeee")
         image = axes.imshow(matrix, aspect="auto", cmap=colormap, vmin=0, vmax=100)
         for row_index, row in enumerate(matrix):
             for column_index, value in enumerate(row):
@@ -216,6 +215,65 @@ def _annual_volume(rows: list[dict], directory: Path) -> str:
     return _save(figure, directory, "annual_hiring_volume.webp")
 
 
+def _monthly_volume(rows: list[dict], directory: Path) -> str:
+    figure, axes = plt.subplots(figsize=(12, 7))
+    figure.subplots_adjust(left=0.08, right=0.95, top=0.82, bottom=0.17)
+    figure.suptitle(
+        "Monthly hiring advertisements by year", x=0.08, y=0.96, ha="left", fontsize=17, fontweight="bold"
+    )
+    if not rows:
+        axes.text(0.5, 0.5, "No observed months", ha="center", transform=axes.transAxes)
+        axes.set_xticks([])
+        axes.set_yticks([])
+    else:
+        years = list(range(int(rows[0]["month"][:4]), int(rows[-1]["month"][:4]) + 1))
+        counts = {row["month"]: row["total_hiring_advertisements"] for row in rows if row["complete_month"]}
+        observed = [value for value in counts.values() if value is not None]
+        maximum = max(1, max(observed, default=0))
+        matrix = [
+            [
+                value if (value := counts.get(f"{year}-{month:02}")) is not None else float("nan")
+                for year in years
+            ]
+            for month in range(1, 13)
+        ]
+        colormap = plt.get_cmap("Blues").with_extremes(bad="#e8e8e8")
+        image = axes.imshow(
+            matrix, aspect="auto", cmap=colormap, vmin=0, vmax=maximum, interpolation="nearest"
+        )
+        for month_index, month_counts in enumerate(matrix):
+            for year_index, count in enumerate(month_counts):
+                missing = count != count
+                axes.text(
+                    year_index,
+                    month_index,
+                    "—" if missing else str(int(count)),
+                    ha="center",
+                    va="center",
+                    fontsize=8,
+                    color="#777777" if missing else "white" if count > 0.6 * maximum else "#222222",
+                )
+        axes.set_xticks(range(len(years)), [str(year) for year in years], rotation=35, ha="right")
+        axes.set_yticks(
+            range(12), ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+        )
+        axes.set_title(
+            f"Counts for each calendar month · observed window {rows[0]['month']}–{rows[-1]['month']}",
+            loc="left",
+            fontsize=10,
+            pad=15,
+        )
+        figure.colorbar(image, ax=axes, pad=0.02, label="Hiring advertisements per month")
+    figure.text(
+        0.08,
+        0.04,
+        "Grey cells (—) are outside the observed window or unavailable months, not zero hiring.\nEach retained ad counts once. These are advertisements, not exact vacancies; the latest year may be incomplete.",
+        fontsize=9,
+        color="#555555",
+    )
+    return _save(figure, directory, "monthly_hiring_volume.webp")
+
+
 def render_charts(tables: dict[str, list[dict]], output_dir: Path) -> list[str]:
     output_dir.mkdir(parents=True, exist_ok=True)
     with plt.rc_context({"font.family": "DejaVu Sans", "font.size": 10}):
@@ -224,4 +282,5 @@ def render_charts(tables: dict[str, list[dict]], output_dir: Path) -> list[str]:
             _role_trends(tables["quarterly"], output_dir, comparable=False),
             _role_trends(tables["comparable_years"], output_dir, comparable=True),
             _annual_volume(tables["annual_totals"], output_dir),
+            _monthly_volume(tables["monthly_totals"], output_dir),
         ]

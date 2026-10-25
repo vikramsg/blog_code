@@ -48,6 +48,7 @@ Definitions and context heuristics are inspectable in `src/hn_hiring_trends/clas
 | `summary.md` | Four-role comparison, charts, sample coverage, and interpretation limits |
 | `monthly.csv`, `quarterly.csv`, `annual.csv` | Counts, denominators, shares, and calendar completeness for the four roles |
 | `annual_totals.csv` | Total hiring advertisements per calendar year, with observed months and partial-year flags |
+| `monthly_totals.csv` | Total hiring advertisements per month; unavailable months have no count |
 | `comparable_years.csv` | Identical calendar-month windows in every eligible year, including the latest partial year |
 | `descriptive_trends.csv` | Descriptive pre/post-2023 slopes for the four role shares |
 | `product_engineer_matches.csv` | Every counted product-role ad, source links, evidence, and detection reasons |
@@ -75,6 +76,8 @@ Complete-quarter/year charts exclude incomplete calendar periods. Equivalent-yea
 Pre/post-2023 slopes are descriptive, equally weighted fits to complete-quarter shares. They provide neither a causal estimate nor a significance test. Economic conditions, employer mix, repeated advertisers, ad length, vocabulary, and changing source coverage are not controlled. This dataset cannot explain layoffs or validate a future employment forecast.
 
 The annual total-volume table/chart count each retained ad once, regardless of how many categories it mentions. They do not estimate vacancies from role lists or unspecified headcount. Partial 2011 and latest-year windows are marked explicitly.
+
+The monthly-by-year volume chart includes every year in the requested window, including 2026 in the checked-in run. Grey cells show unobserved months, not zero hiring; the 2026 column contains January–September, with October–December unobserved.
 
 ## Manual audit
 

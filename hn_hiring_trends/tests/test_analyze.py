@@ -9,6 +9,7 @@ from hn_hiring_trends.analyze import (
     comparable_years,
     descriptive_trends,
     least_squares_slope,
+    monthly_advertisement_totals,
 )
 
 
@@ -142,3 +143,15 @@ def test_annual_hiring_volume_counts_ads_once_and_marks_partial_calendar_years()
     assert totals[0]["total_hiring_advertisements"] == 2
     assert totals[0]["months_observed"] == 1
     assert not totals[0]["complete_year"]
+
+
+def test_monthly_totals_count_ads_once_and_distinguish_unavailable_months():
+    records = [ad(1, "2026-01", ["frontend", "product"]), ad(2, "2026-01", ["backend"])]
+    monthly = aggregate(records, [{"month": "2026-01"}], date(2026, 1, 1), date(2026, 2, 1), "monthly")
+    totals = monthly_advertisement_totals(monthly)
+    assert len(totals) == 2
+    assert totals[0]["month"] == "2026-01"
+    assert totals[0]["total_hiring_advertisements"] == 2
+    assert totals[0]["complete_month"]
+    assert totals[1]["total_hiring_advertisements"] is None
+    assert not totals[1]["complete_month"]

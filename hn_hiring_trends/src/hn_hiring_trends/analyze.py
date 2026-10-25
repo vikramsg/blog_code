@@ -105,6 +105,18 @@ def aggregate(
     return rows
 
 
+def monthly_advertisement_totals(monthly_rows: list[dict]) -> list[dict]:
+    months = {row["period"]: row for row in monthly_rows}
+    return [
+        {
+            "month": month,
+            "total_hiring_advertisements": row["advertisements"] if row["months_observed"] else None,
+            "complete_month": row["complete_period"],
+        }
+        for month, row in sorted(months.items())
+    ]
+
+
 def annual_advertisement_totals(annual_rows: list[dict]) -> list[dict]:
     years = {row["period"]: row for row in annual_rows}
     return [

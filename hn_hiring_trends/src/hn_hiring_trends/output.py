@@ -86,7 +86,7 @@ def summary_markdown(manifest: dict, tables: dict, charts: list[str]) -> str:
         "",
         "## Total hiring advertisements by year",
         "",
-        "These are advertisement counts, not exact vacancy counts. Partial years are labeled and must not be compared directly with complete calendar years.",
+        "These are advertisement counts, not exact vacancy counts. Partial years are labeled and must not be compared directly with complete calendar years. The monthly breakdown is in `monthly_totals.csv` and the monthly-by-year chart, including the latest observed year.",
         "",
         "| Year | Months observed | Total hiring advertisements |",
         "|---|---:|---:|",
