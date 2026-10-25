@@ -199,7 +199,11 @@ def _product_title(segment: str, match: re.Match[str]) -> bool:
         return False
     if re.search(r"\bproduct$", match.group(), re.I):
         tail = segment[match.end() :]
-        if re.match(r"\s*[,/&+]", tail) and not re.match(rf"\s*[/&+]\s*{_QUALIFIER}\b", tail, re.I):
+        # A following vacancy noun is not a specialty suffix for this engineer.
+        if re.match(r"\s+\w", tail) and not re.match(r"\s+engineering\b", tail, re.I):
+            return False
+        technical_suffix = rf"(?:{_FRONT}|{_BACK}|{_FULL}|{_TECHNOLOGY}|software|mobile|iOS|Android)"
+        if re.match(r"\s*[,/&+]", tail) and not re.match(rf"\s*[/&+]\s*{technical_suffix}\b", tail, re.I):
             return False
     following = suffix.strip(" ()/-:")
     design_hybrid = re.search(
@@ -240,7 +244,11 @@ def classify(text: str) -> dict:
     )
     job_seeker = is_job_seeker(text)
     active_engineering: bool | None = None
-    engineering_opening_seen = False
+    engineering_opening_seen = any(
+        _advertised_role(segment, role)
+        for segment in translated
+        for role in _ENGINEERING_TITLE.finditer(segment)
+    )
     for index, (source, segment) in enumerate(zip(source_segments, translated, strict=True)):
         for match in _CANDIDATE.finditer(segment):
             snippet = _excerpt(source, match.start(), match.end())
@@ -261,7 +269,6 @@ def classify(text: str) -> dict:
         ]
         if opening_titles:
             active_engineering = sorted(opening_titles)[-1][1]
-            engineering_opening_seen |= any(engineering for _, engineering in opening_titles)
 
         for role, pattern in _ROLE_PATTERNS.items():
             for match in pattern.finditer(segment):
@@ -330,6 +337,13 @@ def classify(text: str) -> dict:
 
         for match in _VACANCY_SLUG.finditer(segment):
             if not inside_url(segment, match.start()) or not _product_title(segment, match):
+                continue
+            if _reference(segment, match):
+                continue
+            preceding_recruitment = list(_RECRUITMENT.finditer(segment, 0, match.start()))
+            if preceding_recruitment and negated(
+                segment, preceding_recruitment[-1].start(), preceding_recruitment[-1].end()
+            ):
                 continue
             # Slugs count only when attached to this ad's vacancy/application,
             # rather than a company homepage, blog, or someone's past role.

@@ -8,8 +8,8 @@
   "indexed_listed_comments": 94954,
   "unindexed_listed_comments": 6954,
   "advertisements": 88628,
-  "advertisements_with_selected_roles": 30785,
-  "product_engineer_advertisements": 1763,
+  "advertisements_with_selected_roles": 30773,
+  "product_engineer_advertisements": 1730,
   "advertisements_identified_by_role": 458,
   "excluded_comments": 6326,
   "duplicate_comments": 167,
@@ -29,10 +29,11 @@
   "share_denominator": "all retained hiring advertisements",
   "comment_source": "Algolia indexed top-level comments intersected with official HN comment IDs",
   "causal_inference": false,
-  "classified_sha256": "a757249f8d756db1c6f97840598754638b66897ae0318a236560984d5f57ec0b",
+  "classified_sha256": "2f406348748a571a8b22b4de9a4895a8e727d9625247105623aceaa9ba5fea67",
   "charts": [
-    "annual_role_shares.webp",
-    "quarterly_role_trends.webp",
-    "comparable_year_roles.webp"
+    "annual_role_shares-7a47daed3c.webp",
+    "quarterly_role_trends-babdd170a3.webp",
+    "comparable_year_roles-92061c34f5.webp",
+    "annual_hiring_volume-2e3a45f803.webp"
   ]
 }

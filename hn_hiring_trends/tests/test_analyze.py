@@ -4,6 +4,7 @@ import pytest
 
 from hn_hiring_trends.analyze import (
     aggregate,
+    annual_advertisement_totals,
     classify_records,
     comparable_years,
     descriptive_trends,
@@ -131,3 +132,13 @@ def test_descriptive_trends_exclude_incomplete_quarters():
 def test_slope_is_unavailable_without_two_distinct_observation_times():
     assert least_squares_slope([(2022, 1)]) is None
     assert least_squares_slope([(2022, 1), (2022, 2)]) is None
+
+
+def test_annual_hiring_volume_counts_ads_once_and_marks_partial_calendar_years():
+    records = [ad(1, "2022-01", ["frontend", "product"]), ad(2, "2022-01", ["full_stack"])]
+    annual = aggregate(records, [{"month": "2022-01"}], date(2022, 1, 1), date(2022, 1, 1), "annual")
+    totals = annual_advertisement_totals(annual)
+    assert len(totals) == 1
+    assert totals[0]["total_hiring_advertisements"] == 2
+    assert totals[0]["months_observed"] == 1
+    assert not totals[0]["complete_year"]

@@ -84,6 +84,18 @@ def summary_markdown(manifest: dict, tables: dict, charts: list[str]) -> str:
         "Every percentage uses **all retained hiring advertisements** as its denominator, not just engineering ads. "
         "An ad can list more than one of the four roles; categories overlap and must not be stacked or added together.",
         "",
+        "## Total hiring advertisements by year",
+        "",
+        "These are advertisement counts, not exact vacancy counts. Partial years are labeled and must not be compared directly with complete calendar years.",
+        "",
+        "| Year | Months observed | Total hiring advertisements |",
+        "|---|---:|---:|",
+    ]
+    for row in tables["annual_totals"]:
+        year = row["year"] + (" (partial)" if not row["complete_year"] else "")
+        lines.append(f"| {year} | {row['months_observed']}/12 | {row['total_hiring_advertisements']:,} |")
+    lines += [
+        "",
         "## Equivalent-month comparison",
         "",
         f"Every eligible year uses the same calendar months: **{', '.join(f'{month:02}' for month in manifest['comparison_months']) or 'none'}**. "
@@ -102,7 +114,8 @@ def summary_markdown(manifest: dict, tables: dict, charts: list[str]) -> str:
         )
     lines += ["", "## Charts", ""]
     for chart in charts:
-        lines += [f"![{chart.removesuffix('.webp').replace('_', ' ')}]({chart})", ""]
+        label = Path(chart).stem.rsplit("-", 1)[0].replace("_", " ")
+        lines += [f"![{label}]({chart})", ""]
     lines += [
         "## Inspect product-engineer capture",
         "",

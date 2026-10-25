@@ -288,27 +288,14 @@ Babylist is profitable and growing quickly. We're hiring for a number of roles a
 * Support and Operations Engineers
 For more information on these positions (as well as other openings) please see our jobs page - https://www.babylist.com/jobs
 If you have any questions or would like to apply you can contact me directly august[at]babylist.com"
-role_example_2016_2019_product,2019-02,19059395,https://news.ycombinator.com/item?id=19059395,True,,hiring_text,backend;product,"{""backend"": [""advertised_title""], ""product"": [""advertised_title""]}","{""backend"": [""Skip (YC W18) | Android Engineers, iOS Engineers, Backend Serverless TypeScript Engineers, Designers | Full-time | San Francisco (Mission) | On-site | $120 - $170k + equity""], ""product"": [""Now hiring across the board for engineers, product and design.""]}","[""Now hiring across the board for engineers, product and design.""]","Skip (YC W18) | Android Engineers, iOS Engineers, Backend Serverless TypeScript Engineers, Designers | Full-time | San Francisco (Mission) | On-site | $120 - $170k + equity
-Come work with me at Skip in the sunny Mission in San Francisco! We’re the only e-scooter company that:
-- cares about unit economics
-- cares about cities
-- has never gotten a cease and desist
-- is developing the most advanced vehicles
-Here’s some recent love TechCrunch gave us on the kickass new scooters we’re building:
-https://techcrunch.com/2018/12/18/skip-unveils-scooters-with...
-Now hiring across the board for engineers, product and design. ESPECIALLY engineering + designers. Are you one of these people or do you know anyone who’s got crazy good skillz? Email me at afik+jobs[at]skipscooters{dot}com, message me or comment below! ️
-Android-specific details:
-- minSdkVersion = 21
-- 100% Kotlin
-- 100% M-V-VM
-- Dagger, Retrofit, Rx, all the good stuff
-- PLUS exciting opportunities to develop Google Cloud IoT and Android Things stuff for our embedded hardware in the scooters that’s also running Android!
-Benefits / Office:
-- Medical/dental/vision coverage
-- Snacks & stocked fridge and pantry
-- Choose your own Apple equipment
-- Flexible vacation policy; take time when you need it
-Email me at afik+jobs[at]skipscooters{dot}com, message me or comment below! ️"
+role_example_2016_2019_product,2019-06,20083816,https://news.ycombinator.com/item?id=20083816,True,,hiring_text,frontend;product,"{""frontend"": [""advertised_title""], ""product"": [""vacancy_link""]}","{""frontend"": [""Streak | YC S11 | Senior Frontend Engineers | Vancouver, BC | Full Time | Onsite""], ""product"": [""and apply at https://www.streak.com/careers/product-engineer-vancouver""]}","[""and apply at https://www.streak.com/careers/product-engineer-vancouver""]","Streak | YC S11 | Senior Frontend Engineers | Vancouver, BC | Full Time | Onsite
+* Problem: Make Gmail powerful for all businesses
+* Product: We build a sales/hiring/fundraising/dealflow tool all inside Gmail. We believe these workflows belong entirely in your inbox because thats where people spend their entire day.
+* Traction: Product market fit, hundreds of thousands of users, tens of thousands of paying users
+* Stack: Java, Kotlin, Golang, React, all the modern JS tooling - built on GCP, largest user of Google Cloud Spanner
+* You: Deep & foundational knowledge of frontend web engineering. From how browsers work to modern frameworks and everything in between.
+We're growing our Vancouver eng team significantly and offer competitive compensation with amazing benefits.
+Interested? Visit and apply at https://www.streak.com/careers/product-engineer-vancouver"
 product_candidate_2016_2019,2019-02,19058770,https://news.ycombinator.com/item?id=19058770,True,,hiring_text,frontend,"{""frontend"": [""advertised_title""]}","{""frontend"": [""Pacific Medical Data Solutions | Frontend Developer | Full-Time | Denver, CO | Onsite"", ""We're looking for a frontend developer to join our engineering team focusing on our new SaaS product.""]}","[""We're looking for a frontend developer to join our engineering team focusing on our new SaaS product.""]","Pacific Medical Data Solutions | Frontend Developer | Full-Time | Denver, CO | Onsite
 PMDS is a healthcare technology company which provides a physician productivity and compensation platform to hospitals around the US. We're looking for a frontend developer to join our engineering team focusing on our new SaaS product. An ideal candidate should have experience working in Angular 4+ or similar frontend framework and the ability to develop and deliver an intuitive and polished user experience to our customers.
 This role is onsite in our office in the DTC just south of Denver. Please reach out to chris.vanlaw@pacificmds.com for more information or to apply. Please include ""HN"" in the subject line."

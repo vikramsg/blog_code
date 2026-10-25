@@ -2,3 +2,4 @@
 *.nbc
 *.pyc
 *.env
+.agents/

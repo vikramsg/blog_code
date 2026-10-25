@@ -47,6 +47,7 @@ Definitions and context heuristics are inspectable in `src/hn_hiring_trends/clas
 |---|---|
 | `summary.md` | Four-role comparison, charts, sample coverage, and interpretation limits |
 | `monthly.csv`, `quarterly.csv`, `annual.csv` | Counts, denominators, shares, and calendar completeness for the four roles |
+| `annual_totals.csv` | Total hiring advertisements per calendar year, with observed months and partial-year flags |
 | `comparable_years.csv` | Identical calendar-month windows in every eligible year, including the latest partial year |
 | `descriptive_trends.csv` | Descriptive pre/post-2023 slopes for the four role shares |
 | `product_engineer_matches.csv` | Every counted product-role ad, source links, evidence, and detection reasons |
@@ -59,6 +60,8 @@ Definitions and context heuristics are inspectable in `src/hn_hiring_trends/clas
 
 The checked-in `results/` contains a historical run. Large source caches and full-text JSONL files remain local; exact replay requires those original caches. A fresh download of the same dates is not guaranteed to reproduce an earlier snapshot.
 
+Chart filenames include an image-content hash. A changed rendering gets a new path in `manifest.json` and `summary.md`, preventing previews from reusing an older image under the same URL.
+
 ## Collection and calendar comparisons
 
 Discovery uses [HN's Algolia API](https://hn.algolia.com/api) for monthly employer threads posted by `whoishiring`, plus four documented historical canonical IDs: July 2011 ([2719028](https://news.ycombinator.com/item?id=2719028)), December 2011 ([3300290](https://news.ycombinator.com/item?id=3300290)), April 2015 ([9303396](https://news.ycombinator.com/item?id=9303396)), and May 2015 ([9471287](https://news.ycombinator.com/item?id=9471287)). The December official-account post explicitly redirects to its canonical thread. Source authors and selection methods appear in the coverage export.
@@ -70,6 +73,8 @@ Identical text, ignoring case and whitespace, counts once within a month. Repeat
 Complete-quarter/year charts exclude incomplete calendar periods. Equivalent-year comparisons use the months present in the requested final year and include only years with every one of those months. Thus January–September is never compared against a full January–December total. Missing periods appear as gaps, not zero demand.
 
 Pre/post-2023 slopes are descriptive, equally weighted fits to complete-quarter shares. They provide neither a causal estimate nor a significance test. Economic conditions, employer mix, repeated advertisers, ad length, vocabulary, and changing source coverage are not controlled. This dataset cannot explain layoffs or validate a future employment forecast.
+
+The annual total-volume table/chart count each retained ad once, regardless of how many categories it mentions. They do not estimate vacancies from role lists or unspecified headcount. Partial 2011 and latest-year windows are marked explicitly.
 
 ## Manual audit
 

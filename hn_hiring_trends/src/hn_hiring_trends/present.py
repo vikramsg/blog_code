@@ -1,5 +1,7 @@
 """WebP charts of concrete advertised roles, with counts and comparable calendar windows."""
 
+import hashlib
+from io import BytesIO
 from pathlib import Path
 
 import matplotlib
@@ -27,9 +29,13 @@ def _label(index: int, granularity: str) -> str:
 
 def _save(figure, directory: Path, filename: str) -> str:
     try:
-        figure.savefig(
-            directory / filename, format="webp", dpi=150, facecolor="white", pil_kwargs={"lossless": True}
-        )
+        with BytesIO() as buffer:
+            figure.savefig(buffer, format="webp", dpi=150, facecolor="white", pil_kwargs={"lossless": True})
+            image_bytes = buffer.getvalue()
+        # Changed renderings need a new URL so previews cannot reuse stale image bytes.
+        digest = hashlib.sha256(image_bytes).hexdigest()[:10]
+        filename = f"{Path(filename).stem}-{digest}.webp"
+        (directory / filename).write_bytes(image_bytes)
     finally:
         plt.close(figure)
     return filename
@@ -173,6 +179,43 @@ def _annual_heatmap(rows: list[dict], directory: Path) -> str:
     return _save(figure, directory, "annual_role_shares.webp")
 
 
+def _annual_volume(rows: list[dict], directory: Path) -> str:
+    figure, axes = plt.subplots(figsize=(12, 5.5))
+    figure.subplots_adjust(left=0.09, right=0.97, top=0.8, bottom=0.23)
+    figure.suptitle(
+        "Total hiring advertisements on Hacker News",
+        x=0.09,
+        y=0.95,
+        ha="left",
+        fontsize=17,
+        fontweight="bold",
+    )
+    axes.set_title("Calendar-year totals · hatched bars are partial years", loc="left", fontsize=10, pad=15)
+    years = [row["year"] + ("*" if not row["complete_year"] else "") for row in rows]
+    bars = axes.bar(
+        years,
+        [row["total_hiring_advertisements"] for row in rows],
+        color=["#2166ac" if row["complete_year"] else "#aaaaaa" for row in rows],
+    )
+    for bar, row in zip(bars, rows, strict=True):
+        if not row["complete_year"]:
+            bar.set_hatch("//")
+    axes.set_ylabel("Hiring advertisements")
+    axes.tick_params(axis="x", labelrotation=35)
+    axes.spines[["top", "right"]].set_visible(False)
+    axes.grid(axis="y", color="#e5e5e5", linewidth=0.7)
+    axes.set_axisbelow(True)
+    axes.set_ylim(bottom=0)
+    figure.text(
+        0.09,
+        0.04,
+        "*Partial years contain fewer than 12 observed months; totals are not directly comparable to full years.\nOne ad may list several roles or vacancies. This measures HN advertisement volume, not exact job openings or unique employers.",
+        fontsize=9,
+        color="#555555",
+    )
+    return _save(figure, directory, "annual_hiring_volume.webp")
+
+
 def render_charts(tables: dict[str, list[dict]], output_dir: Path) -> list[str]:
     output_dir.mkdir(parents=True, exist_ok=True)
     with plt.rc_context({"font.family": "DejaVu Sans", "font.size": 10}):
@@ -180,4 +223,5 @@ def render_charts(tables: dict[str, list[dict]], output_dir: Path) -> list[str]:
             _annual_heatmap(tables["annual"], output_dir),
             _role_trends(tables["quarterly"], output_dir, comparable=False),
             _role_trends(tables["comparable_years"], output_dir, comparable=True),
+            _annual_volume(tables["annual_totals"], output_dir),
         ]

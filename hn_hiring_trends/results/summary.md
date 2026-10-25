@@ -8,11 +8,34 @@ Window: **2011-04–2026-09**. Measurements describe detected role advertisement
 
 - Canonical monthly threads: **186 / 186**; missing months: **none**.
 - Indexed top-level comments: **94,954 / 101,908** HN-listed IDs; **6,954** are absent from the index.
-- Retained hiring advertisements: **88,628**; detected product-engineer ads: **1,763**.
+- Retained hiring advertisements: **88,628**; detected product-engineer ads: **1,730**.
 - Ads identified by an explicit advertised role rather than conventional hiring text: **458**.
 - Excluded comments: **6,326**, including **167** exact same-month duplicates and **6** outside-month comments.
 
 Every percentage uses **all retained hiring advertisements** as its denominator, not just engineering ads. An ad can list more than one of the four roles; categories overlap and must not be stacked or added together.
+
+## Total hiring advertisements by year
+
+These are advertisement counts, not exact vacancy counts. Partial years are labeled and must not be compared directly with complete calendar years.
+
+| Year | Months observed | Total hiring advertisements |
+|---|---:|---:|
+| 2011 (partial) | 9/12 | 1,431 |
+| 2012 | 12/12 | 2,001 |
+| 2013 | 12/12 | 2,659 |
+| 2014 | 12/12 | 3,420 |
+| 2015 | 12/12 | 6,213 |
+| 2016 | 12/12 | 7,526 |
+| 2017 | 12/12 | 9,093 |
+| 2018 | 12/12 | 9,369 |
+| 2019 | 12/12 | 8,268 |
+| 2020 | 12/12 | 6,913 |
+| 2021 | 12/12 | 10,059 |
+| 2022 | 12/12 | 7,411 |
+| 2023 | 12/12 | 4,011 |
+| 2024 | 12/12 | 3,780 |
+| 2025 | 12/12 | 3,913 |
+| 2026 (partial) | 9/12 | 2,561 |
 
 ## Equivalent-month comparison
 
@@ -23,15 +46,17 @@ Every eligible year uses the same calendar months: **01, 02, 03, 04, 05, 06, 07,
 | Frontend | 13.2% (792/5989) | 3.9% (100/2561) |
 | Backend | 14.2% (852/5989) | 10.8% (276/2561) |
 | Full-stack | 19.0% (1137/5989) | 17.9% (459/2561) |
-| Product engineer | 2.2% (133/5989) | 8.0% (206/2561) |
+| Product engineer | 2.2% (129/5989) | 8.0% (205/2561) |
 
 ## Charts
 
-![annual role shares](annual_role_shares.webp)
+![annual role shares](annual_role_shares-7a47daed3c.webp)
 
-![quarterly role trends](quarterly_role_trends.webp)
+![quarterly role trends](quarterly_role_trends-babdd170a3.webp)
 
-![comparable year roles](comparable_year_roles.webp)
+![comparable year roles](comparable_year_roles-92061c34f5.webp)
+
+![annual hiring volume](annual_hiring_volume-2e3a45f803.webp)
 
 ## Inspect product-engineer capture
 
@@ -51,4 +76,4 @@ Every eligible year uses the same calendar months: **01, 02, 03, 04, 05, 06, 07,
 
 ## Reproducibility
 
-Classified-data SHA-256: `a757249f8d756db1c6f97840598754638b66897ae0318a236560984d5f57ec0b`. Original JSON source responses and retrieval timestamps are cached locally. Exact replay requires those original caches; a fresh collection of the same months can differ.
+Classified-data SHA-256: `2f406348748a571a8b22b4de9a4895a8e727d9625247105623aceaa9ba5fea67`. Original JSON source responses and retrieval timestamps are cached locally. Exact replay requires those original caches; a fresh collection of the same months can differ.

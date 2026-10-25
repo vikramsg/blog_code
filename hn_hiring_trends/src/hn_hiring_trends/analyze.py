@@ -105,6 +105,20 @@ def aggregate(
     return rows
 
 
+def annual_advertisement_totals(annual_rows: list[dict]) -> list[dict]:
+    years = {row["period"]: row for row in annual_rows}
+    return [
+        {
+            "year": year,
+            "total_hiring_advertisements": row["advertisements"],
+            "months_observed": row["months_observed"],
+            "observed_months": row["observed_months"],
+            "complete_year": row["complete_period"],
+        }
+        for year, row in sorted(years.items())
+    ]
+
+
 def comparable_years(records: list[dict], coverage: list[dict], end: date) -> tuple[list[dict], list[int]]:
     """Use identical available calendar months in every compared year, not full-year/YTD mixes."""
     by_year: dict[str, set[int]] = defaultdict(set)

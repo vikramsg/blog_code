@@ -7,7 +7,7 @@ from collections import defaultdict
 from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 
-from .analyze import aggregate, classify_records, comparable_years
+from .analyze import aggregate, annual_advertisement_totals, classify_records, comparable_years
 from .collect import JsonCache, SourceError, collect, months_between
 from .output import write_outputs
 
@@ -62,6 +62,7 @@ def run_pipeline(cache: JsonCache, start: date, end: date, output_dir: Path, wor
         for granularity in ("monthly", "quarterly", "annual")
     }
     tables["comparable_years"], comparison_months = comparable_years(classified, coverage, end)
+    tables["annual_totals"] = annual_advertisement_totals(tables["annual"])
     included = [row for row in classified if row["included"]]
     expected_months = months_between(start, end)
     found_months = {row["month"] for row in coverage}

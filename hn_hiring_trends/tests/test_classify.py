@@ -41,3 +41,26 @@ def test_each_detected_role_has_source_locatable_evidence_and_a_detection_reason
         assert result["match_reasons"][role]
         assert result["evidence"][role]
         assert all(excerpt in text for excerpt in result["evidence"][role])
+
+
+def test_separate_product_design_opening_is_not_an_engineering_specialty_suffix():
+    result = classify("Acme | Backend Engineer, Product Design | Remote")
+    assert "backend" in result["role_families"]
+    assert "product" not in result["role_families"]
+
+
+def test_company_role_definition_is_independent_of_its_order_relative_to_recruitment():
+    heading = "Acme | Remote | Full-time\n"
+    identity = "Our engineers are true product engineers.\n"
+    recruitment = "We are hiring backend engineers.\n"
+    before = classify(heading + identity + recruitment)
+    after = classify(heading + recruitment + identity)
+    assert "product" in before["role_families"]
+    assert set(before["role_families"]) == set(after["role_families"])
+
+
+def test_vacancy_link_does_not_override_explicit_negative_product_recruitment():
+    result = classify(
+        "Acme | Backend Engineer | Remote\nWe are not hiring product engineers; see https://example.com/jobs/product-engineer"
+    )
+    assert "product" not in result["role_families"]
