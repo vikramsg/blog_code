@@ -4,7 +4,8 @@ import re
 from collections import defaultdict
 from datetime import date
 
-from .classify import ROLE_FAMILIES, SIGNALS, classify, is_hiring_ad
+from .advertisements import is_hiring_ad, is_job_seeker
+from .classify import ROLE_FAMILIES, classify
 from .collect import months_between
 
 
@@ -13,39 +14,40 @@ def classify_records(records: list[dict]) -> list[dict]:
     results = []
     for record in sorted(records, key=lambda row: (row["month"], row["comment_id"])):
         text_key = (record["month"], re.sub(r"\s+", " ", record["text"]).strip().casefold())
+        classification = classify(record["text"])
+        conventional_ad = is_hiring_ad(record["text"])
         reason = ""
         if not record["text"]:
             reason = "empty"
         elif record["comment_created_at"][:7] != record["month"]:
             reason = "outside_thread_month"
-        elif not is_hiring_ad(record["text"]):
+        elif is_job_seeker(record["text"]) or not (conventional_ad or classification["role_families"]):
             reason = "not_identified_as_hiring"
         elif text_key in seen_text:
             reason = "same_month_exact_text_duplicate"
         else:
             seen_text.add(text_key)
-        result = {**record, "included": not reason, "exclusion_reason": reason}
-        if not reason:
-            result.update(classify(record["text"]))
+        result = {
+            **record,
+            **classification,
+            "included": not reason,
+            "exclusion_reason": reason,
+            "identification_method": "hiring_text"
+            if conventional_ad
+            else "advertised_role"
+            if classification["role_families"]
+            else "",
+        }
         results.append(result)
     return results
 
 
-def metric_definitions() -> list[tuple[str, str, str]]:
-    return [
-        *((f"role:{family}", "role", "advertisements") for family in ROLE_FAMILIES),
-        *((f"signal:{signal}", "signal", "engineering_advertisements") for signal in SIGNALS),
-        ("signal:breadth_and_product", "signal", "engineering_advertisements"),
-    ]
+def metric_definitions() -> list[str]:
+    return [f"role:{family}" for family in ROLE_FAMILIES]
 
 
 def has_metric(record: dict, metric: str) -> bool:
-    kind, label = metric.split(":", 1)
-    if kind == "role":
-        return label in record["role_families"]
-    if label == "breadth_and_product":
-        return record["signals"]["technical_breadth"] and record["signals"]["product_responsibility"]
-    return record["signals"][label]
+    return metric.removeprefix("role:") in record["role_families"]
 
 
 def period_key(month: str, granularity: str) -> str:
@@ -82,10 +84,8 @@ def aggregate(
         calendar = calendar_months(period, granularity)
         observed = [month for month in calendar if month in available and month in expected]
         ads = by_period[period]
-        engineers = [record for record in ads if record["engineering_ad"]]
-        for metric, kind, denominator_name in metric_definitions():
-            eligible = ads if kind == "role" else engineers
-            count = sum(has_metric(record, metric) for record in eligible)
+        for metric in metric_definitions():
+            count = sum(has_metric(record, metric) for record in ads)
             rows.append(
                 {
                     "period": period,
@@ -95,12 +95,11 @@ def aggregate(
                     "complete_period": observed == calendar,
                     "observed_months": ";".join(observed),
                     "advertisements": len(ads),
-                    "engineering_advertisements": len(engineers),
                     "metric": metric,
                     "count": count,
-                    "denominator_name": denominator_name,
-                    "denominator": len(eligible),
-                    "share": count / len(eligible) if eligible else None,
+                    "denominator_name": "advertisements",
+                    "denominator": len(ads),
+                    "share": count / len(ads) if ads else None,
                 }
             )
     return rows
@@ -148,7 +147,7 @@ def least_squares_slope(points: list[tuple[float, float]]) -> float | None:
 def descriptive_trends(quarterly: list[dict]) -> list[dict]:
     """Separate descriptive fits; these are not a causal model or significance test."""
     rows = []
-    for metric, _, _ in metric_definitions():
+    for metric in metric_definitions():
         observations = [
             row
             for row in quarterly
@@ -178,7 +177,7 @@ def descriptive_trends(quarterly: list[dict]) -> list[dict]:
 
 
 def review_sample(records: list[dict], per_era: int = 12) -> list[dict]:
-    """Deterministic random-within-era examples plus separate positive/negative boundary examples."""
+    """Era samples, concrete role examples, and unmatched product-role candidates for manual audit."""
     import hashlib
 
     included = [record for record in records if record["included"]]
@@ -190,24 +189,18 @@ def review_sample(records: list[dict], per_era: int = 12) -> list[dict]:
         selected.extend(
             {**record, "selection": f"era_sample_{first}_{last}"} for record in candidates[:per_era]
         )
-        for signal in (
-            "technical_breadth",
-            "product_responsibility",
-            "product_engineer_title",
-            "ai_product_work",
-            "ai_tool_use",
-        ):
-            for positive in (True, False):
-                match = next(
-                    (
-                        record
-                        for record in candidates
-                        if record["engineering_ad"] and record["signals"][signal] == positive
-                    ),
-                    None,
-                )
-                if match:
-                    selected.append({**match, "selection": f"boundary_{first}_{last}_{signal}_{positive}"})
+        for family in ROLE_FAMILIES:
+            match = next((record for record in candidates if family in record["role_families"]), None)
+            if match:
+                selected.append({**match, "selection": f"role_example_{first}_{last}_{family}"})
+        missed_candidates = [
+            record
+            for record in candidates
+            if record["candidate_evidence"] and "product" not in record["role_families"]
+        ]
+        selected.extend(
+            {**record, "selection": f"product_candidate_{first}_{last}"} for record in missed_candidates[:4]
+        )
     excluded = [record for record in records if not record["included"] and record["text"]]
     excluded.sort(key=lambda record: hashlib.sha256(str(record["comment_id"]).encode()).hexdigest())
     selected.extend({**record, "selection": "excluded_comment_sample"} for record in excluded[:per_era])

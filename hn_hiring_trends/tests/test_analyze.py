@@ -9,17 +9,14 @@ from hn_hiring_trends.analyze import (
     descriptive_trends,
     least_squares_slope,
 )
-from hn_hiring_trends.classify import SIGNALS
 
 
-def ad(comment_id, month, families, *, engineering=True, positive_signals=()):
+def ad(comment_id, month, families):
     return {
         "comment_id": comment_id,
         "month": month,
         "included": True,
         "role_families": families,
-        "engineering_ad": engineering,
-        "signals": {name: name in positive_signals for name in SIGNALS},
     }
 
 
@@ -32,25 +29,28 @@ def metric_row(rows, metric, period=None):
 def test_overlapping_roles_count_advertisements_not_vacancies():
     records = [
         ad(1, "2022-01", ["frontend", "backend"]),
-        ad(2, "2022-01", ["backend"], positive_signals=["product_responsibility"]),
-        ad(3, "2022-01", ["design"], engineering=False),
+        ad(2, "2022-01", ["backend"]),
+        ad(3, "2022-01", []),
     ]
     rows = aggregate(records, [{"month": "2022-01"}], date(2022, 1, 1), date(2022, 1, 1), "monthly")
     backend = metric_row(rows, "role:backend")
-    product = metric_row(rows, "signal:product_responsibility")
+    frontend = metric_row(rows, "role:frontend")
     assert (backend["count"], backend["denominator"]) == (2, 3)
     assert backend["share"] == pytest.approx(2 / 3)
-    assert (product["count"], product["denominator"], product["share"]) == (1, 2, 0.5)
+    assert (frontend["count"], frontend["denominator"]) == (1, 3)
 
 
-def test_combined_breadth_and_product_requires_both_signals_in_same_ad():
+def test_product_and_fullstack_mentions_have_the_same_denominator_without_requiring_each_other():
     records = [
-        ad(1, "2022-01", ["full_stack"], positive_signals=["technical_breadth"]),
-        ad(2, "2022-01", ["backend"], positive_signals=["product_responsibility"]),
-        ad(3, "2022-01", ["full_stack"], positive_signals=["technical_breadth", "product_responsibility"]),
+        ad(1, "2022-01", ["full_stack"]),
+        ad(2, "2022-01", ["product"]),
+        ad(3, "2022-01", ["full_stack", "product"]),
     ]
     rows = aggregate(records, [{"month": "2022-01"}], date(2022, 1, 1), date(2022, 1, 1), "monthly")
-    assert metric_row(rows, "signal:breadth_and_product")["count"] == 1
+    assert metric_row(rows, "role:product")["count"] == 2
+    assert metric_row(rows, "role:full_stack")["count"] == 2
+    assert metric_row(rows, "role:product")["denominator"] == 3
+    assert metric_row(rows, "role:full_stack")["denominator"] == 3
 
 
 def test_missing_month_is_not_interpreted_as_zero_demand_or_complete_quarter():
@@ -116,13 +116,13 @@ def test_late_comments_do_not_leak_into_a_completed_thread_month():
 
 def test_descriptive_trends_exclude_incomplete_quarters():
     quarters = [
-        {"period": "2021-Q1", "metric": "signal:technical_breadth", "complete_period": True, "share": 0.1},
-        {"period": "2022-Q1", "metric": "signal:technical_breadth", "complete_period": True, "share": 0.2},
-        {"period": "2023-Q1", "metric": "signal:technical_breadth", "complete_period": True, "share": 0.2},
-        {"period": "2024-Q1", "metric": "signal:technical_breadth", "complete_period": True, "share": 0.25},
-        {"period": "2024-Q2", "metric": "signal:technical_breadth", "complete_period": False, "share": 0.99},
+        {"period": "2021-Q1", "metric": "role:product", "complete_period": True, "share": 0.1},
+        {"period": "2022-Q1", "metric": "role:product", "complete_period": True, "share": 0.2},
+        {"period": "2023-Q1", "metric": "role:product", "complete_period": True, "share": 0.2},
+        {"period": "2024-Q1", "metric": "role:product", "complete_period": True, "share": 0.25},
+        {"period": "2024-Q2", "metric": "role:product", "complete_period": False, "share": 0.99},
     ]
-    row = next(row for row in descriptive_trends(quarters) if row["metric"] == "signal:technical_breadth")
+    row = next(row for row in descriptive_trends(quarters) if row["metric"] == "role:product")
     assert row["pre_2023_percentage_points_per_year"] == pytest.approx(10)
     assert row["post_2023_percentage_points_per_year"] == pytest.approx(5)
     assert row["slope_change_percentage_points_per_year"] == pytest.approx(-5)

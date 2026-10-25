@@ -1,78 +1,54 @@
-# HN hiring advertisement trends
+# Frontend, backend, full-stack, and product-engineer hiring
 
-Requested window: **2011-04–2026-09**. This is a descriptive study of explicit language in indexed HN advertisements, not a labor-market census.
+Window: **2011-04–2026-09**. Measurements describe detected role advertisements in HN's hiring community, not vacancies or the wider labor market.
 
-**Classification is an unvalidated rules-based baseline. Detected signals are not estimates of actual job responsibilities or AI adoption.**
+**This is an unvalidated heuristic baseline. Better candidate capture does not establish complete recall or classification accuracy.**
 
-## Sample and coverage
+## Sample and denominator
 
-- Canonical monthly threads found: **186 / 186**.
-- Missing monthly threads: **none**.
-- HN-listed top-level comments: **101,908**; present in the index: **94,954**.
-- HN-listed comments absent from the index: **6,954**. Their visibility/deletion status is not inferred. Coverage changes can affect trends.
-- Retained advertisements: **88,170**; with explicit engineering-role language: **64,358**.
-- Excluded indexed comments: **6,784**, including **167** same-month exact-text duplicates and **6** comments posted outside their thread month.
+- Canonical monthly threads: **186 / 186**; missing months: **none**.
+- Indexed top-level comments: **94,954 / 101,908** HN-listed IDs; **6,954** are absent from the index.
+- Retained hiring advertisements: **88,628**; detected product-engineer ads: **1,763**.
+- Ads identified by an explicit advertised role rather than conventional hiring text: **458**.
+- Excluded comments: **6,326**, including **167** exact same-month duplicates and **6** outside-month comments.
+
+Every percentage uses **all retained hiring advertisements** as its denominator, not just engineering ads. An ad can list more than one of the four roles; categories overlap and must not be stacked or added together.
 
 ## Equivalent-month comparison
 
-Calendar months used in every compared year: **01, 02, 03, 04, 05, 06, 07, 08, 09**. Years missing any comparison month are excluded. Role shares use all retained advertisements; responsibility and AI-signal shares use retained engineering advertisements.
+Every eligible year uses the same calendar months: **01, 02, 03, 04, 05, 06, 07, 08, 09**. Years missing any comparison month are excluded.
 
-| Explicit signal | 2022 | 2026 |
+| Advertised role | 2022 | 2026 |
 |---|---:|---:|
-| frontend | 9.4% (565/5986) | 3.1% (79/2559) |
-| backend | 9.5% (568/5986) | 9.1% (233/2559) |
-| full stack | 12.8% (769/5986) | 12.5% (319/2559) |
-| ml ai | 2.7% (159/5986) | 6.3% (162/2559) |
-| technical breadth | 18.6% (781/4204) | 17.3% (328/1897) |
-| product responsibility | 0.5% (23/4204) | 1.4% (27/1897) |
-| product engineer title | 1.3% (56/4204) | 7.7% (146/1897) |
-| breadth and product | 0.2% (8/4204) | 0.5% (9/1897) |
-| ai product work | 0.4% (16/4204) | 3.0% (56/1897) |
-| ai tool use | 0.0% (0/4204) | 0.5% (10/1897) |
-
-## Descriptive change in trajectory
-
-Separate straight-line fits use complete quarters before 2023 and from 2023 onward, with each quarter weighted equally. Slopes are percentage points per year. A slope difference is not evidence that AI caused a change, and these fits do not provide uncertainty estimates or adjust for economic conditions or repeated advertisers.
-
-| Explicit signal | Before 2023 | From 2023 | Difference |
-|---|---:|---:|---:|
-| frontend | +0.01 | -1.30 | -1.30 |
-| backend | +0.52 | +0.66 | +0.14 |
-| full stack | +1.14 | -0.06 | -1.20 |
-| ml ai | +0.31 | +1.02 | +0.71 |
-| technical breadth | +1.60 | -0.41 | -2.02 |
-| product responsibility | -0.00 | +0.33 | +0.33 |
-| product engineer title | +0.11 | +1.76 | +1.65 |
-| ai product work | +0.03 | +0.93 | +0.91 |
-| ai tool use | +0.00 | +0.14 | +0.14 |
-| breadth and product | +0.02 | +0.10 | +0.08 |
+| Frontend | 13.2% (792/5989) | 3.9% (100/2561) |
+| Backend | 14.2% (852/5989) | 10.8% (276/2561) |
+| Full-stack | 19.0% (1137/5989) | 17.9% (459/2561) |
+| Product engineer | 2.2% (133/5989) | 8.0% (206/2561) |
 
 ## Charts
 
-![annual role shares](annual_role_shares.png)
+![annual role shares](annual_role_shares.webp)
 
-![quarterly broadening product](quarterly_broadening_product.png)
+![quarterly role trends](quarterly_role_trends.webp)
 
-![quarterly ai signals](quarterly_ai_signals.png)
+![comparable year roles](comparable_year_roles.webp)
 
-![quarterly advertisement counts](quarterly_advertisement_counts.png)
+## Inspect product-engineer capture
 
-![comparable year signals](comparable_year_signals.png)
-
-![monthly indexed coverage](monthly_indexed_coverage.png)
+`product_engineer_matches.csv` includes every detected product-role ad with its source, matched evidence, and heuristic reasons. `product_engineer_candidates.csv` includes broad product/engineering candidates not counted as product roles, including excluded comments, so missed or ambiguous cases remain inspectable. `review_examples.csv` adds deterministic era samples and selected role/candidate examples; it is not an accuracy benchmark.
 
 ## Interpretation limits
 
-- HN overrepresents technology companies and startups. Advertisements are not vacancies, hires, layoffs, or employment totals.
-- Labels overlap. A multi-role advertisement may mention several specialties and responsibilities; co-occurrence does not prove one engineer is expected to perform them all.
-- Technical breadth requires explicit full-stack or cross-stack responsibility language, not merely separate frontend and backend openings.
-- Product-engineer titles are separate from product responsibilities. Advertised AI-product duties are separate from expectations to use AI development tools; company descriptions alone do not establish either.
-- Rules detect explicit language, not actual skills or workplace behavior. Changing vocabulary, job-ad length, source availability, and classification errors can affect the result.
-- A separately labeled, representative benchmark across eras is required before using these measurements as strong evidence or claiming classification precision/recall. Manual example inspection and behavioral tests do not provide that validation.
-- Repeated advertisements across months remain observations of advertised demand; they are not independent employers. Only exact-text duplicates within a month are removed.
-- `review_examples.csv` contains deterministic era samples and deliberately selected positive/negative examples. The latter are not representative and must not be used to estimate accuracy. Full text is available locally in `review_sample.jsonl`.
-- This dataset cannot establish AI causality, explain layoffs, or validate a five-year employment forecast.
+- HN disproportionately represents technology companies and startups. Ads are not vacancies, hires, layoffs, or unique employers.
+- Product-focused role descriptions and qualified/reversed titles can qualify, but merely building a product, working with product managers, or serving product engineers does not.
+- English title/role heuristics can miss uncommon wording or confuse the subject of a description. Source-locatable evidence is not proof of correct attribution.
+- A representative, independently labeled cross-era benchmark is required before claims of complete capture, precision/recall, or strong substantive conclusions.
+- Vocabulary, ad length, repeated advertisers, employer mix, and changing indexed coverage can affect trends. Unindexed comments are not assumed to be live, deleted, or representative.
+- Only exact-text duplicates within a month are removed. Repeated advertisements in different months remain observations of advertised demand.
+- Complete-quarter/year charts exclude incomplete periods; equivalent-year charts use identical calendar months. Missing periods are gaps, not zero demand.
+- Any pre/post-2023 slopes in `descriptive_trends.csv` are unweighted descriptive fits to complete-quarter shares, not causal models or significance tests.
+- This dataset cannot explain layoffs, establish AI causality, or validate a future employment forecast.
 
 ## Reproducibility
 
-The manifest identifies classified data with SHA-256 **`8854fbd3c0b0f544f0c356a35e49e4ee1373871fc9d5e4d69058b3db3c938e78`**. Original source responses and retrieval timestamps are cached locally. Use the cached offline rerun to reproduce this snapshot; a fresh collection can differ as comments and the index change.
+Classified-data SHA-256: `a757249f8d756db1c6f97840598754638b66897ae0318a236560984d5f57ec0b`. Original JSON source responses and retrieval timestamps are cached locally. Exact replay requires those original caches; a fresh collection of the same months can differ.

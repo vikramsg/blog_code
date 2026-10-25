@@ -1,4 +1,4 @@
-"""Export inspectable counts, source coverage, and a descriptive research summary."""
+"""Export four role measurements and source-linked product-role audit material."""
 
 import csv
 import hashlib
@@ -6,16 +6,15 @@ import json
 from pathlib import Path
 
 from .analyze import descriptive_trends, review_sample
-from .present import render_charts
+from .present import ROLES, render_charts
 
 
 def write_csv(path: Path, rows: list[dict]) -> None:
     with path.open("w", newline="", encoding="utf-8") as handle:
-        if not rows:
-            return
-        writer = csv.DictWriter(handle, fieldnames=list(rows[0]), lineterminator="\n")
-        writer.writeheader()
-        writer.writerows(rows)
+        if rows:
+            writer = csv.DictWriter(handle, fieldnames=list(rows[0]), lineterminator="\n")
+            writer.writeheader()
+            writer.writerows(rows)
 
 
 def write_jsonl(path: Path, rows: list[dict]) -> None:
@@ -24,117 +23,109 @@ def write_jsonl(path: Path, rows: list[dict]) -> None:
             handle.write(json.dumps(row, ensure_ascii=False) + "\n")
 
 
-def percentage(value: float | None) -> str:
-    return "—" if value is None else f"{100 * value:.1f}%"
+def _example(record: dict) -> dict:
+    return {
+        "selection": record.get("selection", ""),
+        "month": record["month"],
+        "comment_id": record["comment_id"],
+        "source_url": record["source_url"],
+        "included": record["included"],
+        "exclusion_reason": record["exclusion_reason"],
+        "identification_method": record["identification_method"],
+        "role_families": ";".join(record["role_families"]),
+        "match_reasons": json.dumps(record["match_reasons"], ensure_ascii=False),
+        "evidence": json.dumps(record["evidence"], ensure_ascii=False),
+        "candidate_evidence": json.dumps(record["candidate_evidence"], ensure_ascii=False),
+        "text_excerpt": record["text"][:1800],
+    }
 
 
-def summary_markdown(manifest: dict, tables: dict, trends: list[dict], charts: list[str]) -> str:
+def _product_index(record: dict) -> dict:
+    return {
+        "month": record["month"],
+        "comment_id": record["comment_id"],
+        "source_url": record["source_url"],
+        "included": record["included"],
+        "exclusion_reason": record["exclusion_reason"],
+        "identification_method": record["identification_method"],
+        "role_families": ";".join(record["role_families"]),
+        "product_match_reasons": ";".join(record["match_reasons"].get("product", [])),
+        "header": record["text"].splitlines()[0][:300] if record["text"] else "",
+        "product_evidence": json.dumps(record["evidence"].get("product", [])[:3], ensure_ascii=False),
+        "candidate_evidence": json.dumps(record["candidate_evidence"][:2], ensure_ascii=False),
+    }
+
+
+def _share_with_count(row: dict) -> str:
+    return "—" if row["share"] is None else f"{100 * row['share']:.1f}% ({row['count']}/{row['denominator']})"
+
+
+def summary_markdown(manifest: dict, tables: dict, charts: list[str]) -> str:
     latest = manifest["requested_end"][:4]
-    comparable = tables["comparable_years"]
-    baseline_years = sorted({row["period"] for row in comparable if int(row["period"]) < 2023})
-    baseline = baseline_years[-1] if baseline_years else None
-    metrics = (
-        "role:frontend",
-        "role:backend",
-        "role:full_stack",
-        "role:ml_ai",
-        "signal:technical_breadth",
-        "signal:product_responsibility",
-        "signal:product_engineer_title",
-        "signal:breadth_and_product",
-        "signal:ai_product_work",
-        "signal:ai_tool_use",
-    )
+    comparison = tables["comparable_years"]
+    baselines = sorted({row["period"] for row in comparison if int(row["period"]) < 2023})
+    baseline = baselines[-1] if baselines else None
     lines = [
-        "# HN hiring advertisement trends",
+        "# Frontend, backend, full-stack, and product-engineer hiring",
         "",
-        f"Requested window: **{manifest['requested_start']}–{manifest['requested_end']}**. "
-        "This is a descriptive study of explicit language in indexed HN advertisements, not a labor-market census.",
+        f"Window: **{manifest['requested_start']}–{manifest['requested_end']}**. "
+        "Measurements describe detected role advertisements in HN's hiring community, not vacancies or the wider labor market.",
         "",
-        "**Classification is an unvalidated rules-based baseline. Detected signals are not estimates of actual job responsibilities or AI adoption.**",
+        "**This is an unvalidated heuristic baseline. Better candidate capture does not establish complete recall or classification accuracy.**",
         "",
-        "## Sample and coverage",
+        "## Sample and denominator",
         "",
-        f"- Canonical monthly threads found: **{manifest['threads']} / {manifest['expected_months']}**.",
-        f"- Missing monthly threads: **{', '.join(manifest['missing_months']) or 'none'}**.",
-        f"- HN-listed top-level comments: **{manifest['hn_listed_comments']:,}**; "
-        f"present in the index: **{manifest['indexed_listed_comments']:,}**.",
-        f"- HN-listed comments absent from the index: **{manifest['unindexed_listed_comments']:,}**. "
-        "Their visibility/deletion status is not inferred. Coverage changes can affect trends.",
-        f"- Retained advertisements: **{manifest['advertisements']:,}**; "
-        f"with explicit engineering-role language: **{manifest['engineering_advertisements']:,}**.",
-        f"- Excluded indexed comments: **{manifest['excluded_comments']:,}**, including "
-        f"**{manifest['duplicate_comments']:,}** same-month exact-text duplicates and "
-        f"**{manifest['outside_thread_month_comments']:,}** comments posted outside their thread month.",
+        f"- Canonical monthly threads: **{manifest['threads']} / {manifest['expected_months']}**; missing months: **{', '.join(manifest['missing_months']) or 'none'}**.",
+        f"- Indexed top-level comments: **{manifest['indexed_listed_comments']:,} / {manifest['hn_listed_comments']:,}** HN-listed IDs; **{manifest['unindexed_listed_comments']:,}** are absent from the index.",
+        f"- Retained hiring advertisements: **{manifest['advertisements']:,}**; detected product-engineer ads: **{manifest['product_engineer_advertisements']:,}**.",
+        f"- Ads identified by an explicit advertised role rather than conventional hiring text: **{manifest['advertisements_identified_by_role']:,}**.",
+        f"- Excluded comments: **{manifest['excluded_comments']:,}**, including **{manifest['duplicate_comments']:,}** exact same-month duplicates and **{manifest['outside_thread_month_comments']:,}** outside-month comments.",
+        "",
+        "Every percentage uses **all retained hiring advertisements** as its denominator, not just engineering ads. "
+        "An ad can list more than one of the four roles; categories overlap and must not be stacked or added together.",
         "",
         "## Equivalent-month comparison",
         "",
-        f"Calendar months used in every compared year: **{', '.join(f'{month:02}' for month in manifest['comparison_months']) or 'none'}**. "
-        "Years missing any comparison month are excluded. Role shares use all retained advertisements; "
-        "responsibility and AI-signal shares use retained engineering advertisements.",
+        f"Every eligible year uses the same calendar months: **{', '.join(f'{month:02}' for month in manifest['comparison_months']) or 'none'}**. "
+        "Years missing any comparison month are excluded.",
         "",
     ]
-    if baseline and latest != baseline and any(row["period"] == latest for row in comparable):
-        lines += [f"| Explicit signal | {baseline} | {latest} |", "|---|---:|---:|"]
-        lookup = {(row["period"], row["metric"]): row for row in comparable}
-        for metric in metrics:
-            before, after = lookup.get((baseline, metric)), lookup.get((latest, metric))
-            if before and after:
-                lines.append(
-                    f"| {metric.split(':')[1].replace('_', ' ')} | {percentage(before['share'])} ({before['count']}/{before['denominator']}) | {percentage(after['share'])} ({after['count']}/{after['denominator']}) |"
-                )
+    lookup = {(row["period"], row["metric"]): row for row in comparison}
+    if baseline and latest != baseline and (latest, "role:product") in lookup:
+        lines += [f"| Advertised role | {baseline} | {latest} |", "|---|---:|---:|"]
+        for role, label, _ in ROLES:
+            before, after = lookup[(baseline, f"role:{role}")], lookup[(latest, f"role:{role}")]
+            lines.append(f"| {label} | {_share_with_count(before)} | {_share_with_count(after)} |")
     else:
         lines.append(
-            "The requested window does not provide both a pre-2023 comparison year and a later comparison year."
-        )
-    lines += [
-        "",
-        "## Descriptive change in trajectory",
-        "",
-        "Separate straight-line fits use complete quarters before 2023 and from 2023 onward, with each quarter weighted equally. "
-        "Slopes are percentage points per year. A slope difference is not evidence that AI caused a change, "
-        "and these fits do not provide uncertainty estimates or adjust for economic conditions or repeated advertisers.",
-        "",
-        "| Explicit signal | Before 2023 | From 2023 | Difference |",
-        "|---|---:|---:|---:|",
-    ]
-    for row in trends:
-        if row["metric"] not in metrics:
-            continue
-        values = [
-            row[key]
-            for key in (
-                "pre_2023_percentage_points_per_year",
-                "post_2023_percentage_points_per_year",
-                "slope_change_percentage_points_per_year",
-            )
-        ]
-        lines.append(
-            f"| {row['metric'].split(':')[1].replace('_', ' ')} | "
-            + " | ".join("—" if value is None else f"{value:+.2f}" for value in values)
-            + " |"
+            "This window does not contain both a pre-2023 year and a later equivalent-month comparison year."
         )
     lines += ["", "## Charts", ""]
-    for filename in charts:
-        lines += [f"![{filename.removesuffix('.png').replace('_', ' ')}]({filename})", ""]
+    for chart in charts:
+        lines += [f"![{chart.removesuffix('.webp').replace('_', ' ')}]({chart})", ""]
     lines += [
+        "## Inspect product-engineer capture",
+        "",
+        "`product_engineer_matches.csv` includes every detected product-role ad with its source, matched evidence, and heuristic reasons. "
+        "`product_engineer_candidates.csv` includes broad product/engineering candidates not counted as product roles, including excluded comments, so missed or ambiguous cases remain inspectable. "
+        "`review_examples.csv` adds deterministic era samples and selected role/candidate examples; it is not an accuracy benchmark.",
+        "",
         "## Interpretation limits",
         "",
-        "- HN overrepresents technology companies and startups. Advertisements are not vacancies, hires, layoffs, or employment totals.",
-        "- Labels overlap. A multi-role advertisement may mention several specialties and responsibilities; co-occurrence does not prove one engineer is expected to perform them all.",
-        "- Technical breadth requires explicit full-stack or cross-stack responsibility language, not merely separate frontend and backend openings.",
-        "- Product-engineer titles are separate from product responsibilities. Advertised AI-product duties are separate from expectations to use AI development tools; company descriptions alone do not establish either.",
-        "- Rules detect explicit language, not actual skills or workplace behavior. Changing vocabulary, job-ad length, source availability, and classification errors can affect the result.",
-        "- A separately labeled, representative benchmark across eras is required before using these measurements as strong evidence or claiming classification precision/recall. Manual example inspection and behavioral tests do not provide that validation.",
-        "- Repeated advertisements across months remain observations of advertised demand; they are not independent employers. Only exact-text duplicates within a month are removed.",
-        "- `review_examples.csv` contains deterministic era samples and deliberately selected positive/negative examples. The latter are not representative and must not be used to estimate accuracy. Full text is available locally in `review_sample.jsonl`.",
-        "- This dataset cannot establish AI causality, explain layoffs, or validate a five-year employment forecast.",
+        "- HN disproportionately represents technology companies and startups. Ads are not vacancies, hires, layoffs, or unique employers.",
+        "- Product-focused role descriptions and qualified/reversed titles can qualify, but merely building a product, working with product managers, or serving product engineers does not.",
+        "- English title/role heuristics can miss uncommon wording or confuse the subject of a description. Source-locatable evidence is not proof of correct attribution.",
+        "- A representative, independently labeled cross-era benchmark is required before claims of complete capture, precision/recall, or strong substantive conclusions.",
+        "- Vocabulary, ad length, repeated advertisers, employer mix, and changing indexed coverage can affect trends. Unindexed comments are not assumed to be live, deleted, or representative.",
+        "- Only exact-text duplicates within a month are removed. Repeated advertisements in different months remain observations of advertised demand.",
+        "- Complete-quarter/year charts exclude incomplete periods; equivalent-year charts use identical calendar months. Missing periods are gaps, not zero demand.",
+        "- Any pre/post-2023 slopes in `descriptive_trends.csv` are unweighted descriptive fits to complete-quarter shares, not causal models or significance tests.",
+        "- This dataset cannot explain layoffs, establish AI causality, or validate a future employment forecast.",
         "",
         "## Reproducibility",
         "",
-        f"The manifest identifies classified data with SHA-256 **`{manifest['classified_sha256']}`**. "
-        "Original source responses and retrieval timestamps are cached locally. Use the cached offline rerun "
-        "to reproduce this snapshot; a fresh collection can differ as comments and the index change.",
+        f"Classified-data SHA-256: `{manifest['classified_sha256']}`. Original JSON source responses and retrieval timestamps are cached locally. "
+        "Exact replay requires those original caches; a fresh collection of the same months can differ.",
         "",
     ]
     return "\n".join(lines)
@@ -155,30 +146,21 @@ def write_outputs(
     write_csv(output_dir / "descriptive_trends.csv", trends)
     examples = review_sample(records)
     write_jsonl(output_dir / "review_sample.jsonl", examples)
+    write_csv(output_dir / "review_examples.csv", [_example(row) for row in examples])
     write_csv(
-        output_dir / "review_examples.csv",
+        output_dir / "product_engineer_matches.csv",
+        [_product_index(row) for row in records if row["included"] and "product" in row["role_families"]],
+    )
+    write_csv(
+        output_dir / "product_engineer_candidates.csv",
         [
-            {
-                "selection": row["selection"],
-                "month": row["month"],
-                "comment_id": row["comment_id"],
-                "source_url": row["source_url"],
-                "included": row["included"],
-                "exclusion_reason": row["exclusion_reason"],
-                "role_families": ";".join(row.get("role_families", [])),
-                "positive_signals": ";".join(
-                    name for name, positive in row.get("signals", {}).items() if positive
-                ),
-                "evidence": json.dumps(row.get("evidence", {}), ensure_ascii=False),
-                "text_excerpt": row["text"][:1600],
-            }
-            for row in examples
+            _product_index(row)
+            for row in records
+            if row["candidate_evidence"] and not (row["included"] and "product" in row["role_families"])
         ],
     )
-    charts = render_charts(tables, coverage, output_dir)
+    charts = render_charts(tables, output_dir)
     manifest["charts"] = charts
     (output_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
-    (output_dir / "summary.md").write_text(
-        summary_markdown(manifest, tables, trends, charts), encoding="utf-8"
-    )
+    (output_dir / "summary.md").write_text(summary_markdown(manifest, tables, charts), encoding="utf-8")
     return manifest

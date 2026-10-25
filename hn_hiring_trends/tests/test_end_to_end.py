@@ -4,6 +4,7 @@ from urllib.parse import parse_qs
 
 import httpx
 import pytest
+from PIL import Image
 
 from hn_hiring_trends.cli import main
 from hn_hiring_trends.collect import JsonCache
@@ -29,7 +30,7 @@ def test_cli_collects_classifies_exports_and_reproduces_cached_results(tmp_path,
                 "parent_id": thread_id,
                 "type": "comment",
                 "created_at": month + "-03T00:00:00Z",
-                "text": "Beta | Full Stack Engineer | Remote<p>We are hiring. You will talk to customers and make product decisions. Apply at jobs@example.com.",
+                "text": "Beta | Full Stack Product Engineer | Remote<p>We are hiring. You will talk to customers and make product decisions. Apply at jobs@example.com.",
             },
             {
                 "id": thread_id * 100 + 2,
@@ -75,7 +76,8 @@ def test_cli_collects_classifies_exports_and_reproduces_cached_results(tmp_path,
     assert main(args) == 0
     manifest = json.loads((output / "manifest.json").read_text())
     assert manifest["advertisements"] == 12
-    assert manifest["engineering_advertisements"] == 12
+    assert manifest["advertisements_with_selected_roles"] == 12
+    assert manifest["product_engineer_advertisements"] == 6
     assert manifest["excluded_comments"] == 12
     assert manifest["unindexed_listed_comments"] == 6
     assert len(manifest["missing_months"]) == 9
@@ -83,8 +85,12 @@ def test_cli_collects_classifies_exports_and_reproduces_cached_results(tmp_path,
     backend = next(row for row in rows if row["period"] == "2022-Q3" and row["metric"] == "role:backend")
     assert (int(backend["count"]), int(backend["denominator"])) == (3, 6)
     assert float(backend["share"]) == pytest.approx(0.5)
-    assert "not a labor-market census" in (output / "summary.md").read_text()
-    assert all((output / chart).stat().st_size > 0 for chart in manifest["charts"])
+    product = next(row for row in rows if row["period"] == "2022-Q3" and row["metric"] == "role:product")
+    assert (int(product["count"]), int(product["denominator"])) == (3, 6)
+    for chart in manifest["charts"]:
+        with Image.open(output / chart) as image:
+            assert image.format == "WEBP"
+            image.verify()
     first_hash = manifest["classified_sha256"]
     request_count = len(requests)
     assert main([*args, "--offline"]) == 0

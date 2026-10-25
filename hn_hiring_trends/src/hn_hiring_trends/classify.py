@@ -1,359 +1,347 @@
-"""Conservative, inspectable language rules for advertisement-level labels.
+"""Identify four advertised engineering roles with inspectable source evidence.
 
-Labels describe what an ad explicitly says, not duties assigned to each role in
-a multi-role ad. Missing labels mean missing evidence, not absence of a duty.
+Categories overlap: a full-stack product engineer can belong to both categories.
+Unmatched product-role wording is retained for inspection, not treated as a label.
 """
 
 import re
 
-ROLE_FAMILIES: tuple[str, ...] = (
-    "frontend",
-    "backend",
-    "full_stack",
-    "mobile",
-    "infrastructure",
-    "data",
-    "ml_ai",
-    "security",
-    "embedded_hardware",
-    "qa",
-    "engineering_unspecified",
-    "product_management",
-    "design",
-    "sales_marketing",
-    "support_operations",
-)
-SIGNALS: tuple[str, ...] = (
-    "technical_breadth",
-    "product_responsibility",
-    "customer_contact",
-    "product_decisions",
-    "experimentation",
-    "outcome_ownership",
-    "end_to_end_ownership",
-    "founding_engineer",
-    "product_engineer_title",
-    "ai_product_work",
-    "ai_tool_use",
+from .advertisements import (
+    advertised_title,
+    inside_url,
+    is_hiring_ad,
+    is_job_seeker,
+    negated,
+    recruitment_statement,
+    segments,
 )
 
-_ENGINEERING_FAMILIES = set(ROLE_FAMILIES[:11])
-_ENGINEER = r"(?:engineers?|developers?|devs?)"
-_TITLE_MODIFIER = (
-    r"(?:senior(?:\s+(?:I{1,3}|IV|[1-4]))?|junior|staff|lead|principal|founding|full[ -]time|part[ -]time)"
+ROLE_FAMILIES: tuple[str, ...] = ("frontend", "backend", "full_stack", "product")
+
+# Translation preserves character positions so evidence still slices the original.
+_PUNCTUATION = str.maketrans({char: "-" for char in "‐‑‒–—−"} | {"\u00a0": " ", "\u202f": " "})
+_ENGINEER = r"(?:engineers?|developers?|devs?|engs?|SWEs?)"
+_SENIORITY = r"(?:senior|Sr\.?|junior|Jr\.?|staff|principal|lead|founding|graduate|intern|mid(?:[ -]level)?)"
+_FRONT = r"(?:front[ -]?end|client[ -]side|UI(?:\s*/\s*UX)?)"
+_BACK = r"(?:back[ -]?end|server[ -]side)"
+_FULL = r"full[ -]?stack"
+_ORIENTATION = r"(?:minded|focused|oriented|driven|centric|first|leaning|sensitive)"
+_TECHNOLOGY = r"(?:Python|Java(?:Script)?|TypeScript|Ruby(?: on Rails)?|Rails|Go|Rust|C\+\+|C\#|PHP|React|Node(?:\.js)?|Django|Kotlin|Elixir|Scala)"
+_QUALIFIER = rf"(?:{_SENIORITY}|{_FRONT}|{_BACK}|{_FULL}|{_TECHNOLOGY}|software|web|mobile|iOS|Android|application|technical|design|UX|data|ad|advertising|product(?:[ -]{_ORIENTATION})?)"
+_SEPARATOR = r"[ \t/(),:-]+"
+_QUALIFIERS = rf"(?:{_QUALIFIER}{_SEPARATOR}){{0,4}}"
+_LEADING_QUALIFIERS = rf"(?:{_QUALIFIER}[ \t/(-]+){{0,4}}"
+_ENGINEERING_TITLE = re.compile(rf"\b{_LEADING_QUALIFIERS}{_ENGINEER}\b", re.I)
+_OTHER_TITLE = re.compile(
+    rf"\b(?:{_SENIORITY}\s+)*(?:(?:product|engineering|software|AI|data|sales|marketing|design|project|program|account|customer success)\s+)*(?:managers?|directors?|designers?|owners?|analysts?|scientists?|executives?)\b|\b(?:CTO|CEO|VP|head of)\b",
+    re.I,
+)
+_LIST_TITLE = re.compile(
+    rf"\b(?:(?:{_QUALIFIER}|infrastructure|platform|DevOps|cloud|security|streaming|NLP|API|test|QA|growth|research|systems|engineering)\s+)*"
+    rf"(?:{_ENGINEER}|interns?|managers?|designers?|directors?|scientists?|analysts?|owners?|executives?)\b|\bSREs?\b",
+    re.I,
+)
+_LIST_GAP = re.compile(r"[\s,/&+*#•§()\[\]-]*(?:(?:and|or|a|an)\b[\s,/&+*#•§()\[\]-]*)*", re.I)
+_TITLE_FRAGMENT = re.compile(
+    rf"\b(?:{_QUALIFIER}|engineering|growth|infrastructure|platform|DevOps|AI|great|strong|very)\b", re.I
+)
+_RECRUITMENT = re.compile(
+    r"\b(?:hiring|recruiting|seek(?:ing)?|looking (?:for|to hire)|we (?:need|want)|(?:open|available) (?:roles?|positions?))\b|\b(?:roles?|positions?|hiring)\s*:",
+    re.I,
+)
+_PAST_OR_OPTIONAL = re.compile(
+    r"\b(?:experience (?:as|in|engineering|working)|years of experience|previously|formerly|used to|worked as|last (?:week|year)|years ago|"
+    r"bonus|nice[ -]to[ -]have|optional|preference for|depending on|opportunity (?:for .*? )?to be)\b",
+    re.I,
+)
+_HISTORICAL = re.compile(r"\b(?:previously|formerly|last (?:week|year)|years ago|used to)\b", re.I)
+_REFERENCE_PREFIX = re.compile(
+    r"\b(?:work(?:ing)? (?:closely |directly )?with|collaborat\w* with|support(?:ing)?|help(?:ing)?|tools? for|for (?:our|the) (?:customers|users)|"
+    r"customers? (?:are|include)|users? (?:are|include)|used by|made up of|comprised of|team of|I am|I'm)\b",
+    re.I,
+)
+_NON_PRODUCT_TITLE = re.compile(
+    r"\b(?:managers?|management|director|VP|head|chief|designers?|owners?|analysts?|marketers?|marketing|evangelists?|research|adoption|"
+    r"leaders?|leads?(?!\s+(?:software\s+)?(?:engineer|developer))|people|folks|security|support|reliability|embedded|mechanical|hardware|electrical|manufacturing|"
+    r"solar|microgrid|supercharger|energy (?:products?|charging)|industrial storage|commercial solar)\b",
+    re.I,
 )
 _ROLE_PATTERNS = {
-    "frontend": rf"\b(?:front[ -]?end|client[ -]side|UI)\s+(?:software\s+)?{_ENGINEER}\b",
-    "backend": rf"\b(?:back[ -]?end|server[ -]side)\s+(?:software\s+)?{_ENGINEER}\b",
-    "full_stack": rf"\bfull[ -]?stack\s+(?:(?:software|product)\s+)?{_ENGINEER}\b",
-    "mobile": rf"\b(?:mobile|iOS|Android)\s+(?:software\s+)?{_ENGINEER}\b",
-    "infrastructure": rf"\b(?:(?:infrastructure|platform|DevOps|site reliability|cloud)\s+{_ENGINEER}|SREs?)\b",
-    "data": r"\bdata\s+(?:engineers?|scientists?|analysts?)\b",
-    "ml_ai": rf"\b(?:AI|ML|machine learning|deep learning)\s+(?:research\s+)?(?:{_ENGINEER}|scientists?|researchers?)\b",
-    "security": rf"\b(?:security|cybersecurity|application security)\s+{_ENGINEER}\b",
-    "embedded_hardware": rf"\b(?:embedded|firmware|hardware|electrical|mechanical|robotics)\s+(?:software\s+)?{_ENGINEER}\b",
-    "qa": rf"\b(?:(?:QA|quality assurance|test|testing)\s+{_ENGINEER}|SDETs?)\b",
-    "engineering_unspecified": rf"\b(?:(?:software|founding|product|web)\s+)?{_ENGINEER}\b",
-    "product_management": r"\bproduct\s+(?:managers?|owners?)\b",
-    "design": r"\b(?:(?:product|UX\s*/\s*UI|UI\s*/\s*UX|UX|UI|visual|graphic)\s+)?designers?\b",
-    "sales_marketing": r"\b(?:sales\s+(?:engineers?|representatives?|managers?)|account executives?|marketing\s+(?:managers?|specialists?)|marketers?)\b",
-    "support_operations": r"\b(?:(?:customer|technical)\s+support\s+(?:engineers?|specialists?|representatives?)|customer success\s+(?:managers?|engineers?)|operations\s+(?:managers?|specialists?))\b",
+    name: re.compile(
+        rf"\b{_LEADING_QUALIFIERS}{stem}{_SEPARATOR}{_QUALIFIERS}{_ENGINEER}\b|"
+        rf"\b{_LEADING_QUALIFIERS}(?:{_ENGINEER}|engineering)\s*\(\s*(?:{_QUALIFIER}{_SEPARATOR}){{0,2}}{stem}\b"
+        rf"(?:{_SEPARATOR}{_QUALIFIERS}{_ENGINEER}\b)?|"
+        rf"\b{_LEADING_QUALIFIERS}(?:{_ENGINEER}|engineering)\s*[,/:-]\s*(?:{_QUALIFIER}{_SEPARATOR}){{0,2}}{stem}\b"
+        rf"(?!{_SEPARATOR}{_QUALIFIERS}{_ENGINEER}\b)",
+        re.I,
+    )
+    for name, stem in (
+        ("frontend", _FRONT),
+        ("backend", _BACK),
+        ("full_stack", _FULL),
+        ("product", "product"),
+    )
 }
-_ROLES = {name: re.compile(pattern, re.I) for name, pattern in _ROLE_PATTERNS.items()}
-_ANY_ROLE = re.compile("|".join(f"(?:{pattern})" for pattern in _ROLE_PATTERNS.values()), re.I)
-_TITLE_LIST = re.compile(
-    rf"[\s,/&+\-*#•]*(?:(?:and|or|a|an|{_TITLE_MODIFIER})\b[\s,/&+\-*#•]*)*",
+_PRODUCT_ORIENTED = re.compile(
+    rf"\bproduct[ -]{_ORIENTATION}{_SEPARATOR}{_QUALIFIERS}{_ENGINEER}\b|"
+    rf"\b{_QUALIFIERS}{_ENGINEER}(?:\s*[,(:/-]\s*|\s+(?:who are|that are|who have|with|have|are)\s+(?:(?:a|strong|huge|great|deep)\s+){{0,2}})"
+    rf"(?:product[ -]{_ORIENTATION}|product (?:mindset|focus))\b",
     re.I,
 )
-_HIRING = re.compile(
-    r"\b(?:we(?:['’]re| are)?\s+(?:hiring|recruiting|seeking)|(?:is|are) hiring|"
-    r"hiring|recruiting|seeking|looking for|we (?:need|want)|open (?:roles?|positions?)|job openings?|"
-    r"join (?:us|our team)(?: as)?)\b|\b(?:roles?|positions?)\s*:",
+_PRODUCT_IDENTITY = re.compile(
+    rf"\b(?:we (?:view|see|consider|describe|treat) (?:each|every|our|all) {_ENGINEER}[^.!?;|]{{0,35}}\bas (?:a |an |true )*product {_ENGINEER}|"
+    rf"(?:our|each|every|all) {_ENGINEER}[^.!?;|]{{0,35}}\b(?:are|is|act as) (?:true )?product {_ENGINEER})\b",
     re.I,
 )
-_NEGATIVE = re.compile(r"\b(?:not(?! (?:only|just)\b)|never|no|without|don't|doesn't|won't|will not)\b", re.I)
-_APPLICANT_CONTEXT = re.compile(
-    r"\b(?:you(?:'ll| will)?|your|candidate|responsibilities|"
-    r"duties|the role|this role|we expect|we need|looking for|hiring)\b",
+_PRODUCT_TEAM = re.compile(
+    r"\bproduct[ /-]engineering\s+(?:teams?|group|org(?:anization)?|department)\b", re.I
+)
+_INTO_TEAM = re.compile(r"\b(?:join|joining|into|for|on|within)\b", re.I)
+_PRODUCT_DEFINITION = re.compile(
+    r"(?<![\w-])(?:defin(?:e|ing) (?:the |our )?product|own(?:ing)? product decisions|"
+    r"(?:their|your|our) own product managers?|effectively product managers?|"
+    r"(?:PM|product manager),?\s*(?:designer,?\s*)?and engineer in one person|"
+    r"part engineer[^.!?;|]{0,40}product designer)\b",
     re.I,
 )
-_ROLE_DUTY_SUBJECT = re.compile(
-    rf"^[\s*\-•]*(?:(?:the|this|a|an)\s+)?(?:{_ANY_ROLE.pattern})\s+"
-    r"(?:will|must|is expected to|are expected to|is responsible for|are responsible for)\b",
+_PRODUCT_SUBJECT = re.compile(
+    r"\s*(?:\[\d+\])?\s+(?:will|are|build|create|develop|don't just|do not just)\b", re.I
+)
+_CANDIDATE = re.compile(
+    rf"\bproduct\b[^.!?;|]{{0,100}}\b(?:{_ENGINEER}|engineering|development|builders?|hackers?)\b|"
+    rf"\b(?:{_ENGINEER}|engineering|development)\b[^.!?;|]{{0,100}}\bproduct\b",
     re.I,
 )
-_COMPANY_CONTEXT = re.compile(
-    r"\b(?:our (?:[\w-]+\s+){0,4}(?:company|product|platform|tool|service|engineers|developers|team)|customers are|users are|"
-    r"used by|tools? for|platform for|(?:helps?|enables?|allows?) (?:companies|customers|users|developers|engineers|scientists))\b",
+_VACANCY_SLUG = re.compile(
+    rf"(?:product[-_/](?:(?:software|full[-_]?stack|frontend|backend|senior)[-_/])*{_ENGINEER}|"
+    rf"{_ENGINEER}[-_/]product)(?![a-z])",
     re.I,
 )
 
 
-def _segments(text: str) -> list[str]:
-    return [part.strip() for part in re.split(r"\n+|(?<=[.!?])\s+", text) if part.strip()]
+def _excerpt(source: str, start: int, end: int) -> str:
+    return source[max(0, start - 45) : min(len(source), max(end, start + 165))].strip()
 
 
-def _negated(segment: str, start: int, end: int) -> bool:
-    # Negation is local to a clause; a visa restriction must not cancel a role.
-    prefix = re.split(r"[;:|,.]", segment[:start])[-1][-70:]
-    return bool(_NEGATIVE.search(prefix + segment[start:end]))
+def _title_field(prefix: str) -> str:
+    return re.split(r"[|;]", prefix)[-1]
 
 
-def _role_context(segment: str, match: re.Match[str]) -> bool:
-    if _inside_url(segment, match.start()) or _negated(segment, match.start(), match.end()):
-        return False
+def _recruitment_matches(segment: str, start: int = 0, end: int | None = None) -> list[re.Match[str]]:
+    return [
+        cue
+        for cue in _RECRUITMENT.finditer(segment, start, len(segment) if end is None else end)
+        if recruitment_statement(segment, cue)
+        and not re.match(r"\s+manager\b", segment[cue.end() :], re.I)
+        and not re.search(r"\b(?:was|were|previously|formerly|used to)\s*$", segment[: cue.start()], re.I)
+    ]
+
+
+def _reference(segment: str, match: re.Match[str]) -> bool:
     prefix = segment[: match.start()]
-    if "|" in prefix and _TITLE_LIST.fullmatch(_ANY_ROLE.sub("", prefix.rsplit("|", 1)[1])):
-        return True
-    hiring = [match for match in _HIRING.finditer(prefix) if _recruitment_statement(segment, match)]
-    if hiring and not _COMPANY_CONTEXT.search(prefix[hiring[-1].end() :]):
-        previous_roles = [
-            other for pattern in _ROLES.values() for other in pattern.finditer(prefix, hiring[-1].end())
-        ]
-        if previous_roles:
-            gap = prefix[max(other.end() for other in previous_roles) :]
-            if not _TITLE_LIST.fullmatch(gap):
-                return False
-        return True
-    if re.search(r"\b(?:as (?:a|an)|role of|position of)\s*$", prefix, re.I):
-        return True
-    title_prefix = re.fullmatch(rf"[\s*#\-•]*(?:(?:{_TITLE_MODIFIER}|a|an)\s+)*", prefix, re.I)
-    return bool(title_prefix and re.match(r"\s*(?:$|[|:(\-–—]|at\b)", segment[match.end() :], re.I))
-
-
-def _excerpt(segment: str, start: int, end: int) -> str:
-    # Slices, rather than rewritten snippets, can be found verbatim in the source.
-    left = max(0, start - 45)
-    right = min(len(segment), max(end, start + 130))
-    return segment[left:right].strip()
-
-
-def _inside_url(segment: str, position: int) -> bool:
-    return any(match.start() <= position < match.end() for match in re.finditer(r"https?://\S+", segment))
-
-
-def _recruitment_statement(segment: str, match: re.Match[str]) -> bool:
-    return not (
-        _inside_url(segment, match.start())
-        or _negated(segment, match.start(), match.end())
-        or segment.endswith("?")
-        or re.search(
-            r"\b(?:why|who|wish|wonder|question|discussion|if|stop|advice|feedback)\b",
-            segment[: match.start()],
-            re.I,
-        )
-        or re.match(r"\s+(?:advice|feedback|information|tips|is|seems)\b", segment[match.end() :], re.I)
+    field_start = max(prefix.rfind("|"), prefix.rfind(";")) + 1
+    hiring = _recruitment_matches(segment, field_start, match.start())
+    if hiring:
+        prefix = segment[hiring[-1].end() : match.start()]
+    else:
+        prefix = prefix[field_start:]
+    return bool(
+        negated(segment, match.start(), match.end())
+        or _PAST_OR_OPTIONAL.search(prefix + match.group())
+        or _HISTORICAL.search(re.split(r"[,|;:]", segment[match.end() :])[0])
+        or _REFERENCE_PREFIX.search(prefix)
     )
 
 
-def is_hiring_ad(text: str) -> bool:
-    """Retain explicit recruitment and conventional headers, not job seekers/replies."""
-    segments = _segments(text)
-    if not segments:
+def _advertised_role(segment: str, match: re.Match[str]) -> bool:
+    if inside_url(segment, match.start()) or _reference(segment, match):
         return False
-    beginning = " ".join(segments[:2])
-    if re.search(
-        r"\b(?:seeking work|looking for (?:a (?:new )?job|work|employment)|"
-        r"(?:I am|I'm) (?:a |an )?(?:\w+\s+){0,3}(?:engineer|developer).*looking|"
-        r"available for (?:hire|work))\b",
-        beginning,
-        re.I,
-    ):
-        return False
-    for segment in segments:
-        for match in _HIRING.finditer(segment):
-            if _recruitment_statement(segment, match):
-                if re.search(r"\bhiring|recruiting|open|join\b", match.group(), re.I) or any(
-                    pattern.search(segment[match.end() :]) for pattern in _ROLES.values()
-                ):
-                    return True
-                if re.search(
-                    r"\b(?:someone|people|generalists?|architects?|head of|technologists?|interns?|specialists?|managers?)\b",
-                    segment[match.end() :],
-                    re.I,
-                ):
-                    return True
-        if any(_role_context(segment, match) for match in _ANY_ROLE.finditer(segment)):
+    if advertised_title(segment, match):
+        return True
+    prefix = segment[: match.start()]
+    field_start = max(prefix.rfind("|"), prefix.rfind(";")) + 1
+    hiring = _recruitment_matches(segment, field_start, match.start())
+    if hiring:
+        prefix = segment[hiring[-1].end() : match.start()]
+        if not (_ENGINEERING_TITLE.search(prefix) or _OTHER_TITLE.search(prefix)):
             return True
-        if segment.count("|") >= 2 and re.search(
-            r"\b(?:remote|onsite|on-site|hybrid|full[ -]time|part[ -]time|contract|engineers?|developers?)\b",
-            segment.split("|", 1)[1],
-            re.I,
-        ):
-            return True
-        if re.search(
-            r"\b(?:apply (?:at|via|here|now|to)|send (?:your |a )?(?:CV|resume)|careers\.)", segment, re.I
-        ):
-            return True
+    else:
+        prefix = re.split(r"\s+-\s+", prefix[field_start:])[-1]
+    # Conventional headers and comma-separated vacancy lists also use abbreviated
+    # titles that the general advertisement identifier need not recognize.
+    remainder = _TITLE_FRAGMENT.sub("", _LIST_TITLE.sub("", prefix))
+    if _LIST_GAP.fullmatch(remainder):
+        return bool(
+            hiring
+            or re.match(r"\s*(?:$|[.,|:()\]/-]|at\b|wanted\b|job posting\b)", segment[match.end() :], re.I)
+        )
     return False
 
 
-_FRONT = r"(?:front[ -]?end|client[ -]side)"
-_BACK = r"(?:back[ -]?end|server[ -]side)"
-_AI = r"(?:AI|ML|LLMs?|generative AI|machine learning|language models?)"
-_AI_SYSTEM = (
-    rf"(?:{_AI}(?:[-](?:powered|based|driven|infused|native))?\s+(?:[a-z][a-z-]*\s+){{0,2}}"
-    r"(?:systems?|products?|applications?|apps?|models?|pipelines?|workflows?|agents?|tools?|platforms?|engines?|features?)|LLMs?|language models?)"
-)
-_BUILD = r"(?:build(?:ing)?|develop(?:ing)?|own(?:ing)?|work(?:ing)? on)"
-_AI_TOOL_ACTION = (
-    r"(?:us(?:e|ing)|leverag(?:e|ing)|adopt(?:ing)?|experience with|comfortable with|comfort with)"
-)
-_CODING_ASSISTANT = r"(?:GitHub Copilot|Copilot|Cursor|Claude Code|Codex|ChatGPT)"
-_AI_SYSTEM_VERB = r"(?:build(?:ing)?|develop(?:ing)?|ship(?:ping)?|design(?:ing)?|implement(?:ing)?|integrat(?:e|ing)|train(?:ing)?|fine[ -]tun(?:e|ing)|evaluat(?:e|ing)|deploy(?:ing)?)"
-_SIGNAL_PATTERNS = {
-    "customer_contact": r"\b(?:talk(?:ing)?|speak(?:ing)?|interact(?:ing)?|meet(?:ing)?|engag(?:e|ing)|collaborat(?:e|ing)|work(?:ing)?)\s+(?:directly\s+|closely\s+|regularly\s+)?(?:to|with)\s+(?:our\s+|the\s+)?(?:customers|users)\b|\b(?:customer|user)\s+(?:interviews|research)\b",
-    "product_decisions": r"\b(?:mak(?:e|ing)|shap(?:e|ing)|driv(?:e|ing)|defin(?:e|ing)|influenc(?:e|ing)|own(?:ing)?|decid(?:e|ing)|prioriti[sz](?:e|ing))\s+(?:our\s+|the\s+)?(?:product\s+(?:roadmap|direction|strategy|decisions|priorities|discovery)|what (?:we |to )?build)\b|\b(?:responsibilities|duties|role)\s+includes?\s+product discovery\b",
-    "experimentation": r"\b(?:run(?:ning)?|design(?:ing)?|conduct(?:ing)?|own(?:ing)?|driv(?:e|ing))\s+(?:(?:product|growth|user|customer)\s+experiments|A/B tests|user tests)\b|\b(?:test(?:ing)?|validat(?:e|ing))\s+(?:product|customer|user|business|growth)\s+(?:hypotheses|assumptions)\b",
-    "outcome_ownership": r"\b(?:own(?:ing)?|driv(?:e|ing)|responsible for|accountable for|measured (?:by|on)|take ownership of)\s+(?:product\s+|business\s+|customer\s+)?(?:outcomes|impact|metrics|retention|conversion|revenue|activation|engagement)\b",
-    "end_to_end_ownership": r"\b(?:own|deliver|build|responsible for)(?:ing)?\b.{0,65}\bend[ -]to[ -]end\b|\bend[ -]to[ -]end\s+ownership\b|\b(?:own|take)\b.{0,35}\bfrom\s+(?:idea|concept|design)\b.{0,65}\b(?:production|deployment|launch)\b",
-    "ai_product_work": rf"\b{_AI_SYSTEM_VERB}(?:\s*(?:,\s*(?:and\s+)?|and\s+){_AI_SYSTEM_VERB}){{0,3}}\s+(?:(?:a|an|the|our|new|production|scalable|automated|advanced|modern|large|self-service)\s+){{0,3}}{_AI_SYSTEM}\b",
-    "ai_tool_use": (
-        rf"\b{_AI_TOOL_ACTION}\s+(?:tools (?:like|such as)\s+|AI (?:coding )?(?:tools|assistants)\s*(?:(?:like|such as)\s+|\(\s*)|(?:an? |the )?){_CODING_ASSISTANT}\b|"
-        rf"\b(?:{_AI_TOOL_ACTION}|with)\s+AI(?:[- ]assisted|[- ]powered)?\s+(?:coding|development|programming)(?:\s+(?:assistants?|tools))?\b|"
-        rf"\b{_AI_TOOL_ACTION}\s+(?:(?:modern|generative)\s+)?AI\s+(?:tools|assistants)\s+(?:to|for)\s+(?:ship|develop|development|build|coding|programming|write code|code)\b|"
-        r"\b(?:use|using|leverage)\s+(?:LLMs?|AI)\s+(?:to (?:write code|code|program)|for (?:coding|programming))\b|"
-        r"\bAI-assisted\s+(?:coding|development|programming)\b(?=\s*(?:\(|is\b|has\b|will\b|[.,;:]|$))"
-    ),
-}
-_SIGNAL_RULES = {name: re.compile(pattern, re.I) for name, pattern in _SIGNAL_PATTERNS.items()}
-_FRONT_DUTY = rf"{_FRONT}(?!\s+(?:software\s+)?{_ENGINEER}\b)"
-_BACK_DUTY = rf"{_BACK}(?!\s+(?:software\s+)?{_ENGINEER}\b)"
-_BREADTH = re.compile(
-    rf"\b{_BUILD}\b[^;|.]{{0,45}}\b(?:{_FRONT_DUTY}[^;|.]{{0,45}}{_BACK_DUTY}|"
-    rf"{_BACK_DUTY}[^;|.]{{0,45}}{_FRONT_DUTY})\b|"
-    rf"\b(?:across|spanning|from)\s+(?:the\s+)?(?:{_FRONT_DUTY}[^;|.]{{0,45}}{_BACK_DUTY}|"
-    rf"{_BACK_DUTY}[^;|.]{{0,45}}{_FRONT_DUTY})\b",
-    re.I,
-)
-_DUTY_ROLES = {
-    "frontend": re.compile(rf"\b{_BUILD}\s+(?:our\s+|the\s+)?{_FRONT}\b", re.I),
-    "backend": re.compile(rf"\b{_BUILD}\s+(?:our\s+|the\s+)?{_BACK}\b", re.I),
-}
-
-
-def _last_advertised_role(segment: str, start: int, end: int) -> re.Match[str] | None:
-    roles = list(_ANY_ROLE.finditer(segment, start, end))
-    return roles[-1] if roles and _role_context(segment, roles[-1]) else None
-
-
-def _duty_context(segment: str, match: re.Match[str]) -> bool:
-    if _inside_url(segment, match.start()) or _negated(segment, match.start(), match.end()):
-        return False
-    full_prefix = segment[: match.start()]
-    clause_start = max(full_prefix.rfind("|"), full_prefix.rfind(";")) + 1
-    relative_clauses = list(re.finditer(r"\b(?:who|that|which)\b", full_prefix[clause_start:], re.I))
-    relative_duty = False
-    if relative_clauses:
-        relative = relative_clauses[-1]
-        antecedent = _last_advertised_role(segment, clause_start, clause_start + relative.start())
-        clause_start += relative.end()
-        relative_duty = bool(
-            antecedent
-            and re.match(
-                r"\s*(?:will|must|is expected to|are expected to)\b", full_prefix[clause_start:], re.I
-            )
+def _product_title(segment: str, match: re.Match[str]) -> bool:
+    if inside_url(segment, match.start()):
+        url = next(
+            url for url in re.finditer(r"https?://\S+", segment) if url.start() <= match.start() < url.end()
         )
-        if not relative_duty and not _APPLICANT_CONTEXT.search(full_prefix[clause_start:]):
+        slug = url.group().split("/", 3)[-1].replace("-", " ").replace("_", " ")
+        return not (
+            _NON_PRODUCT_TITLE.search(_title_field(segment[: url.start()]))
+            or _NON_PRODUCT_TITLE.search(slug)
+            or re.search(r"/(?:blog|posts?|articles?|guides?)/", url.group(), re.I)
+        )
+    prefix = segment[: match.start()]
+    hiring = _recruitment_matches(segment, end=match.start())
+    if hiring:
+        prefix = prefix[hiring[-1].end() :]
+    prefix = re.split(r"[,|;:&]|\b(?:and|as well as)\b", prefix, flags=re.I)[-1]
+    suffix = re.split(r"[,|;]", segment[match.end() :])[0]
+    if re.search(r"\bengineering\s*[,/:-]", match.group(), re.I):
+        return False
+    if re.search(r"\bproduct$", match.group(), re.I):
+        tail = segment[match.end() :]
+        if re.match(r"\s*[,/&+]", tail) and not re.match(rf"\s*[/&+]\s*{_QUALIFIER}\b", tail, re.I):
             return False
-    prefix = full_prefix[clause_start:]
-    # Headers and references to coworkers must not authorize a different
-    # clause's work. Hypothetical explanations are not assigned duties.
-    if re.match(r"\s*if\b", prefix, re.I) and not re.search(
-        r"\byou(?:['’]ll| will)\b|\byour (?:role|responsibilities|duties)\b", prefix, re.I
-    ):
-        return False
-    company = list(_COMPANY_CONTEXT.finditer(prefix))
-    if company and not _APPLICANT_CONTEXT.search(prefix, company[-1].end()):
-        return False
-    role = _last_advertised_role(segment, clause_start, match.start())
-    title_duty = bool(role and re.fullmatch(r"[\s:–—-]*", full_prefix[role.end() :]))
-    return bool(
-        relative_duty
-        or _APPLICANT_CONTEXT.search(prefix)
-        or _ROLE_DUTY_SUBJECT.search(prefix)
-        or title_duty
-        or re.fullmatch(r"[\s*\-•]*", prefix)
-        or re.match(
-            r"[\s*\-•]*(?:experience with|comfortable with|proficient in|proficiency in|must|ability to)\b",
-            prefix,
-            re.I,
-        )
+    following = suffix.strip(" ()/-:")
+    design_hybrid = re.search(
+        rf"\bproduct{_SEPARATOR}{_QUALIFIERS}{_ENGINEER}\b", match.group(), re.I
+    ) and re.match(r"\s*/\s*(?:product\s+)?designer\b", segment[match.end() :], re.I)
+    return not (
+        _NON_PRODUCT_TITLE.search(prefix)
+        or (not design_hybrid and (_NON_PRODUCT_TITLE.match(following) or _OTHER_TITLE.match(following)))
     )
 
 
 def classify(text: str) -> dict:
-    """Return overlapping families/signals with exact evidence for positive labels."""
+    """Return advertised roles, reasons, and broad product-role candidates."""
     evidence: dict[str, list[str]] = {}
+    reasons: dict[str, list[str]] = {}
+    candidates: list[str] = []
 
-    def record(name: str, segment: str, match: re.Match[str]) -> None:
-        excerpt = _excerpt(segment, match.start(), match.end())
-        examples = evidence.setdefault(name, [])
-        if excerpt not in examples and len(examples) < 3:
-            examples.append(excerpt)
+    def record(role: str, source: str, match: re.Match[str], reason: str) -> None:
+        snippet = _excerpt(source, match.start(), match.end())
+        if snippet not in evidence.setdefault(role, []):
+            evidence[role].append(snippet)
+        if reason not in reasons.setdefault(role, []):
+            reasons[role].append(reason)
+        if role == "product" and snippet not in candidates:
+            candidates.append(snippet)
 
-    segments = _segments(text)
-    for segment in segments:
-        specific_matches = [
-            match
-            for name, pattern in _ROLES.items()
-            if name != "engineering_unspecified"
+    source_segments = segments(text)
+    translated = [source.translate(_PUNCTUATION) for source in source_segments]
+    recruiting_engineering = any(
+        _ENGINEERING_TITLE.search(segment, cue.end())
+        for segment in translated
+        for cue in _recruitment_matches(segment)
+    )
+    hiring_ad = (
+        is_hiring_ad(text)
+        or recruiting_engineering
+        or bool(re.search(r"\b(?:positions?|roles?) available\b", text, re.I))
+    )
+    job_seeker = is_job_seeker(text)
+    active_engineering: bool | None = None
+    engineering_opening_seen = False
+    for index, (source, segment) in enumerate(zip(source_segments, translated, strict=True)):
+        for match in _CANDIDATE.finditer(segment):
+            snippet = _excerpt(source, match.start(), match.end())
+            if snippet not in candidates:
+                candidates.append(snippet)
+        for match in _VACANCY_SLUG.finditer(segment):
+            snippet = _excerpt(source, match.start(), match.end())
+            if snippet not in candidates:
+                candidates.append(snippet)
+        if job_seeker:
+            continue
+
+        opening_titles = [
+            (match.start(), engineering)
+            for pattern, engineering in ((_ENGINEERING_TITLE, True), (_OTHER_TITLE, False))
             for match in pattern.finditer(segment)
+            if _advertised_role(segment, match)
         ]
-        for family, pattern in _ROLES.items():
-            for match in pattern.finditer(segment):
-                if family == "engineering_unspecified" and any(
-                    other.start() <= match.start() < other.end() for other in specific_matches
-                ):
-                    continue
-                if _role_context(segment, match):
-                    record(family, segment, match)
-                    if family == "full_stack":
-                        record("technical_breadth", segment, match)
-                    if (
-                        family in _ENGINEERING_FAMILIES
-                        and re.search(rf"\b{_ENGINEER}\b", match.group(), re.I)
-                        and (
-                            re.search(r"\bfounding engineers?\b", match.group(), re.I)
-                            or re.search(r"\bfounding\s+$", segment[: match.start()], re.I)
-                        )
-                    ):
-                        record("founding_engineer", segment, match)
-                    if re.search(r"\bproduct engineers?\b", match.group(), re.I):
-                        record("product_engineer_title", segment, match)
-        for family, pattern in _DUTY_ROLES.items():
-            for match in pattern.finditer(segment):
-                if _duty_context(segment, match):
-                    record(family, segment, match)
-        for match in _BREADTH.finditer(segment):
-            # Do not join the duties of separately named frontend/backend roles.
-            separate_roles = _ROLES["frontend"].search(match.group()) or _ROLES["backend"].search(
-                match.group()
-            )
-            if not separate_roles and _duty_context(segment, match):
-                record("technical_breadth", segment, match)
-                record("frontend", segment, match)
-                record("backend", segment, match)
-        for signal, pattern in _SIGNAL_RULES.items():
-            for match in pattern.finditer(segment):
-                if signal == "outcome_ownership" and re.search(
-                    r"\b(?:that|which)\s*$", segment[: match.start()], re.I
-                ):
-                    continue
-                if _duty_context(segment, match):
-                    record(signal, segment, match)
+        if opening_titles:
+            active_engineering = sorted(opening_titles)[-1][1]
+            engineering_opening_seen |= any(engineering for _, engineering in opening_titles)
 
-    product_evidence = [
-        excerpt
-        for name in ("customer_contact", "product_decisions", "experimentation", "outcome_ownership")
-        for excerpt in evidence.get(name, [])
-    ]
-    if product_evidence:
-        evidence["product_responsibility"] = list(dict.fromkeys(product_evidence))[:3]
-    families = [name for name in ROLE_FAMILIES if name in evidence]
+        for role, pattern in _ROLE_PATTERNS.items():
+            for match in pattern.finditer(segment):
+                if role == "product" and not _product_title(segment, match):
+                    continue
+                if _advertised_role(segment, match):
+                    record(role, source, match, "advertised_title")
+                elif (
+                    role == "product"
+                    and hiring_ad
+                    and active_engineering is not False
+                    and not _reference(segment, match)
+                    and _LIST_GAP.fullmatch(
+                        segment[: match.start()].removeprefix("Our ").removeprefix("our ")
+                    )
+                    and _PRODUCT_SUBJECT.match(segment[match.end() :])
+                ):
+                    record(role, source, match, "product_engineer_description")
+
+        for match in _PRODUCT_ORIENTED.finditer(segment):
+            if _product_title(segment, match) and _advertised_role(segment, match):
+                record("product", source, match, "product_focused_recruitment")
+
+        if hiring_ad and engineering_opening_seen:
+            for match in _PRODUCT_IDENTITY.finditer(segment):
+                if not _reference(segment, match):
+                    record("product", source, match, "product_engineer_description")
+        if hiring_ad and active_engineering is not False:
+            for match in _PRODUCT_TEAM.finditer(segment):
+                before = segment[: match.start()]
+                roles = [
+                    role for role in _ENGINEERING_TITLE.finditer(before) if _advertised_role(segment, role)
+                ]
+                incoming = bool(roles and _INTO_TEAM.search(before[roles[-1].end() :]))
+                assigned_team = active_engineering and re.search(
+                    r"\byou(?:'ll| will)?[^.!?;|]{0,35}\bjoin\b", before, re.I
+                )
+                next_segment = translated[index + 1] if index + 1 < len(translated) else ""
+                hiring_manager = re.search(r"\bhiring manager for (?:our|the)\s*$", before, re.I) and any(
+                    _advertised_role(next_segment, role) for role in _ENGINEERING_TITLE.finditer(next_segment)
+                )
+                if (incoming or assigned_team or hiring_manager) and (
+                    hiring_manager or (not _reference(segment, match) and _product_title(segment, match))
+                ):
+                    record("product", source, match, "product_engineering_team")
+
+        for match in _PRODUCT_DEFINITION.finditer(segment):
+            incoming = bool(_recruitment_matches(segment, end=match.start()))
+            assigned = re.search(
+                rf"\b(?:you|your|our {_ENGINEER}|each {_ENGINEER}|every {_ENGINEER}|each of us|we(?:'re| are)? (?:hiring|looking))\b",
+                segment[: match.start()],
+                re.I,
+            )
+            combined_role = incoming and "engineer in one person" in match.group().lower()
+            explicit_engineering = active_engineering is True or bool(
+                re.search(rf"\b{_ENGINEER}\b", match.group(), re.I)
+            )
+            engineering_duty = hiring_ad and explicit_engineering and assigned
+            if (
+                (combined_role or engineering_duty)
+                and not re.search(r"\b(?:market|industry|category)\s+$", segment[: match.start()], re.I)
+                and not _PAST_OR_OPTIONAL.search(segment)
+                and not _reference(segment, match)
+            ):
+                record("product", source, match, "combined_product_engineering_role")
+
+        for match in _VACANCY_SLUG.finditer(segment):
+            if not inside_url(segment, match.start()) or not _product_title(segment, match):
+                continue
+            # Slugs count only when attached to this ad's vacancy/application,
+            # rather than a company homepage, blog, or someone's past role.
+            attached = re.search(
+                r"\b(?:apply|job|jobs|careers|positions?|roles?|posting|opening)\b", segment, re.I
+            )
+            if hiring_ad and attached and not _PAST_OR_OPTIONAL.search(segment):
+                record("product", source, match, "vacancy_link")
+
     return {
-        "role_families": families,
-        "engineering_ad": bool(_ENGINEERING_FAMILIES.intersection(families)),
-        "signals": {name: name in evidence for name in SIGNALS},
+        "role_families": [role for role in ROLE_FAMILIES if role in evidence],
         "evidence": evidence,
+        "match_reasons": reasons,
+        "candidate_evidence": candidates,
     }

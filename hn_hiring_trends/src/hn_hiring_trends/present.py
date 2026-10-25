@@ -1,4 +1,4 @@
-"""Blog charts with explicit denominators, calendar windows, and missing-period gaps."""
+"""WebP charts of concrete advertised roles, with counts and comparable calendar windows."""
 
 from pathlib import Path
 
@@ -9,301 +9,175 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.ticker import PercentFormatter
 
-COLORS = ("#2166ac", "#b35806", "#1b7837", "#762a83", "#a63603", "#557b83")
-BROADENING = (
-    ("signal:technical_breadth", "Technical breadth"),
-    ("signal:product_responsibility", "Product responsibility"),
-    ("signal:product_engineer_title", "Product-engineer title"),
-    ("signal:breadth_and_product", "Breadth + product responsibility"),
+ROLES = (
+    ("frontend", "Frontend", "#2166ac"),
+    ("backend", "Backend", "#1b7837"),
+    ("full_stack", "Full-stack", "#b35806"),
+    ("product", "Product engineer", "#762a83"),
 )
-AI_SIGNALS = (
-    ("signal:ai_product_work", "AI-product work"),
-    ("signal:ai_tool_use", "AI-tool use"),
-)
-ROLE_LABELS = {"role:ml_ai": "ML / AI", "role:qa": "QA", "role:full_stack": "Full-stack"}
 
 
-def _period_index(period: str, granularity: str) -> int:
-    year = int(period[:4])
-    if granularity == "quarterly":
-        return year * 4 + int(period[-1]) - 1
-    if granularity == "monthly":
-        return year * 12 + int(period[5:]) - 1
-    return year
+def _index(period: str, granularity: str) -> int:
+    return int(period[:4]) * 4 + int(period[-1]) - 1 if granularity == "quarterly" else int(period)
 
 
-def _period_label(index: int, granularity: str) -> str:
-    if granularity == "quarterly":
-        return f"{index // 4}-Q{index % 4 + 1}"
-    if granularity == "monthly":
-        return f"{index // 12}-{index % 12 + 1:02}"
-    return str(index)
+def _label(index: int, granularity: str) -> str:
+    return f"{index // 4}-Q{index % 4 + 1}" if granularity == "quarterly" else str(index)
 
 
-def _calendar_grid(rows: list[dict], granularity: str, period_field: str = "period") -> list[int]:
-    indices = [_period_index(row[period_field], granularity) for row in rows]
-    return list(range(min(indices), max(indices) + 1)) if indices else []
-
-
-def _figure(title: str, subtitle: str, footer: str):
-    figure, axes = plt.subplots(figsize=(12, 6))
-    figure.subplots_adjust(left=0.09, right=0.97, top=0.82, bottom=0.35)
-    figure.suptitle(title, x=0.09, y=0.96, ha="left", fontsize=17, fontweight="bold")
-    axes.set_title(subtitle, loc="left", fontsize=10, color="#555555", pad=14)
-    axes.spines[["top", "right"]].set_visible(False)
-    axes.grid(axis="y", color="#e5e5e5", linewidth=0.7)
-    axes.set_axisbelow(True)
-    figure.text(0.09, 0.035, footer, fontsize=9, color="#555555", va="bottom")
-    return figure, axes
-
-
-def _empty(axes, message: str) -> None:
-    axes.text(0.5, 0.5, message, ha="center", va="center", transform=axes.transAxes, color="#555555")
-    axes.set_xticks([])
-    axes.set_yticks([])
-
-
-def _calendar_axis(axes, grid: list[int], granularity: str) -> None:
-    step = max(1, (len(grid) + 9) // 10)
-    ticks = grid[::step]
-    if grid[-1] not in ticks:
-        ticks.append(grid[-1])
-    axes.set_xticks(ticks, [_period_label(index, granularity) for index in ticks], rotation=35, ha="right")
-    axes.set_xlim(grid[0] - 0.4, grid[-1] + 0.4)
-
-
-def _boundary(axes, grid: list[int], granularity: str) -> None:
-    boundary = _period_index("2023-Q1" if granularity == "quarterly" else "2023", granularity)
-    if grid[0] <= boundary <= grid[-1]:
-        axes.axvline(boundary, color="#777777", linestyle="--", linewidth=1, zorder=1)
-        axes.text(
-            boundary,
-            1.02,
-            "2023",
-            transform=axes.get_xaxis_transform(),
-            ha="center",
-            fontsize=9,
-            color="#666666",
-        )
-
-
-def _save(figure, output_dir: Path, filename: str) -> str:
+def _save(figure, directory: Path, filename: str) -> str:
     try:
-        figure.savefig(output_dir / filename, dpi=150, facecolor="white")
+        figure.savefig(
+            directory / filename, format="webp", dpi=150, facecolor="white", pil_kwargs={"lossless": True}
+        )
     finally:
         plt.close(figure)
     return filename
 
 
-def _share_chart(
-    rows: list[dict],
-    metrics: tuple[tuple[str, str], ...],
-    output_dir: Path,
-    filename: str,
-    title: str,
-    subtitle: str,
-    granularity: str = "quarterly",
-    completeness_field: str = "complete_period",
-) -> str:
-    figure, axes = _figure(
-        title,
-        subtitle,
-        "Signals overlap; shares use engineering advertisements, not vacancies. Gaps are missing/ineligible periods or zero denominators.\n"
-        "2023 marks a descriptive boundary, not evidence of AI causation.",
+def _role_trends(rows: list[dict], directory: Path, *, comparable: bool) -> str:
+    granularity = "annual" if comparable else "quarterly"
+    complete = "complete_comparison_window" if comparable else "complete_period"
+    figure, axes = plt.subplots(2, 1, figsize=(12, 8), sharex=True)
+    figure.subplots_adjust(left=0.09, right=0.97, top=0.83, bottom=0.23, hspace=0.13)
+    title = (
+        "Engineering roles in equivalent-month annual windows"
+        if comparable
+        else "Engineering role hiring on Hacker News"
     )
-    grid = _calendar_grid(rows, granularity)
-    eligible = [row for row in rows if row[completeness_field]]
-    if not grid or not eligible:
-        _empty(axes, "Insufficient complete periods for this comparison.")
-        return _save(figure, output_dir, filename)
-    values = {(row["period"], row["metric"]): row["share"] for row in eligible}
-    finite_values = []
-    for color, (metric, label) in zip(COLORS, metrics, strict=False):
-        shares = [values.get((_period_label(index, granularity), metric)) for index in grid]
-        percentages = [100 * value if value is not None else float("nan") for value in shares]
-        finite_values.extend(value for value in percentages if value == value)
-        axes.plot(grid, percentages, label=label, color=color, linewidth=2, marker="o", markersize=3)
-    _calendar_axis(axes, grid, granularity)
-    _boundary(axes, grid, granularity)
-    axes.set_ylabel("Share of engineering advertisements")
-    axes.yaxis.set_major_formatter(PercentFormatter(xmax=100))
-    axes.set_ylim(0, min(100, max(5, max(finite_values, default=0) * 1.15)))
-    if not finite_values:
-        axes.text(
-            0.5,
-            0.5,
-            "No engineering denominator in the eligible periods.",
-            transform=axes.transAxes,
-            ha="center",
-            color="#555555",
+    figure.suptitle(title, x=0.09, y=0.96, ha="left", fontsize=17, fontweight="bold")
+    subtitle = "Complete quarters only"
+    if comparable and rows:
+        subtitle = (
+            f"Identical calendar months in each year: {rows[0]['comparison_months'].replace(';', ', ')}"
         )
-    figure.legend(loc="lower center", bbox_to_anchor=(0.53, 0.12), ncol=2, frameon=False, fontsize=9)
-    return _save(figure, output_dir, filename)
-
-
-def _role_heatmap(rows: list[dict], output_dir: Path) -> str:
-    figure, axes = _figure(
-        "Role-family mentions in hiring advertisements",
-        "Complete calendar years only · percentage of all advertisements",
-        "Role families overlap: an advertisement can mention several roles. Categories must not be added together.\n"
-        "Blank cells indicate missing/incomplete years or a zero advertisement denominator; these are not zero shares.",
+    figure.text(
+        0.09, 0.9, subtitle + " · an advertisement can list more than one role", fontsize=10, color="#555555"
     )
-    eligible = [row for row in rows if row["complete_period"] and row["metric"].startswith("role:")]
-    if not eligible:
-        _empty(axes, "Insufficient complete calendar years for the role comparison.")
-        return _save(figure, output_dir, "annual_role_shares.png")
-    grid = _calendar_grid(eligible, "annual")
-    roles = sorted({row["metric"] for row in eligible})
-    values = {(row["period"], row["metric"]): row["share"] for row in eligible}
-    matrix = [
-        [
-            100 * values[(str(year), role)] if values.get((str(year), role)) is not None else float("nan")
-            for year in grid
-        ]
-        for role in roles
-    ]
-    axes.grid(False)
-    colormap = plt.get_cmap("Blues").copy()
-    colormap.set_bad("#eeeeee")
-    image = axes.imshow(matrix, aspect="auto", cmap=colormap, vmin=0, vmax=100, interpolation="nearest")
-    for row_index, row in enumerate(matrix):
-        for column_index, value in enumerate(row):
-            if value == value:
-                axes.text(
-                    column_index,
-                    row_index,
-                    f"{value:.1f}",
-                    ha="center",
-                    va="center",
-                    fontsize=7,
-                    color="white" if value >= 65 else "#333333",
-                )
-    axes.set_yticks(
-        range(len(roles)),
-        [ROLE_LABELS.get(role, role.removeprefix("role:").replace("_", " ").capitalize()) for role in roles],
-        fontsize=9,
-    )
-    step = max(1, (len(grid) + 13) // 14)
-    axes.set_xticks(range(0, len(grid), step), [str(year) for year in grid[::step]], rotation=35, ha="right")
-    figure.subplots_adjust(left=0.22, bottom=0.2)
-    figure.colorbar(image, ax=axes, pad=0.025, label="Share of all advertisements (%)")
-    return _save(figure, output_dir, "annual_role_shares.png")
-
-
-def _advertisement_counts(rows: list[dict], output_dir: Path) -> str:
-    figure, axes = _figure(
-        "Quarterly hiring-advertisement counts",
-        "Complete calendar quarters only · engineering advertisements are a subset of all advertisements",
-        "Counts represent included advertisements, not vacancies or unique employers. Missing/incomplete quarters are gaps.\n"
-        "2023 marks a descriptive boundary, not evidence of AI causation.",
-    )
-    grid = _calendar_grid(rows, "quarterly")
-    eligible = {row["period"]: row for row in rows if row["complete_period"]}
+    eligible = [row for row in rows if row[complete]]
+    periods = [_index(row["period"], granularity) for row in rows]
+    grid = list(range(min(periods), max(periods) + 1)) if periods else []
+    values = {(row["period"], row["metric"]): row for row in eligible}
+    for axis in axes:
+        axis.spines[["top", "right"]].set_visible(False)
+        axis.grid(axis="y", color="#e5e5e5", linewidth=0.7)
+        axis.set_axisbelow(True)
     if not grid or not eligible:
-        _empty(axes, "Insufficient complete calendar quarters for the count comparison.")
-    else:
-        for color, field, label in (
-            (COLORS[0], "advertisements", "All advertisements"),
-            (COLORS[1], "engineering_advertisements", "Engineering advertisements"),
-        ):
-            counts = [
-                eligible.get(_period_label(index, "quarterly"), {}).get(field, float("nan")) for index in grid
-            ]
-            axes.plot(grid, counts, label=label, color=color, linewidth=2, marker="o", markersize=3)
-        _calendar_axis(axes, grid, "quarterly")
-        _boundary(axes, grid, "quarterly")
-        axes.set_ylabel("Advertisements")
-        axes.set_ylim(bottom=0)
-        figure.legend(loc="lower center", bbox_to_anchor=(0.53, 0.12), ncol=2, frameon=False)
-    return _save(figure, output_dir, "quarterly_advertisement_counts.png")
-
-
-def _coverage_chart(coverage: list[dict], output_dir: Path) -> str:
-    figure, axes = _figure(
-        "Indexed coverage of HN-listed top-level comments",
-        "Monthly indexed comments ÷ HN-listed comments · before hiring-advertisement classification",
-        "Coverage measures source retrieval, not how representative HN is of the labor market.\n"
-        "Missing months and months with no listed-comment denominator are gaps, not 0% coverage.",
-    )
-    grid = _calendar_grid(coverage, "monthly", "month")
-    if not grid:
-        _empty(axes, "No monthly source-coverage observations available.")
-    else:
-        by_month = {row["month"]: row for row in coverage}
-        percentages = []
-        for index in grid:
-            row = by_month.get(_period_label(index, "monthly"), {})
-            listed = row.get("hn_listed_comments", 0)
-            percentages.append(100 * row["indexed_listed_comments"] / listed if listed else float("nan"))
-        axes.plot(grid, percentages, color=COLORS[0], linewidth=1.8, marker="o", markersize=2.5)
-        _calendar_axis(axes, grid, "monthly")
-        axes.set_ylabel("Indexed share of listed comments")
-        axes.yaxis.set_major_formatter(PercentFormatter(xmax=100))
-        axes.set_ylim(0, 105)
-        if not any(value == value for value in percentages):
-            axes.text(
+        for axis in axes:
+            axis.text(
                 0.5,
                 0.5,
-                "No listed-comment denominator available.",
-                transform=axes.transAxes,
+                "Insufficient complete periods for this comparison",
                 ha="center",
-                color="#555555",
+                transform=axis.transAxes,
             )
-    return _save(figure, output_dir, "monthly_indexed_coverage.png")
-
-
-def render_charts(tables: dict[str, list[dict]], coverage: list[dict], output_dir: Path) -> list[str]:
-    """Write six PNG charts, including explicit empty states when calendar coverage is insufficient."""
-    output_dir.mkdir(parents=True, exist_ok=True)
-    quarterly = tables.get("quarterly", [])
-    comparable = tables.get("comparable_years", [])
-    windows = {row["comparison_months"] for row in comparable if row["complete_comparison_window"]}
-    if len(windows) == 1:
-        months = next(iter(windows)).split(";")
-        month_names = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
-        window_label = ", ".join(month_names[int(month) - 1] for month in months)
-        subtitle = f"Identical calendar months in every year: {window_label} · includes latest available year"
+            axis.set_xticks([])
+            axis.set_yticks([])
     else:
-        # Different calendar-month windows cannot be interpreted as a single annual trajectory.
-        comparable = []
-        subtitle = "No single complete equivalent-calendar-month comparison window available"
-    with plt.rc_context(
-        {
-            "font.family": "DejaVu Sans",
-            "font.size": 10,
-            "axes.labelcolor": "#333333",
-            "xtick.color": "#555555",
-            "ytick.color": "#555555",
-        }
-    ):
+        for role, label, color in ROLES:
+            observations = [values.get((_label(index, granularity), f"role:{role}")) for index in grid]
+            shares = [
+                100 * row["share"] if row and row["share"] is not None else float("nan")
+                for row in observations
+            ]
+            counts = [row["count"] if row else float("nan") for row in observations]
+            axes[0].plot(grid, shares, color=color, label=label, linewidth=2, marker="o", markersize=3)
+            axes[1].plot(grid, counts, color=color, linewidth=2, marker="o", markersize=3)
+        step = max(1, (len(grid) + 9) // 10)
+        ticks = grid[::step]
+        if grid[-1] not in ticks:
+            ticks.append(grid[-1])
+        axes[1].set_xticks(ticks, [_label(index, granularity) for index in ticks], rotation=35, ha="right")
+        axes[1].set_xlim(grid[0] - 0.4, grid[-1] + 0.4)
+        boundary = _index("2023" if comparable else "2023-Q1", granularity)
+        if grid[0] <= boundary <= grid[-1]:
+            for axis in axes:
+                axis.axvline(boundary, color="#777777", linewidth=1, linestyle="--")
+            axes[0].text(
+                boundary, 1.02, "2023", transform=axes[0].get_xaxis_transform(), ha="center", fontsize=9
+            )
+        handles, labels = axes[0].get_legend_handles_labels()
+        figure.legend(handles, labels, loc="lower center", bbox_to_anchor=(0.53, 0.07), ncol=4, frameon=False)
+    for axis in axes:
+        axis.set_ylim(bottom=0)
+    axes[0].set_ylabel("Share of all hiring ads")
+    axes[0].yaxis.set_major_formatter(PercentFormatter(xmax=100))
+    axes[1].set_ylabel("Ads mentioning the role")
+    figure.text(
+        0.09,
+        0.015,
+        "Counts are advertisements, not vacancies. Role categories overlap; gaps are incomplete/missing periods.\n2023 is a descriptive boundary, not evidence of AI causation. Classification is an unvalidated heuristic baseline.",
+        fontsize=9,
+        color="#555555",
+    )
+    filename = "comparable_year_roles.webp" if comparable else "quarterly_role_trends.webp"
+    return _save(figure, directory, filename)
+
+
+def _annual_heatmap(rows: list[dict], directory: Path) -> str:
+    figure, axes = plt.subplots(figsize=(12, 4.5))
+    figure.subplots_adjust(left=0.15, right=0.92, top=0.78, bottom=0.25)
+    figure.suptitle(
+        "Advertised engineering roles over time", x=0.15, y=0.96, ha="left", fontsize=17, fontweight="bold"
+    )
+    axes.set_title(
+        "Complete years only · percentage of all retained hiring advertisements",
+        loc="left",
+        fontsize=10,
+        pad=16,
+    )
+    eligible = [row for row in rows if row["complete_period"]]
+    if not eligible:
+        axes.text(0.5, 0.5, "Insufficient complete years", ha="center", transform=axes.transAxes)
+        axes.set_xticks([])
+        axes.set_yticks([])
+    else:
+        years = list(
+            range(
+                min(int(row["period"]) for row in eligible), max(int(row["period"]) for row in eligible) + 1
+            )
+        )
+        values = {(int(row["period"]), row["metric"]): row["share"] for row in eligible}
+        matrix = [
+            [
+                100 * value if (value := values.get((year, f"role:{role}"))) is not None else float("nan")
+                for year in years
+            ]
+            for role, _, _ in ROLES
+        ]
+        colormap = plt.get_cmap("Blues").copy()
+        colormap.set_bad("#eeeeee")
+        image = axes.imshow(matrix, aspect="auto", cmap=colormap, vmin=0, vmax=100)
+        for row_index, row in enumerate(matrix):
+            for column_index, value in enumerate(row):
+                if value == value:
+                    axes.text(
+                        column_index,
+                        row_index,
+                        f"{value:.1f}",
+                        ha="center",
+                        va="center",
+                        fontsize=9,
+                        color="white" if value >= 65 else "#333333",
+                    )
+        axes.set_yticks(range(len(ROLES)), [label for _, label, _ in ROLES])
+        axes.set_xticks(range(len(years)), [str(year) for year in years], rotation=35, ha="right")
+        figure.colorbar(image, ax=axes, pad=0.02, label="Share of all hiring ads (%)")
+    figure.text(
+        0.15,
+        0.03,
+        "Role mentions overlap; percentages must not be stacked or added. Blank cells are missing periods, not zero demand.\nProduct-engineer detection includes inspectable title and explicit role-description heuristics, not generic product work.",
+        fontsize=9,
+        color="#555555",
+    )
+    return _save(figure, directory, "annual_role_shares.webp")
+
+
+def render_charts(tables: dict[str, list[dict]], output_dir: Path) -> list[str]:
+    output_dir.mkdir(parents=True, exist_ok=True)
+    with plt.rc_context({"font.family": "DejaVu Sans", "font.size": 10}):
         return [
-            _role_heatmap(tables.get("annual", []), output_dir),
-            _share_chart(
-                quarterly,
-                BROADENING,
-                output_dir,
-                "quarterly_broadening_product.png",
-                "Technical breadth and product expectations",
-                "Complete calendar quarters only · explicit responsibility language is separate from titles",
-            ),
-            _share_chart(
-                quarterly,
-                AI_SIGNALS,
-                output_dir,
-                "quarterly_ai_signals.png",
-                "AI-product work and AI-tool expectations",
-                "Complete calendar quarters only · building AI products is distinct from using AI tools",
-            ),
-            _advertisement_counts(quarterly, output_dir),
-            _share_chart(
-                comparable,
-                BROADENING + AI_SIGNALS,
-                output_dir,
-                "comparable_year_signals.png",
-                "Engineering expectations in equivalent-month annual windows",
-                subtitle,
-                "annual",
-                "complete_comparison_window",
-            ),
-            _coverage_chart(coverage, output_dir),
+            _annual_heatmap(tables["annual"], output_dir),
+            _role_trends(tables["quarterly"], output_dir, comparable=False),
+            _role_trends(tables["comparable_years"], output_dir, comparable=True),
         ]

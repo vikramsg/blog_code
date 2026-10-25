@@ -39,8 +39,12 @@ def run_pipeline(cache: JsonCache, start: date, end: date, output_dir: Path, wor
         row.update(
             {
                 "included_advertisements": len(month_ads),
-                "engineering_advertisements": sum(record["engineering_ad"] for record in month_ads),
-                "unlabeled_advertisements": sum(not record["role_families"] for record in month_ads),
+                "advertisements_with_selected_roles": sum(
+                    bool(record["role_families"]) for record in month_ads
+                ),
+                "product_engineer_advertisements": sum(
+                    "product" in record["role_families"] for record in month_ads
+                ),
                 "not_identified_as_hiring": sum(
                     record["exclusion_reason"] == "not_identified_as_hiring" for record in month_records
                 ),
@@ -71,7 +75,11 @@ def run_pipeline(cache: JsonCache, start: date, end: date, output_dir: Path, wor
         "indexed_listed_comments": sum(row["indexed_listed_comments"] for row in coverage),
         "unindexed_listed_comments": sum(row["unindexed_listed_comments"] for row in coverage),
         "advertisements": len(included),
-        "engineering_advertisements": sum(row["engineering_ad"] for row in included),
+        "advertisements_with_selected_roles": sum(bool(row["role_families"]) for row in included),
+        "product_engineer_advertisements": sum("product" in row["role_families"] for row in included),
+        "advertisements_identified_by_role": sum(
+            row["identification_method"] == "advertised_role" for row in included
+        ),
         "excluded_comments": len(classified) - len(included),
         "duplicate_comments": sum(
             row["exclusion_reason"] == "same_month_exact_text_duplicate" for row in classified
@@ -80,7 +88,8 @@ def run_pipeline(cache: JsonCache, start: date, end: date, output_dir: Path, wor
             row["exclusion_reason"] == "outside_thread_month" for row in classified
         ),
         "comparison_months": comparison_months,
-        "classification_method": "explicit-language rules; advertisement-level, overlapping labels",
+        "classification_method": "four advertised role categories with inspectable title/role-description heuristics",
+        "share_denominator": "all retained hiring advertisements",
         "comment_source": "Algolia indexed top-level comments intersected with official HN comment IDs",
         "causal_inference": False,
     }
@@ -90,7 +99,7 @@ def run_pipeline(cache: JsonCache, start: date, end: date, output_dir: Path, wor
 def main(argv: list[str] | None = None) -> int:
     today = datetime.now(UTC).date()
     parser = argparse.ArgumentParser(
-        description="Analyze explicit role and responsibility language in indexed HN hiring advertisements."
+        description="Analyze frontend, backend, full-stack, and product-engineer hiring advertisements."
     )
     parser.add_argument(
         "--start",

@@ -7,9 +7,11 @@
   "hn_listed_comments": 101908,
   "indexed_listed_comments": 94954,
   "unindexed_listed_comments": 6954,
-  "advertisements": 88170,
-  "engineering_advertisements": 64358,
-  "excluded_comments": 6784,
+  "advertisements": 88628,
+  "advertisements_with_selected_roles": 30785,
+  "product_engineer_advertisements": 1763,
+  "advertisements_identified_by_role": 458,
+  "excluded_comments": 6326,
   "duplicate_comments": 167,
   "outside_thread_month_comments": 6,
   "comparison_months": [
@@ -23,16 +25,14 @@
     8,
     9
   ],
-  "classification_method": "explicit-language rules; advertisement-level, overlapping labels",
+  "classification_method": "four advertised role categories with inspectable title/role-description heuristics",
+  "share_denominator": "all retained hiring advertisements",
   "comment_source": "Algolia indexed top-level comments intersected with official HN comment IDs",
   "causal_inference": false,
-  "classified_sha256": "8854fbd3c0b0f544f0c356a35e49e4ee1373871fc9d5e4d69058b3db3c938e78",
+  "classified_sha256": "a757249f8d756db1c6f97840598754638b66897ae0318a236560984d5f57ec0b",
   "charts": [
-    "annual_role_shares.png",
-    "quarterly_broadening_product.png",
-    "quarterly_ai_signals.png",
-    "quarterly_advertisement_counts.png",
-    "comparable_year_signals.png",
-    "monthly_indexed_coverage.png"
+    "annual_role_shares.webp",
+    "quarterly_role_trends.webp",
+    "comparable_year_roles.webp"
   ]
 }
