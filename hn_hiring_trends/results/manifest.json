@@ -1,0 +1,40 @@
+{
+  "requested_start": "2011-04",
+  "requested_end": "2026-09",
+  "expected_months": 186,
+  "threads": 186,
+  "missing_months": [],
+  "hn_listed_comments": 101908,
+  "indexed_listed_comments": 94954,
+  "unindexed_listed_comments": 6954,
+  "advertisements": 88628,
+  "advertisements_with_selected_roles": 30773,
+  "product_engineer_advertisements": 1730,
+  "advertisements_identified_by_role": 458,
+  "excluded_comments": 6326,
+  "duplicate_comments": 167,
+  "outside_thread_month_comments": 6,
+  "comparison_months": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "classification_method": "four advertised role categories with inspectable title/role-description heuristics",
+  "share_denominator": "all retained hiring advertisements",
+  "comment_source": "Algolia indexed top-level comments intersected with official HN comment IDs",
+  "causal_inference": false,
+  "classified_sha256": "2f406348748a571a8b22b4de9a4895a8e727d9625247105623aceaa9ba5fea67",
+  "charts": [
+    "annual_role_shares-7a47daed3c.webp",
+    "quarterly_role_trends-babdd170a3.webp",
+    "comparable_year_roles-92061c34f5.webp",
+    "annual_hiring_volume-2e3a45f803.webp",
+    "monthly_hiring_volume-30c16d2d26.webp"
+  ]
+}
